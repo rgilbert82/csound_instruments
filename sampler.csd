@@ -322,7 +322,7 @@ endin
 ;p8  f-table function number
 
 ; PITCH
-;p9  pitch start    relative to sample pitch, which is 0
+;p9  pitch start    relative to sample pitch, which is 1
 ;p10  pitch end
 ;p11  pitch duration
 
