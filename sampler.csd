@@ -38,7 +38,7 @@ opcode	decimator, a, aki
 
   a0ut     fold  aout, kfold		; Resample
 
-	xout      a0ut * 0.0002
+	xout      a0ut * 0.0001
 endop
 
 ; =============================================================================
@@ -371,6 +371,37 @@ elseif (idec_on == 2) then
 endif
 
 
+/*If UDOs don't work in Blue*/
+/*if (idec_on == 1) then
+  kbit	   ctrl7	1, 1, 1, 16
+  ksrate   ctrl7	1, 7, 11025, 44100
+
+  kbits    = idec_bitrate^kbit
+  kfold    = (idec_samps/ksrate)
+
+  kin_l    downsamp  a1
+  kin_l    = (kin_l + 1)
+  kin_l    = kin_l*(kbits / 2)
+  kin_l    = int(kin_l)
+  a1       upsamp  kin_l
+  a1       = a1 * (2/kbits) - 1
+
+  kin_r    downsamp  a2
+  kin_r    = (kin_r + 1)
+  kin_r    = kin_r*(kbits / 2)
+  kin_r    = int(kin_r)
+  a2       upsamp  kin_r
+  a2       = a2 * (2/kbits) - 1
+
+  a1      fold  a1, kfold
+  a2      fold  a2, kfold
+elseif (idec_on == 2) then
+  kfold   line  ifold_start, idur, ifold_end
+  a1      fold  a1, kfold
+  a2      fold  a2, kfold
+endif*/
+
+
 ; =============================================================================
 ; Flanger
 ; =============================================================================
@@ -628,7 +659,7 @@ i"sampler_1"       0      5       .9      0.5     0.5   1    101  0     1   \   
             5000   0      .5      500     4       0.5   0    0.1  0.8   4   \   ; lowpass cutoff / res
 0           5000   0      1       100     3       9.5    \                      ; highpass
 0           1      0      1       .2      2       1      \                      ; distortion
-0           8      20     30      2       \                                     ; bitcrusher
+1           8      20     30      2       \                                     ; bitcrusher
 0           0.8    0      2       .3      1       .5     \                      ; flanger
 0           5000   0      2       100     2       0.8    \                      ; phaser
 0           0      0     .1       1       2       0      \                      ; tremolo / amp lfo

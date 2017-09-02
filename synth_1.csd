@@ -467,6 +467,25 @@ elseif (idec_on == 2) then
   a1      fold  a1, kfold
 endif
 
+/*If UDOs don't work in Blue*/
+/*if (idec_on == 1) then
+  kbit	   ctrl7	1, 1, 1, 16
+  ksrate   ctrl7	1, 7, 11025, 44100
+
+  kbits    = idec_bitrate^kbit
+  kfold    = (idec_samps/ksrate)
+  kin      downsamp  a1
+  kin      = (kin + 1)
+  kin      = kin*(kbits / 2)
+  kin      = int(kin)
+  a1       upsamp  kin
+  a1       = a1 * (2/kbits) - 1
+
+  a1      fold  a1, kfold
+elseif (idec_on == 2) then
+  kfold   line  ifold_start, idur, ifold_end
+  a1      fold  a1, kfold
+endif*/
 
 ; =============================================================================
 ; Flanger
@@ -771,7 +790,7 @@ i"synth_1"  0      5      1       0.5     0.5     5      0     0    0     \     
             5000   0      .5      500     4        0.5   0    0.1  0.8   4   \  ; lowpass cutoff / res
 0           5000   0      1       100     3       9.5    \                      ; highpass
 0           1      0      1       .2      2       1      \                      ; distortion
-0           8      20     30      2       \                                     ; bitcrusher
+1           8      20     30      2       \                                     ; bitcrusher
 0           0.8    0      2       .3      1       .5     \                      ; flanger
 0           5000   0      2       100     2       0.8    \                      ; phaser
 0           0      0     .1       1       2       0      \                      ; tremolo / amp lfo
