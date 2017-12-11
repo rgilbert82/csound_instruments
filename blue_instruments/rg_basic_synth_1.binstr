@@ -1,0 +1,25 @@
+<instrument type='blue.orchestra.GenericInstrument'>
+  <name>basic osc</name>
+  <comment></comment>
+  <globalOrc></globalOrc>
+  <globalSco></globalSco>
+  <instrumentText>ifreq = cps2pch(p4, 10)
+iamp = ((p5 &gt; 0) ? 0dbfs*p5 : ampdbfs(p5))*1.4
+ifnc = p6
+icut = p7
+ires = p8
+
+aosc1 oscil iamp, ifreq, ifnc
+aosc2 oscil iamp, ifreq, ifnc
+aosc3 oscil iamp, ifreq, ifnc
+aosc4 oscil iamp, ifreq, ifnc
+
+aoscs = (aosc1 + aosc2 + aosc3 + aosc4) * 0.25
+
+afilt moogladder2 aoscs, icut, ires
+
+asig = afilt
+
+blueMixerOut asig, asig</instrumentText>
+  <opcodeList/>
+</instrument>

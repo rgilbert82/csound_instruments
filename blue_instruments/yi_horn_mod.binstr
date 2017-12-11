@@ -1,0 +1,424 @@
+<instrument type='blue.orchestra.BlueSynthBuilder' editEnabled='true'>
+  <name>yi_horn_mod</name>
+  <comment>Horner and Ayers French Horn</comment>
+  <globalOrc>;[once]{
+gi_sine	ftgen 0, 0, 65536, 10, 1
+;}
+
+;[once]{
+;Horner and Ayers French Horn tables
+gi_horn_seed = .5
+gi_horn_cutoff	ftgen 0, 0, 16, -2, 40, 40, 80, 160, 320, 640, 1280, 2560, 5120, 10240, 10240	;LP Filter Cutoff Lookup table
+
+gi_horn_wt	ftgen 0, 0, 2048, -17, 0, 0, 85, 1, 114, 2, 153, 3, 204, 4, 272, 5, 364, 6, 486, 7	; horn wavetables
+
+gi_horn0	ftgen 0, 0, 5, -9, 1, 0.0, 0	; zero amp sine wave
+gi_horn1	ftgen 0, 0, 4097, -9, 2, 6.236, 0, 3, 12.827, 0
+gi_horn2	ftgen 0, 0, 4097, -9, 4, 21.591, 0, 5, 11.401, 0, 6, 3.570, 0, 7, 2.833, 0
+gi_horn3	ftgen 0, 0, 4097, -9, 8, 3.070, 0, 9, 1.053, 0, 10, 0.773, 0, 11, 1.349, 0, 12, 0.819, 0, 13, 0.369, 0, 14, 0.362, 0, 15, 0.165, 0, 16, 0.124, 0, 18, 0.026, 0, 19, 0.042, 0
+gi_horn4	ftgen 0, 0, 4097, -9, 2, 3.236, 0, 3, 6.827, 0
+gi_horn5	ftgen 0, 0, 4097, -9, 4, 5.591, 0, 5, 2.401, 0, 6, 1.870, 0, 7, 0.733, 0
+gi_horn6	ftgen 0, 0, 4097, -9, 8, 0.970, 0, 9, 0.553, 0, 10, 0.373, 0, 11, 0.549, 0, 12, 0.319, 0, 13, 0.119, 0, 14, 0.092, 0, 15, 0.045, 0, 16, 0.034, 0
+gi_horn7	ftgen 0, 0, 4097, -9, 2, 5.019, 0, 3, 4.281, 0
+gi_horn8	ftgen 0, 0, 4097, -9, 4, 2.091, 0, 5, 1.001, 0, 6, 0.670, 0, 7, 0.233, 0
+gi_horn9	ftgen 0, 0, 4097, -9, 8, 0.200, 0, 9, 0.103, 0, 10, 0.073, 0, 11, 0.089, 0, 12, 0.059, 0, 13, 0.029, 0
+gi_horn10	ftgen 0, 0, 4097, -9, 2, 4.712, 0, 3, 1.847, 0
+gi_horn11	ftgen 0, 0, 4097, -9, 4, 0.591, 0, 5, 0.401, 0, 6, 0.270, 0, 7, 0.113, 0
+gi_horn12	ftgen 0, 0, 4097, -9, 8, 0.060, 0, 9, 0.053, 0, 10, 0.023, 0
+gi_horn13	ftgen 0, 0, 4097, -9, 2, 1.512, 0, 3, 0.247, 0
+gi_horn14	ftgen 0, 0, 4097, -9, 4, 0.121, 0, 5, 0.101, 0, 6, 0.030, 0, 7, 0.053, 0
+gi_horn15	ftgen 0, 0, 4097, -9, 8, 0.030, 0
+gi_horn16	ftgen 0, 0, 4097, -9, 2, 0.412, 0, 3, 0.087, 0
+gi_horn17	ftgen 0, 0, 4097, -9, 4, 0.071, 0, 5, 0.021, 0
+gi_horn18	ftgen 0, 0, 4097, -9, 2, 0.309, 0, 3, 0.067, 0
+gi_horn19	ftgen 0, 0, 4097, -9, 4, 0.031, 0
+gi_horn20	ftgen 0, 0, 4097, -9, 2, 0.161, 0, 3, 0.047, 0
+
+; instrument wavetable numbers
+gi_horn_instrwt	ftgen 0, 0, 64, -2, gi_horn1, gi_horn2, gi_horn3, 52.476, gi_horn4, gi_horn5, gi_horn6, 18.006, \
+			gi_horn7, gi_horn8, gi_horn9, 11.274, gi_horn10, gi_horn11, gi_horn12, 6.955, \ 
+			gi_horn13, gi_horn14, gi_horn15, 2.260, gi_horn16, gi_horn17, gi_horn0, 1.171, \
+			gi_horn18, gi_horn19, gi_horn0, 1.106, gi_horn20, gi_horn0, gi_horn0, 1.019	
+;}
+
+
+gi_horn_stop_cutoff	ftgen 0, 0, 16, -2, 40, 40, 80, 160, 320, 640, 1280, 2560, 5120, 10240, 10240	; filter cutoff table
+gi_horn_stop_wt	ftgen 0, 0, 16384, -17, 0, 0, 272, 1, 363, 2, 484, 3	; stopped horn wavetables
+
+gi_horn_stop0	ftgen 0, 0, 5, -9, 1, 0.0, 0	; zero-amp sine wave
+gi_horn_stop1	ftgen 0, 0, 4097, -9, 2, 0.961, 0, 3, 0.052, 0
+gi_horn_stop2	ftgen 0, 0, 4097, -9, 4, 0.079, 0, 5, 0.137, 0, 6, 0.185, 0, 7, 0.109, 0
+gi_horn_stop3	ftgen 0, 0, 4097, -9, 8, 0.226, 0, 9, 0.107, 0, 10, 0.155, 0, 11, 0.140, 0, 12, 0.428, 0, 13, 0.180, 0, 14, 0.070, 0, 15, 0.112, 0, 16, 0.335, 0, 17, 0.183, 0, 18, 0.073, 0, 19, 0.172, 0, 20, 0.117, 0, 21, 0.089, 0, 22, 0.193, 0, 23, 0.119, 0, 24, 0.080, 0, 25, 0.036, 0, 26, 0.143, 0, 27, 0.036, 0, 28, 0.044, 0, 29, 0.040, 0, 30, 0.052, 0, 31, 0.086, 0, 32, 0.067, 0, 33, 0.097, 0, 34, 0.046, 0, 36, 0.030, 0, 37, 0.025, 0, 38, 0.048, 0, 39, 0.021, 0, 40, 0.025
+gi_horn_stop4	ftgen 0, 0, 4097, -9, 2, 0.162, 0, 3, 0.068, 0
+gi_horn_stop5	ftgen 0, 0, 4097, -9, 4, 0.116, 0, 5, 0.138, 0, 6, 0.050, 0, 7, 0.089, 0
+gi_horn_stop6	ftgen 0, 0, 4097, -9, 8, 0.156, 0, 9, 0.381, 0, 10, 0.191, 0, 11, 0.126, 0, 12, 0.162, 0, 13, 0.073, 0, 15, 0.157, 0, 16, 0.074, 0, 17, 0.087, 0, 18, 0.151, 0, 19, 0.093, 0, 20, 0.031, 0, 21, 0.030, 0, 22, 0.051, 0, 23, 0.058, 0, 24, 0.051, 0, 25, 0.077, 0, 26, 0.033, 0, 27, 0.021, 0, 28, 0.039, 0
+gi_horn_stop7	ftgen 0, 0, 4097, -9, 2, 0.164, 0, 3, 0.164, 0
+gi_horn_stop8	ftgen 0, 0, 4097, -9, 4, 0.401, 0, 5, 0.141, 0, 6, 0.293, 0, 7, 0.203, 0
+gi_horn_stop9	ftgen 0, 0, 4097, -9, 8, 0.170, 0, 9, 0.306, 0, 10, 0.170, 0, 11, 0.103, 0, 12, 0.131, 0, 13, 0.134, 0, 14, 0.047, 0, 15, 0.182, 0, 16, 0.049, 0, 17, 0.088, 0, 18, 0.088, 0, 19, 0.064, 0, 20, 0.024, 0, 21, 0.064, 0, 22, 0.022
+gi_horn_stop10	ftgen 0, 0, 4097, -9, 2, 0.193, 0, 3, 0.542, 0
+gi_horn_stop11	ftgen 0, 0, 4097, -9, 4, 0.125, 0, 5, 0.958, 0, 6, 0.154, 0, 7, 0.364, 0
+gi_horn_stop12	ftgen 0, 0, 4097, -9, 8, 0.444, 0, 9, 0.170, 0, 10, 0.090, 0, 11, 0.077, 0, 12, 0.026, 0, 13, 0.073, 0
+
+; instrument wavetable numbers
+
+gi_horn_stop_instrwt	ftgen 0, 0, 64, -2, gi_horn_stop1, gi_horn_stop2, gi_horn_stop3, 3.172, gi_horn_stop4, gi_horn_stop5, gi_horn_stop6, 1.947, \
+
+			gi_horn_stop7, gi_horn_stop8, gi_horn_stop9, 2.221, gi_horn_stop10, gi_horn_stop11, gi_horn_stop12, 2.811
+
+
+</globalOrc>
+  <globalSco/>
+  <instrumentText>idur        = abs(p3)
+iskip       tival 
+iamp        = p4
+icps1       = p5
+icps2       = p6
+iscale      = p7
+ipch_ramp   = p8
+iSpace      = p9
+ienvType    = p10
+ipan_start  = p11
+ipan_end    = p12
+ipan_dur    = p13
+ipan_freq   = p14
+ipan_mode   = p15
+ifunc       = p16
+
+ipch    cps2pch  icps1, iscale
+ipch2   cps2pch  icps2, iscale
+
+if (ipch_ramp == 0) then
+  kpchline 	line ipch, idur, ipch2
+else
+  kpchline 	expseg ipch, idur, ipch2
+endif
+
+if (ipan_dur &lt;= 0) then
+    ipan_dur = idur
+endif
+
+iHornType = i(&lt;horntype&gt;)
+
+kenv yiEnvelope ienvType, i(&lt;attack&gt;), i(&lt;decay&gt;), i(&lt;sustain&gt;), i(&lt;release&gt;)
+;kenv yiEnvelope ienvType, .05, .05, .95, .1
+
+
+; INSERT SOUND GENERATING CODE HERE 
+
+ifcut	= 2560		; LP FILTER CUTOFF FREQUENCY
+
+
+kenv2	=		kenv * kenv 			; WAVETABLE ENVELOPES
+kenv3	=		kenv2 * kenv
+kenv4	=		kenv3 * kenv
+
+
+if (iHornType == 1) then
+	irange	tablei	ipch, gi_horn_stop_wt
+else
+	irange	tablei	ipch, gi_horn_wt
+endif
+
+
+
+iwt1	=	gi_sine					; WAVETABLE NUMBERS
+iwt2	table	(irange*4), gi_horn_instrwt
+iwt3	table	(irange*4)+1, gi_horn_instrwt
+iwt4	table	(irange*4)+2, gi_horn_instrwt
+inorm	table	(irange*4)+3, gi_horn_instrwt		; NORMALIZATION FACTOR
+
+iiwt1 			=			iwt1
+iiwt2 			=			iwt2
+iiwt3 			=			iwt3
+iiwt4 			=			iwt4
+
+iphase	= gi_horn_seed				; SAME PHASE FOR ALL TABLES
+giseed	= frac(gi_horn_seed*105.947)
+
+if (ifunc == 0) then
+    awt1	oscil	kenv, kpchline, iiwt1, iphase ; WAVETABLE LOOKUP
+    awt2	oscil	kenv2, kpchline, iiwt2, iphase
+    awt3	oscil	kenv3, kpchline, iiwt3, iphase
+    awt4	oscil	kenv4, kpchline, iiwt4, iphase
+else
+    awt1	oscil	kenv, kpchline, ifunc, iphase ; WAVETABLE LOOKUP
+    awt2	oscil	kenv2, kpchline, ifunc, iphase
+    awt3	oscil	kenv3, kpchline, ifunc, iphase
+    awt4	oscil	kenv4, kpchline, ifunc, iphase
+endif
+
+aout	=		(awt1+awt2+awt3+awt4)*iamp/inorm
+
+afilt	tone	aout, ifcut			; LP FILTER...
+asig	balance	afilt, aout			; ... TO CONTROL BRIGHTNESS
+
+
+if (&lt;horntype&gt; == 2) then
+	afilt     atone   asig, 1200                                ; insert a high-pass filter to
+	asig      balance afilt, .5*asig                            ; simulate horn straight mute
+endif
+
+aport	oscil	1, .05, gi_sine
+aport	=	(aport * 0.02) + 1
+aout	=	asig * aport
+;aout = asig	
+
+
+;aout limit aout, -.5, .5
+
+
+;END SOUND GENERATION CODE
+
+if (ipan_freq != 0) then
+  kpan     lfo   1, ipan_freq, ipan_mode
+elseif (ipan_start != ipan_end) then
+  kpan     line  ipan_start, ipan_dur, ipan_end
+else
+  kpan = ipan_start
+endif
+
+aLeft, aRight    pan2  aout, kpan
+
+iSpace	= iSpace * 3.14159265359 * .5
+krtl    = sqrt(2) / 2 * (cos(iSpace) + sin(iSpace)) ; CONSTANT POWER PANNING
+krtr    = sqrt(2) / 2 * (cos(iSpace) - sin(iSpace)) ; FROM C.ROADS &quot;CM TUTORIAL&quot; pp460
+
+aLeft 	=	aLeft * krtl
+aRight	=	aRight * krtr
+
+blueMixerOut aLeft, aRight
+</instrumentText>
+  <alwaysOnInstrumentText></alwaysOnInstrumentText>
+  <graphicInterface editEnabled='false'>
+    <gridSettings>
+      <width>15</width>
+      <height>15</height>
+      <gridStyle>NONE</gridStyle>
+      <snapGridEnabled>false</snapGridEnabled>
+    </gridSettings>
+    <bsbObject type='blue.orchestra.blueSynthBuilder.BSBKnob' version='2'>
+      <objectName>decay</objectName>
+      <x>152</x>
+      <y>32</y>
+      <automationAllowed>true</automationAllowed>
+      <minimum>0.0</minimum>
+      <maximum>1.0</maximum>
+      <value>0.0</value>
+      <knobWidth>50</knobWidth>
+      <randomizable>true</randomizable>
+    </bsbObject>
+    <bsbObject type='blue.orchestra.blueSynthBuilder.BSBKnob' version='2'>
+      <objectName>sustain</objectName>
+      <x>205</x>
+      <y>32</y>
+      <automationAllowed>true</automationAllowed>
+      <minimum>0.0</minimum>
+      <maximum>1.0</maximum>
+      <value>0.89665</value>
+      <knobWidth>50</knobWidth>
+      <randomizable>true</randomizable>
+    </bsbObject>
+    <bsbObject type='blue.orchestra.blueSynthBuilder.BSBKnob' version='2'>
+      <objectName>release</objectName>
+      <x>258</x>
+      <y>32</y>
+      <automationAllowed>true</automationAllowed>
+      <minimum>0.0</minimum>
+      <maximum>10.0</maximum>
+      <value>0.14609</value>
+      <knobWidth>50</knobWidth>
+      <randomizable>true</randomizable>
+    </bsbObject>
+    <bsbObject type='blue.orchestra.blueSynthBuilder.BSBKnob' version='2'>
+      <objectName>attack</objectName>
+      <x>99</x>
+      <y>32</y>
+      <automationAllowed>true</automationAllowed>
+      <minimum>0.0</minimum>
+      <maximum>10.0</maximum>
+      <value>0.0</value>
+      <knobWidth>50</knobWidth>
+      <randomizable>true</randomizable>
+    </bsbObject>
+    <bsbObject type='blue.orchestra.blueSynthBuilder.BSBLabel'>
+      <objectName></objectName>
+      <x>106</x>
+      <y>13</y>
+      <label>Attack</label>
+    </bsbObject>
+    <bsbObject type='blue.orchestra.blueSynthBuilder.BSBLabel'>
+      <objectName></objectName>
+      <x>160</x>
+      <y>13</y>
+      <label>Decay</label>
+    </bsbObject>
+    <bsbObject type='blue.orchestra.blueSynthBuilder.BSBLabel'>
+      <objectName></objectName>
+      <x>210</x>
+      <y>13</y>
+      <label>Sustain</label>
+    </bsbObject>
+    <bsbObject type='blue.orchestra.blueSynthBuilder.BSBLabel'>
+      <objectName></objectName>
+      <x>261</x>
+      <y>13</y>
+      <label>Release</label>
+    </bsbObject>
+    <bsbObject type='blue.orchestra.blueSynthBuilder.BSBLabel'>
+      <objectName></objectName>
+      <x>12</x>
+      <y>44</y>
+      <label>&lt;html&gt;&lt;font size=&quot;+1&quot;&gt;Amp Env&lt;/font&gt;&lt;/html&gt;</label>
+    </bsbObject>
+    <bsbObject type='blue.orchestra.blueSynthBuilder.BSBKnob' version='2'>
+      <objectName>space</objectName>
+      <x>333</x>
+      <y>34</y>
+      <automationAllowed>true</automationAllowed>
+      <minimum>0.0</minimum>
+      <maximum>1.0</maximum>
+      <value>0.48166</value>
+      <knobWidth>60</knobWidth>
+      <randomizable>true</randomizable>
+    </bsbObject>
+    <bsbObject type='blue.orchestra.blueSynthBuilder.BSBLabel'>
+      <objectName></objectName>
+      <x>348</x>
+      <y>9</y>
+      <label>&lt;html&gt;&lt;font size=&quot;+1&quot;&gt;Pan&lt;/font&gt;&lt;/html&gt;</label>
+    </bsbObject>
+    <bsbObject type='blue.orchestra.blueSynthBuilder.BSBDropdown'>
+      <objectName>horntype</objectName>
+      <x>99</x>
+      <y>111</y>
+      <automationAllowed>true</automationAllowed>
+      <bsbDropdownItemList>
+        <bsbDropdownItem uniqueId='520763026'>
+          <name>Open</name>
+          <value>0</value>
+        </bsbDropdownItem>
+        <bsbDropdownItem uniqueId='520763027'>
+          <name>Stopped</name>
+          <value>1</value>
+        </bsbDropdownItem>
+        <bsbDropdownItem uniqueId='520763028'>
+          <name>Straight Mute</name>
+          <value>2</value>
+        </bsbDropdownItem>
+      </bsbDropdownItemList>
+      <selectedIndex>2</selectedIndex>
+      <randomizable>true</randomizable>
+    </bsbObject>
+  </graphicInterface>
+  <bsbParameterList>
+    <parameter uniqueId='520763023' name='attack' label='' min='0.0' max='10.0' resolution='-1.0' automationEnabled='false' value='0.0'>
+      <line name='' version='2' max='10.0' min='0.0' resolution='-1.0' color='-8355712' rightBound='false' endPointsLinked='false'>
+        <linePoint x='0.0' y='0.0'/>
+      </line>
+    </parameter>
+    <parameter uniqueId='520763017' name='decay' label='' min='0.0' max='1.0' resolution='-1.0' automationEnabled='false' value='0.0'>
+      <line name='' version='2' max='1.0' min='0.0' resolution='-1.0' color='-8355712' rightBound='false' endPointsLinked='false'>
+        <linePoint x='0.0' y='0.0'/>
+      </line>
+    </parameter>
+    <parameter uniqueId='605199017' name='horntype' label='' min='0.0' max='2.0' resolution='1.0' automationEnabled='false' value='2.0'>
+      <line name='' version='2' max='2.0' min='0.0' resolution='1.0' color='-8355712' rightBound='false' endPointsLinked='false'>
+        <linePoint x='0.0' y='2.0'/>
+      </line>
+    </parameter>
+    <parameter uniqueId='520763021' name='release' label='' min='0.0' max='10.0' resolution='-1.0' automationEnabled='false' value='0.14609'>
+      <line name='' version='2' max='10.0' min='0.0' resolution='-1.0' color='-8355712' rightBound='false' endPointsLinked='false'>
+        <linePoint x='0.0' y='0.14609'/>
+      </line>
+    </parameter>
+    <parameter uniqueId='520763025' name='space' label='' min='0.0' max='1.0' resolution='-1.0' automationEnabled='false' value='0.48166'>
+      <line name='' version='2' max='1.0' min='0.0' resolution='-1.0' color='-8355712' rightBound='false' endPointsLinked='false'>
+        <linePoint x='0.0' y='0.48166'/>
+      </line>
+    </parameter>
+    <parameter uniqueId='520763019' name='sustain' label='' min='0.0' max='1.0' resolution='-1.0' automationEnabled='false' value='0.89665'>
+      <line name='' version='2' max='1.0' min='0.0' resolution='-1.0' color='-8355712' rightBound='false' endPointsLinked='false'>
+        <linePoint x='0.0' y='0.89665'/>
+      </line>
+    </parameter>
+  </bsbParameterList>
+  <presetGroup name='Presets'/>
+  <opcodeList>
+    <udo>
+      <opcodeName>yiEnvelope</opcodeName>
+      <outTypes>k</outTypes>
+      <inTypes>ioooooo</inTypes>
+      <codeBody>ienvType, iattack, idecay, isus, irel, iOldAmp, iNewAmp	xin
+
+itie	tival
+idur = abs(p3)
+
+iEndAmp = iNewAmp / iOldAmp
+
+if (ienvType == 0) then
+	kenv	adsr	iattack + 0.000001, idecay, isus, irel
+	;kenv	linsegr	0, iattack, 1, idecay, isus, irel, 0
+
+elseif (ienvType == 1) then	
+
+	idur2 = idur - .02
+	kenv 	linseg	0, idur2 * .5, 1, .02, 1, idur2 * .5, 0
+	kenv logcurve kenv, 1.5
+
+
+;	;kenv 	linsegr	0, idur * .5, 1, idur * .5, 0
+;	;kenv logcurve kenv, 1.5
+;	kenv 	linseg	0, idur * .49, 1, idur * .02, 1, idur * .49, 0
+;	kenv expcurve kenv, 5
+;kenv transeg 0, idur * .5, 0, 2, idur * .5, -2,  0
+elseif (ienvType == 2) then	
+	kenv	linsegr 	0, idur - .1, 1, .1, 0	
+
+elseif (ienvType == 3) then
+
+    if (itie == 0 &amp;&amp; p3 &lt; 0) then
+        ; this is an initial note within a group of tied notes
+        kenv	linseg	0, .2, 1,  .2, 1
+       
+    elseif (p3 &gt; 0 &amp;&amp; itie == 1) then
+        ; this is an end note out of a group of tied notes
+        
+	kenv linsegr	1, .01, 1, irel, 0
+ 
+    elseif (p3 &gt; 0 &amp;&amp; itie == 0) then
+        ; this is a stand alone note
+        kenv adsr iattack, idecay, isus, irel
+    else
+        ; this is a middle note within a group of tied notes (p3 &lt; 0 &amp;&amp; itie == 1)
+        kenv = 1
+    endif  
+
+endif
+
+	xout 	kenv
+</codeBody>
+      <comments></comments>
+    </udo>
+    <udo>
+      <opcodeName>yi_envelope</opcodeName>
+      <outTypes>k</outTypes>
+      <inTypes>iiiii</inTypes>
+      <codeBody>itype, iattack, idecay, isustain, irelease xin
+setksmps 1
+ktype init itype
+
+if (ktype == 0) then
+	kout linsegr 0, iattack, 1, idecay, isustain, irelease, 0
+else 
+	isustain = (isustain == 0) ? 0.000001 : isustain
+	kout expsegr 0.0001, iattack, 1, idecay, isustain, irelease, 0.0001
+	kdeclick linseg 0, .001, 1, .1, 1
+	kout = kout * kdeclick
+endif
+
+	xout kout
+</codeBody>
+      <comments></comments>
+    </udo>
+  </opcodeList>
+</instrument>

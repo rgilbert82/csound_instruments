@@ -1,0 +1,48 @@
+<instrument type='blue.orchestra.GenericInstrument'>
+  <name>whistle</name>
+  <comment></comment>
+  <globalOrc>;[once]{
+gi_sine	ftgen 0, 0, 65537, 10, 1
+;}
+</globalOrc>
+  <globalSco></globalSco>
+  <instrumentText>;ipch 	= p4
+;ipch2	= p5
+
+;ipch 	= (ipch &lt; 15 ? cpspch(ipch) : ipch)
+;ipch2 	= (ipch2 &lt; 15 ? cpspch(ipch2) : ipch2)
+
+ipch 	getFrequency p4
+ipch2 	getFrequency p5
+
+kpchline 	line ipch, p3, ipch2
+
+iamp 	= ampdb(p6)
+iSpace	= p7
+ienvType	= p8
+
+kenv	yiEnvelope ienvType
+
+;INSERT SOUND GENERATION CODE HERE
+
+kwidth =	kpchline * .01	; width = 1 /100 of cps
+
+kran 	randh kwidth, kr	; generate range of iwidth
+kran 	= kran + kpchline	; centre on iptch
+
+aout	oscil kenv * iamp, kran, gi_sine	; noise oscillator
+
+
+;END SOUND GENERATION CODE
+
+iSpace	= iSpace * 3.14159265359 * .5
+krtl     	= sqrt(2) / 2 * (cos(iSpace) + sin(iSpace)) ; CONSTANT POWER PANNING
+krtr     	= sqrt(2) / 2 * (cos(iSpace) - sin(iSpace)) ; FROM C.ROADS &quot;CM TUTORIAL&quot; pp460
+
+aLeft 	=	aout * krtl
+aRight	=	aout * krtr
+
+blueMixerOut aLeft, aRight
+</instrumentText>
+  <opcodeList/>
+</instrument>
