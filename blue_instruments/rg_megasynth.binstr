@@ -1,89 +1,195 @@
-<CsoundSynthesizer>
-<CsOptions>
-; Select audio/midi flags here according to platform
--odac      ;;;realtime audio out
-;-iadc    ;;;uncomment -iadc if realtime audio input is needed too
-; For Non-realtime ouput leave only the line below:
-; -o name_of_output_file.wav -W ;;; for file output any platform
-</CsOptions>
-
-<CsInstruments>
-
-sr     = 44100
-kr     = 4410
-ksmps  = 10
-nchnls = 2
-0dbfs  = 1
-
-
-; =============================================================================
-; F tables
+<instrument type='blue.orchestra.GenericInstrument'>
+  <name>mega_synth</name>
+  <comment>; =============================================================================
+; P fields
 ; =============================================================================
 
-gisine     ftgen 1,  0, 16384, 10, 1	;sine wave
-gisquare   ftgen 2,  0, 16384, 10, 1, 0 , .33, 0, .2 , 0, .14, 0 , .11, 0, .09 ;odd harmonics
-gisaw      ftgen 3,  0, 16384, 10, 0, .2, 0, .4, 0, .6, 0, .8, 0, 1, 0, .8, 0, .6, 0, .4, 0,.2 ;even harmonics
-gihanning  ftgen 4,  0, 8192,  20, 2, 1  ;Hanning function
-gisigmoid  ftgen 5,  0, 1024,  19, .5, .5, 270, .5    ; Sigmoid
-gisquare2  ftgen 6,  0, 16384, 10, 1, 0, 0.3, 0, 0.2, 0, 0.14, 0, .111 ; Square wave
-gisaw2     ftgen 7,  0, 16384, 10, 1, 0.5, 0.3, 0.25, 0.2, 0.167, 0.14, 0.125, .111 ; Saw
-gipulse    ftgen 8,  0, 16384, 10, 1, 1, 1, 1, 0.7, 0.5, 0.3, 0.1
-ginoise    ftgen 9,  0, 2^10,9, 1,2,0, 3,2,0, 9,0.333,180
-giadd1     ftgen 10, 0, 16384, 11, 1, 1
-giadd2     ftgen 11, 0, 16384, 11, 10, 1, .7
-giadd3     ftgen 12, 0, 16384, 11, 10, 5, 2
-gicubic1   ftgen 13, 0, 513, 6, 1, 128, -1, 128, 1, 64, -.5, 64, .5, 16, -.5, 8, 1, 16, -.5, 8, 1, 16, -.5, 84, 1, 16, -.5, 8, .1, 16, -.1, 17, 0
-gicubic2   ftgen 14, 0, 513, 6, 0, 128, 0.5, 128, 1, 128, 0, 129, -1
-giexpon1   ftgen 15, 0, 129, 5, 1, 100, 0.0001, 29
-giexpon2   ftgen 16, 0, 129, 5, 0.00001, 87, 1, 22, .5, 20, 0.0001
-gidist     ftgen 17, 0, 257, 9, .5,1,270
-gioctblend ftgen 18, 0, 1024, -19, 1, 0.5, 270, 0.5
-gifof1     ftgen 19, 0, 1024, 19, 0.5, 0.5, 270, 0.5    ; Sigmoid for FOF
-gifof2     ftgen 20, 0, 1024, 7, 0, 512, 1, 0, -1, 512, 0  ; for FOF
+; INSTRUMENT
+;p1  instr
+;p2  start time
+;p3  duration
+;p4  amplitude    range 0 - 1+
+;p5  pan start    range 0 - 1
+;p6  pan end      range 0 - 1
+;p7  pan duration
+;p8  pan freq for lfo in hz, lfo off = 0
+;p9  pad mode for lfo,       sine = 0, tri = 1, square bi = 2, square uni = 3, saw up = 4, saw down = 5
+;p10 synth type
 
+; PITCH
+;p11 pitch value 1, in octave point decimal
+;p12 pitch value 2
+;p13 pitch value 3
+;p14 pitch value 4
+;p15 pitch duration 1 (between pitch value 1 and 2)
+;p16 pitch duration 2
+;p17 pitch duration 3
+;p18 pitch envelope ramp type, 0 = linear, 1 = exponential
+;p19 pitch randomness, range 0 - 1
+;p20 number of octave divisions for scale
 
-giadditive_freqs ftgen 999, 0, 32, 7, 0, 32, 0
-giadditive_amps ftgen 998, 0, 32, 7, 0, 32, 0
+; VIBRATO
+;p21 average amplitude value of vibrato
+;p22 average frequency value of vibrato (in cps)
+;p23 amount of random amplitude deviation
+;p24 amount of random frequency deviation
+;p25 vibrato attack
+;p26 vibrato decay
+;p27 vibrato sustain
+;p28 vibrato release
+;p29 f-table function for vibrato shape
 
+; SYNTH OSC FUNCTIONS - for synth types 0, 4, 5
+;p30 synth function 1
+;p31 synth function 2
+;p32 synth function 3
+;p33 synth function 4
 
+; SYNTH OSC PHASE - for synth types 0, 2
+;p34 osc phase 1, range 0 - 1
+;p35 osc phase 2
+;p36 osc phase 3
+;p37 osc phase 4
+
+; HARMONICS - for synth type 1
+;p38 number of harmonics start
+;p39 number of harmonics end
+;p40 number of harmonics duration
+
+; VCO - for synth type 2
+;p41 vco mode 1: 12 = tri, 10 = square, 8 = integrated saw, 6 = pulse, 4 = saw/tri/ramp, 2 = square/PWM, 0 = saw
+;p42 vco mode 2
+;p43 vco mode 3
+;p44 vco mode 4
+;p45 pulse width of square wave, range 0 - 1
+;p46 bandwidth of waveform, range 0 - 1, default 0.5
+
+; PVS SYNTH - for synth type 3
+;p47 pvs type 1: 1 = saw, 2 = square, 3 = pulse, 4 = cosine
+;p48 pvs type 2
+;p49 pvs type 3
+;p50 pvs type 4
+
+; HSB SYNTH - for synth type 4
+;p51 octave count, range 2 - 10
+;p52 tone start, range 0 - 1
+;p53 tone end
+;p54 brightness 1: 1 is octiave above 0, -1 is octave below, etc
+;p55 brightness 2
+;p56 brightness 3
+;p57 brightness 4
+
+; FM SYNTH - for synth type 5
+;p58 fm index start value, range 0+
+;p59 fm index end
+;p60 fm mod start. gives modulating freq when multiplied by the carrier freq
+;p61 fm mod end
+; ADDITIVE SYNTH - for synth type 6
+;p62 additive osc count, range 1 - 30
+;p63 additive osc wave function
+
+; FOF SYNTH - for synth type 7
+;p64 fof osc function 1
+;p65 fof osc function 2, preferably linear or sinusoid
+;p66 fof formant freq start, in hz
+;p67 fof formant freq end
+
+; LOWPASS FILTERS
+;p68 lowpass type, off = 0
+;p69 lp distortion, for lp type 1    range 0 - 1+
+;p70 lp feedback, for lp type 8      range 0 - 17
+;p71 lp q, for lp type 5             range 1 - 10
+;p72 lp stack, for lp type 7         range 1+
+
+;p73 lp cutoff freq in hz
+;p74 lp cutoff attack time
+;p75 lp cutoff decline time
+;p76 lp cutoff sustain freq in hz
+;p77 lp cutoff release time
+;p78 lp resonance value,   range 0 - 1
+;p79 lp resonance attack time
+;p80 lp resonance decline time
+;p81 lp resonance sustain value, range 0 - 1
+;p82 lp resonance release time
+
+; HIGHPASS FILTERS
+;p83 hp type, off = 0
+;p84 hp cutoff freq in hz
+;p85 hp cutoff attack time
+;p86 hp cutoff decline time
+;p87 hp cutoff sustain freq in hz
+;p88 hp cutoff release time
+;p89 hp cutoff q, for hp type 3     range 1 - 10
+
+; DISTORTION
+;p90 distortion on = 1, off = 0
+;p91 distortion value,    range 0 - 1
+;p92 distortion attack time
+;p93 distortiom decline time
+;p94 distortion sustain value,   range 0 - 1
+;p95 distortion release time
+;p96 distortion shape function
+
+; BITCRUSHER
+;p97  bitcrusher type, off = 0
+;p98  decimator bitrate, range 1 - 32
+;p99  decimator samples
+;p100 fold start value, amount of foldover expressed in multiple of sampling rate. range 1+
+;p101 fold end value
+
+; FLANGER
+;p102 flanger on = 1, off = 0
+;p103 flanger delay time value
+;p104 flanger delay attack time
+;p105 flanger delay decline time
+;p106 flanger delay time sustain value
+;p107 flanger release time
+;p108 flanger feedback, range 0 - 1
+
+; PHASER
+;p109 phaser on = 1, off = 0
+;p110 phaser freq in hz
+;p111 phaser attack time
+;p112 phaser decline time
+;p113 phaser sustain freq in hz
+;p114 phaser release time
+;p115 phaser feedback, range -1 - 1
+
+; LFO / TREMOLO
+;p116 lfo start freq in hz, off = 0
+;p117 lfo end freq in hz
+;p118 lfo shape,  sine = 0, tri = 1, square bi = 2, square uni = 3, saw up = 4, saw down = 5
+;p119 lfo attack time
+;p120 lfo decline time
+;p121 lfo sustain amplitude
+;p122 lfo release time
+
+; AMPLITUDE ENVELOPE
+;p123 adsr attack time
+;p124 adsr decay value
+;p125 adsr sustain volume, range 0 - 1
+;p126 adsr release time
+
+; COMPRESSOR
+;p127  compressor threshold, normally &lt;= 0
+;p128 compressor low knee in db
+;p129 compressor high knee in db
+;p130 compression ratio, a value of 1 will cause no compression
+;p131 compressor attack time
+;p132 compressor release time
+;p133 compressor lookahead time, typical value is 0.5
+
+; EQ
+;p134 eq on = 1, off = 0
+;p135 eq freq in hz
+;p136 eq gain in db
+;p137 eq q, range 0 - 1
+;p138 eq mode, 0 = peaking, 1 = low shelf, 2 = high shelf</comment>
+  <globalOrc></globalOrc>
+  <globalSco></globalSco>
+  <instrumentText>; =============================================================================
+; MEGA_SYNTH
 ; =============================================================================
-; UDOs
-; =============================================================================
-
-opcode Vocoder, a, aakkkpp
-  avocoder_synth,avocoder_sig,kvocoder_min,kvocoder_max,kvocoder_q,ivocoder_band,ivocoder_cnt  xin
-
-  if kvocoder_max < kvocoder_min then
-    ktmp = kvocoder_min
-    kvocoder_min = kvocoder_max
-    kvocoder_max = ktmp
-  endif
-
-  if kvocoder_min == 0 then
-    kvocoder_min = 1
-  endif
-
-  if (ivocoder_cnt >= ivocoder_band) goto bank
-  abnd   Vocoder avocoder_synth,avocoder_sig,kvocoder_min,kvocoder_max,kvocoder_q,ivocoder_band,ivocoder_cnt+1
-
-  bank:
-  kfreq = kvocoder_min*(kvocoder_max/kvocoder_min)^((ivocoder_cnt-1)/(ivocoder_band-1))
-  kbw = kfreq/kvocoder_q
-  an  butterbp  avocoder_sig, kfreq, kbw
-  an  butterbp  an, kfreq, kbw
-  as  butterbp  avocoder_synth, kfreq, kbw
-  as  butterbp  as, kfreq, kbw
-  ao balance as, an
-
-  amix = ao + abnd
-  xout amix
-endop
-
-; =============================================================================
-; SYNTH_1
-; =============================================================================
-
-instr synth_1
 
 kindex = 0
 
@@ -268,8 +374,8 @@ icps_4   cps2pch  ipch_4, iscale
 ; =============================================================================
 
 if (ivcdr_on != 0) then
-  i101 ftgenonce 0, 0, 524288, 1, "samples/hellorcb.aif", isample_skiptime, 0, 1
-  i102 ftgenonce 0, 0, 524288, 1, "samples/amen.wav",     isample_skiptime, 0, 1
+  i101 ftgenonce 0, 0, 524288, 1, &quot;samples/hellorcb.aif&quot;, isample_skiptime, 0, 1
+  i102 ftgenonce 0, 0, 524288, 1, &quot;samples/amen.wav&quot;,     isample_skiptime, 0, 1
   ; Add other samples here
 
   if (isample == 101) then
@@ -316,7 +422,7 @@ endif
 
 if (ivib_avg_amp == 0) then
   kpitch = kpitch_ramp
-elseif (ivib_att == 0 && ivib_rel == 0) then
+elseif (ivib_att == 0 &amp;&amp; ivib_rel == 0) then
   kvib       vibrato   ivib_avg_amp * kpitch_ramp, ivib_avg_freq, ivib_rand_amp, ivib_rand_freq, 3, 5, 3, 5, ivib_fnc
   kpitch = kpitch_ramp + kvib
 elseif (ivib_att == 0) then
@@ -333,7 +439,7 @@ endif
 ; Sample Pitch
 ; =============================================================================
 
-if (ivcdr_on != 0 && isample_pitch != 0) then
+if (ivcdr_on != 0 &amp;&amp; isample_pitch != 0) then
   ifftsize = 16
   iwtype = 0
   avcdr_sig     paulstretch isample_stretch, 0.02, isample
@@ -412,7 +518,7 @@ elseif (isynth_type == 6) then    ; Additive
     tablew kamp_fnc, kindex, giadditive_amps
 
     kindex = kindex + 1
-    if (kindex < iadditive_cnt) kgoto loop
+    if (kindex &lt; iadditive_cnt) kgoto loop
 
     aoscs adsynt iamp, kpitch, iadditive_func, giadditive_freqs, giadditive_amps, iadditive_cnt
 elseif (isynth_type == 7) then    ; FOF
@@ -481,15 +587,15 @@ endif
 if (ilowpass_on == 0) then
   a1 = aoscs
 else
-  if (ilowpass_on != 0 && ilp_cut_att == 0) then
+  if (ilowpass_on != 0 &amp;&amp; ilp_cut_att == 0) then
     klp_cut linseg   ilp_cut, ilp_cut_dec, ilp_cut_sust, idur - ilp_cut_dec - ilp_cut_rel, ilp_cut_sust, ilp_cut_rel, 10
-  elseif (ilowpass_on != 0 && ilp_cut_att != 0) then
+  elseif (ilowpass_on != 0 &amp;&amp; ilp_cut_att != 0) then
     klp_cut linseg   10, ilp_cut_att, ilp_cut, ilp_cut_dec, ilp_cut_sust, idur - ilp_cut_att - ilp_cut_dec - ilp_cut_rel, ilp_cut_sust, ilp_cut_rel, 10
   endif
 
-  if (ilowpass_on != 0 && ilp_res_att == 0) then
+  if (ilowpass_on != 0 &amp;&amp; ilp_res_att == 0) then
     klp_res linseg   ilp_res, ilp_res_dec, ilp_res_sust, idur - ilp_res_dec - ilp_res_rel, ilp_res_sust, ilp_res_rel, 0.001
-  elseif (ilowpass_on != 0 && ilp_res_att != 0) then
+  elseif (ilowpass_on != 0 &amp;&amp; ilp_res_att != 0) then
     klp_res linseg   0.001, ilp_res_att, ilp_res, ilp_res_dec, ilp_res_sust, idur - ilp_res_att - ilp_res_dec - ilp_res_rel, ilp_res_sust, ilp_res_rel, 0.001
   endif
 endif
@@ -516,7 +622,7 @@ elseif (ilowpass_on == 6) then
 elseif (ilowpass_on == 7) then
   a1      tonex     aoscs, klp_cut, ilp_stack
   a1      balance a1, aoscs
-elseif (ilowpass_on >= 8) then
+elseif (ilowpass_on &gt;= 8) then
   a1      diode_ladder aoscs, klp_cut, ilp_fb
   a1      balance a1, aoscs
 endif
@@ -526,9 +632,9 @@ endif
 ; Highpass Filters
 ; =============================================================================
 
-if (ihighpass_on != 0 && ihp_cut_att == 0) then
+if (ihighpass_on != 0 &amp;&amp; ihp_cut_att == 0) then
   khp_cut linseg   ihp_cut, ihp_cut_dec, ihp_cut_sust, idur - ihp_cut_dec - ihp_cut_rel, ihp_cut_sust, ihp_cut_rel, 10
-elseif (ihighpass_on != 0 && ihp_cut_att != 0) then
+elseif (ihighpass_on != 0 &amp;&amp; ihp_cut_att != 0) then
   khp_cut linseg   10, ihp_cut_att, ihp_cut, ihp_cut_dec, ihp_cut_sust, idur - ihp_cut_att - ihp_cut_dec - ihp_cut_rel, ihp_cut_sust, ihp_cut_rel, 10
 endif
 
@@ -634,20 +740,20 @@ endif
 
 iremaining_time = idur - iattack - idecay
 
-if ((iattack + idecay) >= idur ) then
+if ((iattack + idecay) &gt;= idur ) then
   idecay = idur - iattack
   irelease = 0
-elseif (iremaining_time < irelease) then
+elseif (iremaining_time &lt; irelease) then
   irelease = iremaining_time
 endif
 
-if ((iattack <= 0 && idecay <= 0) && irelease <= 0) then
+if ((iattack &lt;= 0 &amp;&amp; idecay &lt;= 0) &amp;&amp; irelease &lt;= 0) then
   aadsr = 1
-elseif (iattack <= 0 && irelease <= 0) then
+elseif (iattack &lt;= 0 &amp;&amp; irelease &lt;= 0) then
   aadsr   linseg  1, idecay, isustain_vol
-elseif (iattack <= 0 && idecay <= 0) then
+elseif (iattack &lt;= 0 &amp;&amp; idecay &lt;= 0) then
   aadsr   linseg  1, idur - irelease, 1, irelease, 0
-elseif (iattack <= 0) then
+elseif (iattack &lt;= 0) then
   aadsr   linseg  1, idecay, isustain_vol, idur - idecay - irelease, isustain_vol, irelease, 0
 else
   aadsr   adsr    iattack, idecay, isustain_vol, irelease
@@ -661,7 +767,7 @@ aenv_sig = aadsr * afadeout * (1 - alfo) * a1
 ; Compressor
 ; =============================================================================
 
-if (icomp_ratio <= 1) then
+if (icomp_ratio &lt;= 1) then
   afinal = aenv_sig
 else
   afinal    compress  aenv_sig, aenv_sig, icomp_thresh, icomp_loknee, icomp_hiknee, icomp_ratio, icomp_att, icomp_rel, icomp_look
@@ -695,251 +801,40 @@ apan_l, apan_r  pan2  afinal, kpan
 ; Outputs
 ; =============================================================================
 
-outs  apan_l, apan_r
+blueMixerOut  apan_l, apan_r</instrumentText>
+  <opcodeList>
+    <udo>
+      <opcodeName>Vocoder</opcodeName>
+      <outTypes>a</outTypes>
+      <inTypes>aakkkpp</inTypes>
+      <codeBody>avocoder_synth,avocoder_sig,kvocoder_min,kvocoder_max,kvocoder_q,ivocoder_band,ivocoder_cnt  xin
 
-endin
+if kvocoder_max &lt; kvocoder_min then
+ktmp = kvocoder_min
+kvocoder_min = kvocoder_max
+kvocoder_max = ktmp
+endif
 
-; =============================================================================
+if kvocoder_min == 0 then
+kvocoder_min = 1
+endif
 
-</CsInstruments>
-<CsScore>
+if (ivocoder_cnt &gt;= ivocoder_band) goto bank
+abnd   Vocoder avocoder_synth,avocoder_sig,kvocoder_min,kvocoder_max,kvocoder_q,ivocoder_band,ivocoder_cnt+1
 
-; =============================================================================
-; P fields
-; =============================================================================
+bank:
+kfreq = kvocoder_min*(kvocoder_max/kvocoder_min)^((ivocoder_cnt-1)/(ivocoder_band-1))
+kbw = kfreq/kvocoder_q
+an  butterbp  avocoder_sig, kfreq, kbw
+an  butterbp  an, kfreq, kbw
+as  butterbp  avocoder_synth, kfreq, kbw
+as  butterbp  as, kfreq, kbw
+ao balance as, an
 
-; INSTRUMENT
-;p1  instr
-;p2  start time
-;p3  duration
-;p4  amplitude    range 0 - 1+
-;p5  pan start    range 0 - 1
-;p6  pan end      range 0 - 1
-;p7  pan duration
-;p8  pan freq for lfo in hz, lfo off = 0
-;p9  pad mode for lfo,       sine = 0, tri = 1, square bi = 2, square uni = 3, saw up = 4, saw down = 5
-;p10 synth type   range 0 - 8
+amix = ao + abnd
 
-; PITCH
-;p11 pitch value 1, in octave point decimal
-;p12 pitch value 2
-;p13 pitch value 3
-;p14 pitch value 4
-;p15 pitch duration 1 (between pitch value 1 and 2)
-;p16 pitch duration 2
-;p17 pitch duration 3
-;p18 pitch envelope ramp type, 0 = linear, 1 = exponential
-;p19 pitch randomness, range 0 - 1
-;p20 number of octave divisions for scale
-;p21 pitch fraction, off = 0
-;    Ex with C root:
-;    C       C#      D-      D       Eb-      Eb       E       F      F#-
-;    1/1     25/24   10/9    9/8     32/27    6/5      5/4     4/3    25/18
-;
-;    F#      G       G#      A       Bb-      Bb       B       C
-;    45/32   3/2     25/16   5/3     16/9     9/5      15/8    2/1
-
-
-; VIBRATO
-;p22 average amplitude value of vibrato
-;p23 average frequency value of vibrato (in cps)
-;p24 amount of random amplitude deviation
-;p25 amount of random frequency deviation
-;p26 vibrato attack
-;p27 vibrato decay
-;p28 vibrato sustain
-;p29 vibrato release
-;p30 f-table function for vibrato shape
-
-; SYNTH OSC FUNCTIONS - for synth types 0, 4, 5
-;p31 synth function 1
-;p32 synth function 2
-;p33 synth function 3
-;p34 synth function 4
-
-; SYNTH OSC PHASE - for synth types 0, 2
-;p35 osc phase 1, range 0 - 1
-;p36 osc phase 2
-;p37 osc phase 3
-;p38 osc phase 4
-
-; HARMONICS - for synth type 1
-;p39 number of harmonics start
-;p40 number of harmonics end
-;p41 number of harmonics duration
-
-; VCO - for synth type 2
-;p42 vco mode 1: 12 = tri, 10 = square, 8 = integrated saw, 6 = pulse, 4 = saw/tri/ramp, 2 = square/PWM, 0 = saw
-;p43 vco mode 2
-;p44 vco mode 3
-;p45 vco mode 4
-;p46 pulse width of square wave, range 0 - 1
-;p47 bandwidth of waveform, range 0 - 1, default 0.5
-
-; PVS SYNTH - for synth type 3
-;p48 pvs type 1: 1 = saw, 2 = square, 3 = pulse, 4 = cosine
-;p49 pvs type 2
-;p50 pvs type 3
-;p51 pvs type 4
-
-; HSB SYNTH - for synth type 4
-;p52 octave count, range 2 - 10
-;p53 tone start, range 0 - 1
-;p54 tone end
-;p55 brightness 1: 1 is octiave above 0, -1 is octave below, etc
-;p56 brightness 2
-;p57 brightness 3
-;p58 brightness 4
-
-; FM SYNTH - for synth type 5
-;p59 fm index start value, range 0+
-;p60 fm index end
-;p61 fm mod start. gives modulating freq when multiplied by the carrier freq
-;p62 fm mod end
-; ADDITIVE SYNTH - for synth type 6
-;p63 additive osc count, range 1 - 30
-;p64 additive osc wave function
-
-; FOF SYNTH - for synth type 7
-;p65 fof osc function 1
-;p66 fof osc function 2, preferably linear or sinusoid
-;p67 fof formant freq start, in hz
-;p68 fof formant freq end
-
-; VOCODER
-;p69 Vocoder on = 1, off = 0
-;p70 sample function
-;p71 sample pitch
-;p72 sample stretch value:  1 = normal, 2 = half, .5 = double, etc
-;p73 sample skiptime
-;p74 vocoder max freq
-;p75 vocoder min freq
-;p76 vocoder Q:  range 5+
-;p77 vocoder band:  range 5+
-;p78 vocoder count:  range 1+
-
-; LOWPASS FILTERS
-;p79 lowpass type, off = 0
-;p80 lp distortion, for lp type 1    range 0 - 1+
-;p81 lp feedback, for lp type 8      range 0 - 17
-;p82 lp q, for lp type 5             range 1 - 10
-;p83 lp stack, for lp type 7         range 1+
-
-;p84 lp cutoff freq in hz
-;p85 lp cutoff attack time
-;p86 lp cutoff decline time
-;p87 lp cutoff sustain freq in hz
-;p88 lp cutoff release time
-;p89 lp resonance value,   range 0 - 1
-;p90 lp resonance attack time
-;p91 lp resonance decline time
-;p92 lp resonance sustain value, range 0 - 1
-;p93 lp resonance release time
-
-; HIGHPASS FILTERS
-;p94  hp type, off = 0
-;p95  hp cutoff freq in hz
-;p96  hp cutoff attack time
-;p97  hp cutoff decline time
-;p98  hp cutoff sustain freq in hz
-;p99  hp cutoff release time
-;p100 hp cutoff q, for hp type 3     range 1 - 10
-
-; DISTORTION
-;p101 distortion on = 1, off = 0
-;p102 distortion value,    range 0 - 1
-;p103 distortion attack time
-;p104 distortiom decline time
-;p105 distortion sustain value,   range 0 - 1
-;p106 distortion release time
-;p107 distortion shape function
-
-; BITCRUSHER
-;p108  bitcrusher type, off = 0
-;p109  decimator bitrate, range 1 - 32
-;p110  decimator samples
-;p111 fold start value, amount of foldover expressed in multiple of sampling rate. range 1+
-;p112 fold end value
-
-; FLANGER
-;p113 flanger on = 1, off = 0
-;p114 flanger delay time value
-;p115 flanger delay attack time
-;p116 flanger delay decline time
-;p117 flanger delay time sustain value
-;p118 flanger release time
-;p119 flanger feedback, range 0 - 1
-
-; PHASER
-;p120 phaser on = 1, off = 0
-;p121 phaser freq in hz
-;p122 phaser attack time
-;p123 phaser decline time
-;p124 phaser sustain freq in hz
-;p125 phaser release time
-;p126 phaser feedback, range -1 - 1
-
-; LFO / TREMOLO
-;p127 lfo start freq in hz, off = 0
-;p128 lfo end freq in hz
-;p129 lfo shape,  sine = 0, tri = 1, square bi = 2, square uni = 3, saw up = 4, saw down = 5
-;p130 lfo attack time
-;p131 lfo decline time
-;p132 lfo sustain amplitude
-;p133 lfo release time
-
-; AMPLITUDE ENVELOPE
-;p134 adsr attack time
-;p135 adsr decay value
-;p136 adsr sustain volume, range 0 - 1
-;p137 adsr release time
-
-; COMPRESSOR
-;p138 compression ratio, a value of 1 will cause no compression
-;p139 compressor threshold, normally <= 0
-;p140 compressor low knee in db
-;p141 compressor high knee in db
-;p142 compressor attack time
-;p143 compressor release time
-;p144 compressor lookahead time, typical value is 0.5
-
-; EQ
-;p145 eq on = 1, off = 0
-;p146 eq freq in hz
-;p147 eq gain in db
-;p148 eq q, range 0 - 1
-;p149 eq mode, 0 = peaking, 1 = low shelf, 2 = high shelf
-
-
-; =============================================================================
-; Score
-; =============================================================================
-
-i"synth_1"  0      3      .5      .5      .5      [1/2]  0     0    0           ; Instrument
-7.00        0      6.02   5.08    [1/10]  [3/10]  [6/10] 0     0    12    [0]   ; Pitch
-0           8      0      0       [1/2]   [1/4]   3      [0]   1                ; vibrato
-2           2      14     15                                                    ; Osc functions
-0           0      0      0                                                     ; Osc phase
-4           28     [1/2]                                                        ; Harmonics
-12          12     10     10      0.8     0.5                                   ; VCO
-2           2      2      2                                                     ; PVS osc types
-5           0      1      0       0       1       2                             ; HBSoscil
-0           20     2.03   2.03    25      10                                    ; FM / Additive
-6           19     400    100                                                   ; FOF
-0           101    0      1      0       9000    100     10     50   2          ; Vocoder
-0           0.25   15     9.0     20                                            ; lowpass settings
-            5000   [1/4]  [1/2]   500     [0]     0.5    [0]   [1/4] 0.8  [1/2] ; lowpass cutoff / res
-0           5000   [1/4]  [1/2]   100     [1/4]   9.5                           ; highpass
-0           1      [1/4]  [1/2]   .2      [1/4]   1                             ; distortion
-0           16     20     30      2                                             ; bitcrusher
-0           0.8    [1/4]  [1/2]   .3      [1/4]   .5                            ; flanger
-0           5000   [1/4]  [1/2]   100     [1/4]   0.8                           ; phaser
-0           8      0      [1/4]   [1/2]   1       [1/4]                         ; tremolo / amp lfo
-[0]        [0]     1      [0]                                                   ; adsr
-0           0      45     60      0.1     0.5     .05                           ; Compressor
-0           1000   -100   1       0                                             ; EQ
-
-e
-
-</CsScore>
-</CsoundSynthesizer>
+     xout amix</codeBody>
+      <comments></comments>
+    </udo>
+  </opcodeList>
+</instrument>
