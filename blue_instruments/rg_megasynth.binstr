@@ -349,20 +349,6 @@ idecay        = p135 * idur
 isustain_vol  = p136
 irelease      = p137 * idur
 
-icomp_ratio   = p138
-icomp_thresh  = p139
-icomp_loknee  = p140
-icomp_hiknee  = p141
-icomp_att     = p142
-icomp_rel     = p143
-icomp_look    = p144
-
-ieq_on        = p145
-ieq_freq      = p146
-ieq_gain      = ampdb(p147)
-ieq_q         = p148
-ieq_mode      = p149
-
 icps_1   cps2pch  ipch_1, iscale
 icps_2   cps2pch  ipch_2, iscale
 icps_3   cps2pch  ipch_3, iscale
@@ -760,26 +746,7 @@ else
 endif
 
 afadeout  linseg    1, idur - 0.001, 1, 0.001, 0
-aenv_sig = aadsr * afadeout * (1 - alfo) * a1
-
-
-; =============================================================================
-; Compressor
-; =============================================================================
-
-if (icomp_ratio &lt;= 1) then
-  afinal = aenv_sig
-else
-  afinal    compress  aenv_sig, aenv_sig, icomp_thresh, icomp_loknee, icomp_hiknee, icomp_ratio, icomp_att, icomp_rel, icomp_look
-endif
-
-; =============================================================================
-; EQ
-; =============================================================================
-
-if (ieq_on != 0) then
-  afinal    pareq     afinal, ieq_freq, ieq_gain, ieq_q, ieq_mode
-endif
+afinal = aadsr * afadeout * (1 - alfo) * a1
 
 
 ; =============================================================================

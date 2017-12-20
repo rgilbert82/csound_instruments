@@ -129,7 +129,7 @@
 ;p97 adsr sustain volume, range 0 - 1
 ;p98 adsr release time
 
-; COMPRESSOR
+; COMPRESSOR    * not in Blue instrument version
 ;p99  compression ratio, a value of <= 1 will cause no compression
 ;p100 compressor threshold, normally <= 0
 ;p101 compressor low knee in db
@@ -138,7 +138,7 @@
 ;p104 compressor release time
 ;p105 compressor lookahead time, typical value is 0.5
 
-; EQ
+; EQ    * not in Blue instrument version
 ;p106 eq on = 1, off = 0
 ;p107 eq freq in hz
 ;p108 eq gain in db
@@ -336,7 +336,7 @@
 ;p136 adsr sustain volume, range 0 - 1
 ;p137 adsr release time
 
-; COMPRESSOR
+; COMPRESSOR    * not in Blue instrument version
 ;p138 compression ratio, a value of 1 will cause no compression
 ;p139 compressor threshold, normally <= 0
 ;p140 compressor low knee in db
@@ -345,7 +345,7 @@
 ;p143 compressor release time
 ;p144 compressor lookahead time, typical value is 0.5
 
-; EQ
+; EQ    * not in Blue instrument version
 ;p145 eq on = 1, off = 0
 ;p146 eq freq in hz
 ;p147 eq gain in db

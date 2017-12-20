@@ -264,19 +264,6 @@ idecay        = p96 * idur
 isustain_vol  = p97
 irelease      = p98 * idur
 
-icomp_ratio   = p99
-icomp_thresh  = p100
-icomp_loknee  = p101
-icomp_hiknee  = p102
-icomp_att     = p103
-icomp_rel     = p104
-icomp_look    = p105
-
-ieq_on        = p106
-ieq_freq      = p107
-ieq_gain      = ampdb(p108)
-ieq_q         = p109
-ieq_mode      = p110
 
 if (isampler_mode == 1) then
   ilen filelen iloop_filename
@@ -580,30 +567,9 @@ endif
 
 afadeout  linseg    1, idur - 0.001, 1, 0.001, 0
 
-aenv_sig_l = aadsr * afadeout * (1 - alfo) * a1
-aenv_sig_r = aadsr * afadeout * (1 - alfo) * a2
+afinal_l = aadsr * afadeout * (1 - alfo) * a1
+afinal_r = aadsr * afadeout * (1 - alfo) * a2
 
-
-; =============================================================================
-; Compressor
-; =============================================================================
-
-if (icomp_ratio &lt;= 1) then
-  afinal_l = aenv_sig_l
-  afinal_r = aenv_sig_r
-else
-  afinal_l    compress  aenv_sig_l, aenv_sig_l, icomp_thresh, icomp_loknee, icomp_hiknee, icomp_ratio, icomp_att, icomp_rel, icomp_look
-  afinal_r    compress  aenv_sig_r, aenv_sig_r, icomp_thresh, icomp_loknee, icomp_hiknee, icomp_ratio, icomp_att, icomp_rel, icomp_look
-endif
-
-; =============================================================================
-; EQ
-; =============================================================================
-
-if (ieq_on != 0) then
-  afinal_l    pareq     afinal_l, ieq_freq, ieq_gain, ieq_q, ieq_mode
-  afinal_r    pareq     afinal_r, ieq_freq, ieq_gain, ieq_q, ieq_mode
-endif
 
 
 ; =============================================================================
