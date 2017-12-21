@@ -250,107 +250,245 @@
 
 ; VOCODER
 ;p69 Vocoder on = 1, off = 0
-;p70 sample function
-;p71 sample pitch
-;p72 sample stretch value:  1 = normal, 2 = half, .5 = double, etc
-;p73 sample skiptime
-;p74 vocoder max freq
-;p75 vocoder min freq
-;p76 vocoder Q:  range 5+
-;p77 vocoder band:  range 5+
-;p78 vocoder count:  range 1+
+;p70 sample pitch
+;p71 vocoder max freq
+;p72 vocoder min freq
+;p73 vocoder Q:  range 5+
+;p74 vocoder band:  range 5+
+;p75 vocoder count:  range 1+
 
 ; LOWPASS FILTERS
-;p79 lowpass type, off = 0
-;p80 lp distortion, for lp type 1    range 0 - 1+
-;p81 lp feedback, for lp type 8      range 0 - 17
-;p82 lp q, for lp type 5             range 1 - 10
-;p83 lp stack, for lp type 7         range 1+
+;p76 lowpass type, off = 0
+;p77 lp distortion, for lp type 1    range 0 - 1+
+;p78 lp feedback, for lp type 8      range 0 - 17
+;p79 lp q, for lp type 5             range 1 - 10
+;p80 lp stack, for lp type 7         range 1+
 
-;p84 lp cutoff freq in hz
-;p85 lp cutoff attack time
-;p86 lp cutoff decline time
-;p87 lp cutoff sustain freq in hz
-;p88 lp cutoff release time
-;p89 lp resonance value,   range 0 - 1
-;p90 lp resonance attack time
-;p91 lp resonance decline time
-;p92 lp resonance sustain value, range 0 - 1
-;p93 lp resonance release time
+;p81 lp cutoff freq in hz
+;p82 lp cutoff attack time
+;p83 lp cutoff decline time
+;p84 lp cutoff sustain freq in hz
+;p85 lp cutoff release time
+;p86 lp resonance value,   range 0 - 1
+;p87 lp resonance attack time
+;p88 lp resonance decline time
+;p89 lp resonance sustain value, range 0 - 1
+;p90 lp resonance release time
 
 ; HIGHPASS FILTERS
-;p94  hp type, off = 0
-;p95  hp cutoff freq in hz
-;p96  hp cutoff attack time
-;p97  hp cutoff decline time
-;p98  hp cutoff sustain freq in hz
-;p99  hp cutoff release time
-;p100 hp cutoff q, for hp type 3     range 1 - 10
+;p91  hp type, off = 0
+;p92  hp cutoff freq in hz
+;p93  hp cutoff attack time
+;p94  hp cutoff decline time
+;p95  hp cutoff sustain freq in hz
+;p96  hp cutoff release time
+;p97 hp cutoff q, for hp type 3     range 1 - 10
 
 ; DISTORTION
-;p101 distortion on = 1, off = 0
-;p102 distortion value,    range 0 - 1
-;p103 distortion attack time
-;p104 distortiom decline time
-;p105 distortion sustain value,   range 0 - 1
-;p106 distortion release time
-;p107 distortion shape function
+;p98 distortion on = 1, off = 0
+;p99 distortion value,    range 0 - 1
+;p100 distortion attack time
+;p101 distortiom decline time
+;p102 distortion sustain value,   range 0 - 1
+;p103 distortion release time
+;p104 distortion shape function
 
 ; BITCRUSHER
-;p108  bitcrusher type, off = 0
-;p109  decimator bitrate, range 1 - 32
-;p110  decimator samples
-;p111 fold start value, amount of foldover expressed in multiple of sampling rate. range 1+
-;p112 fold end value
+;p105  bitcrusher type, off = 0
+;p106  decimator bitrate, range 1 - 32
+;p107  decimator samples
+;p108 fold start value, amount of foldover expressed in multiple of sampling rate. range 1+
+;p109 fold end value
 
 ; FLANGER
-;p113 flanger on = 1, off = 0
-;p114 flanger delay time value
-;p115 flanger delay attack time
-;p116 flanger delay decline time
-;p117 flanger delay time sustain value
-;p118 flanger release time
-;p119 flanger feedback, range 0 - 1
+;p110 flanger on = 1, off = 0
+;p111 flanger delay time value
+;p112 flanger delay attack time
+;p113 flanger delay decline time
+;p114 flanger delay time sustain value
+;p115 flanger release time
+;p116 flanger feedback, range 0 - 1
 
 ; PHASER
-;p120 phaser on = 1, off = 0
-;p121 phaser freq in hz
-;p122 phaser attack time
-;p123 phaser decline time
-;p124 phaser sustain freq in hz
-;p125 phaser release time
-;p126 phaser feedback, range -1 - 1
+;p117 phaser on = 1, off = 0
+;p118 phaser freq in hz
+;p119 phaser attack time
+;p120 phaser decline time
+;p121 phaser sustain freq in hz
+;p122 phaser release time
+;p123 phaser feedback, range -1 - 1
 
 ; LFO / TREMOLO
-;p127 lfo start freq in hz, off = 0
-;p128 lfo end freq in hz
-;p129 lfo shape,  sine = 0, tri = 1, square bi = 2, square uni = 3, saw up = 4, saw down = 5
-;p130 lfo attack time
-;p131 lfo decline time
-;p132 lfo sustain amplitude
-;p133 lfo release time
+;p124 lfo start freq in hz, off = 0
+;p125 lfo end freq in hz
+;p126 lfo shape,  sine = 0, tri = 1, square bi = 2, square uni = 3, saw up = 4, saw down = 5
+;p127 lfo attack time
+;p128 lfo decline time
+;p129 lfo sustain amplitude
+;p130 lfo release time
 
 ; AMPLITUDE ENVELOPE
-;p134 adsr attack time
-;p135 adsr decay value
-;p136 adsr sustain volume, range 0 - 1
-;p137 adsr release time
+;p131 adsr attack time
+;p132 adsr decay value
+;p133 adsr sustain volume, range 0 - 1
+;p134 adsr release time
 
 ; COMPRESSOR    * not in Blue instrument version
-;p138 compression ratio, a value of 1 will cause no compression
-;p139 compressor threshold, normally <= 0
-;p140 compressor low knee in db
-;p141 compressor high knee in db
-;p142 compressor attack time
-;p143 compressor release time
-;p144 compressor lookahead time, typical value is 0.5
+;p135 compression ratio, a value of 1 will cause no compression
+;p136 compressor threshold, normally <= 0
+;p137 compressor low knee in db
+;p138 compressor high knee in db
+;p139 compressor attack time
+;p140 compressor release time
+;p141 compressor lookahead time, typical value is 0.5
 
 ; EQ    * not in Blue instrument version
-;p145 eq on = 1, off = 0
-;p146 eq freq in hz
-;p147 eq gain in db
-;p148 eq q, range 0 - 1
-;p149 eq mode, 0 = peaking, 1 = low shelf, 2 = high shelf
+;p142 eq on = 1, off = 0
+;p143 eq freq in hz
+;p144 eq gain in db
+;p145 eq q, range 0 - 1
+;p146 eq mode, 0 = peaking, 1 = low shelf, 2 = high shelf
+
+
+|==============================================================================|
+| SCANNER                                                                      |
+|==============================================================================|
+
+; INSTRUMENT
+;p1  instr
+;p2  start time
+;p3  duration
+;p4  amplitude    range 0 - 1+
+;p5 pitch value 1, in octave point decimal
+;p6 pitch value 2
+;p7 pitch duration
+;p8 number of octave divisions for scale
+;p9 pitch fraction, off = 0
+;    Ex with C root:
+;    C       C#      D-      D       Eb-      Eb       E       F      F#-
+;    1/1     25/24   10/9    9/8     32/27    6/5      5/4     4/3    25/18
+;
+;    F#      G       G#      A       Bb-      Bb       B       C
+;    45/32   3/2     25/16   5/3     16/9     9/5      15/8    2/1
+
+; PANNING
+;p10 pan start, range: 0 - 1
+;p11 pan end, range: 0 - 1
+;p12 pan duration
+;p13 pan freq, for LFO pan
+;p14 pan LFO mode  ; sine = 0, tri = 1, square bi = 2, square uni = 3, saw up = 4, saw down = 5
+
+; VIBRATO
+;p15 average amplitude value of vibrato
+;p16 average frequency value of vibrato (in cps)
+;p17 amount of random amplitude deviation
+;p18 amount of random frequency deviation
+;p19 vibrato attack
+;p20 vibrato decay
+;p21 vibrato sustain
+;p22 vibrato release
+;p23 f-table function for vibrato shape
+
+; SCANNER
+;p24 scan rate,     range 0.0001 - 1
+;p25 scan mass,     range 0.5 - 120+  Don't go lower!
+;p26 scan center,   range 0+ - 0.1    Don't go higher!
+;p27 scan damp,     range -1 - 0      Don't go positive!
+
+; SCANNER F-Table Functions
+;p28 init
+;p29 center
+;p30 damp
+;p31 velocity
+;p32 mass
+;p33 stiffness
+;p34 trajectory
+
+; VOCODER
+;p35 Vocoder on = 1, off = 0
+;p36 sample pitch
+;p37 vocoder max freq
+;p38 vocoder min freq
+;p39 vocoder Q:  range 5+
+;p40 vocoder band:  range 5+
+;p41 vocoder count:  range 1+
+
+; LOWPASS FILTERS
+;p42 lowpass type, off = 0
+;p43 lp distortion, for lp type 1    range 0 - 1+
+;p44 lp feedback, for lp type 8      range 0 - 17
+;p45 lp q, for lp type 5             range 1 - 10
+;p46 lp stack, for lp type 7         range 1+
+
+;p47 lp cutoff freq in hz
+;p48 lp cutoff attack time
+;p49 lp cutoff decline time
+;p50 lp cutoff sustain freq in hz
+;p51 lp cutoff release time
+;p52 lp resonance value,   range 0 - 1
+;p53 lp resonance attack time
+;p54 lp resonance decline time
+;p55 lp resonance sustain value, range 0 - 1
+;p56 lp resonance release time
+
+; HIGHPASS FILTERS
+;p57 hp type, off = 0
+;p58 hp cutoff freq in hz
+;p59 hp cutoff attack time
+;p60 hp cutoff decline time
+;p61 hp cutoff sustain freq in hz
+;p62 hp cutoff release time
+;p63 hp cutoff q, for hp type 3     range 1 - 10
+
+; DISTORTION
+;p64 distortion on = 1, off = 0
+;p65 distortion value,    range 0 - 1
+;p66 distortion attack time
+;p67 distortiom decline time
+;p68 distortion sustain value,   range 0 - 1
+;p69 distortion release time
+;p70 distortion shape function
+
+; BITCRUSHER
+;p71 bitcrusher type, off = 0
+;p72 decimator bitrate, range 1 - 32
+;p73 decimator samples
+;p74 fold start value, amount of foldover expressed in multiple of sampling rate. range 1+
+;p75 fold end value
+
+; FLANGER
+;p76 flanger on = 1, off = 0
+;p77 flanger delay time value
+;p78 flanger delay attack time
+;p79 flanger delay decline time
+;p80 flanger delay time sustain value
+;p81 flanger release time
+;p82 flanger feedback, range 0 - 1
+
+; PHASER
+;p83 phaser on = 1, off = 0
+;p84 phaser freq in hz
+;p85 phaser attack time
+;p86 phaser decline time
+;p87 phaser sustain freq in hz
+;p88 phaser release time
+;p89 phaser feedback, range -1 - 1
+
+; LFO / TREMOLO
+;p90 lfo start freq in hz, off = 0
+;p91 lfo end freq in hz
+;p92 lfo shape,  sine = 0, tri = 1, square bi = 2, square uni = 3, saw up = 4, saw down = 5
+;p93 lfo attack time
+;p94 lfo decline time
+;p95 lfo sustain amplitude
+;p96 lfo release time
+
+; AMPLITUDE ENVELOPE
+;p97  adsr attack time
+;p98  adsr decay value
+;p99  adsr sustain volume, range 0 - 1
+;p100 adsr release time
+
 
 |==============================================================================|
 | YI_RESON_MOD                                                                 |

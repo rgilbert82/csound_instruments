@@ -14,6 +14,8 @@ ksmps  = 10
 nchnls = 2
 0dbfs  = 1
 
+gasamp = 0    ;Sample input for vocoder
+
 ; =============================================================================
 ; F tables
 ; =============================================================================
@@ -41,10 +43,10 @@ gifof2     ftgen 20, 0, 1024, 7, 0, 512, 1, 0, -1, 512, 0  ; for FOF
 
 ; For Scanner
 gi501      ftgen 501, 0, 128, 7, 0, 64, 1, 64, 0			; Initial condition
-gi502      ftgen 502, 0, 128, -7, 1, 128, 0.3			    ; Masses
+gi502      ftgen 502, 0, 128, -7, 1, 128, .3			    ; Masses
 gi503      ftgen 503, 0, 128, -7, 2, 4, 0, 124, 2		  ; Centering force, also 501, 502, 504
 gi504      ftgen 504, 0, 128, -7, 1, 128, 0			      ; Damping
-gi505      ftgen 505, 0, 128, -7, -.0, 128, 0			    ; Initial velocity
+gi505      ftgen 505, 0, 128, -7, 0, 128, 0			    ; Initial velocity
 
 gi550      ftgen 550, 0, 16384, -23, "matrices/cylinder-128,8"	     ; Spring matrices
 gi551      ftgen 551, 0, 16384, -23, "matrices/circularstring-128"	 ; Spring matrices
@@ -52,6 +54,7 @@ gi552      ftgen 552, 0, 16384, -23, "matrices/full-128"             ; Spring ma
 gi553      ftgen 553, 0, 16384, -23, "matrices/grid-128,8"	         ; Spring matrices
 gi554      ftgen 554, 0, 16384, -23, "matrices/string-128"	         ; Spring matrices
 gi555      ftgen 555, 0, 16384, -23, "matrices/torus-128,8"	         ; Spring matrices
+gi559      ftgen 559, 0, 128, -7, 0, 128, 128
 gi560      ftgen 560, 0, 128, -5, .001, 128, 128		                     ; Trajectories
 gi561      ftgen 561, 0, 128, -23, "matrices/spiral-8,16,128,2,1over2"   ; Trajectories
 gi562      ftgen 562, 0, 128, -23, "matrices/cylinder-128,8"
@@ -100,10 +103,38 @@ endop
 
 
 ; =============================================================================
+; SAMPLER for vocoder
+; =============================================================================
+
+instr samp
+
+isample = 101
+isample_skiptime = 0
+
+i101 ftgenonce 0, 0, 524288, 1, "samples/hellorcb.aif", isample_skiptime, 0, 1
+i102 ftgenonce 0, 0, 524288, 1, "samples/amen.wav",     isample_skiptime, 0, 1
+; Add other samples here
+
+if (isample == 101) then
+  isample = i101
+elseif (isample == 102) then
+  isample = i102
+endif
+
+;asig  paulstretch 1, 0.02, isample
+asig flooper2 1, 1, 0, p3, 0.001, isample
+
+
+gasamp = asig
+
+endin
+
+
+; =============================================================================
 ; SCANNER
 ; =============================================================================
 
-instr 2
+instr scan
 
 idur        = p3
 iamp        = p4
@@ -143,102 +174,84 @@ iscan_stiff = p33
 iscan_traj  = p34
 
 ivcdr_on         = p35
-isample          = p36
-isample_pitch    = p37
-isample_stretch  = p38
-isample_skiptime = p39 / isample_stretch
-ivcdr_max        = p40
-ivcdr_min        = p41
-ivcdr_q          = p42
-ivcdr_band       = p43
-ivcdr_cnt        = p44
+isample_pitch    = p36
+ivcdr_max        = p37
+ivcdr_min        = p38
+ivcdr_q          = p39
+ivcdr_band       = p40
+ivcdr_cnt        = p41
 
-ilowpass_on   = p45
-ilp_dist      = p46
-ilp_fb        = p47
-klp_q         = p48
-ilp_stack     = p49
+ilowpass_on   = p42
+ilp_dist      = p43
+ilp_fb        = p44
+klp_q         = p45
+ilp_stack     = p46
 
-ilp_cut       = p50
-ilp_cut_att   = p51 * idur
-ilp_cut_dec   = p52 * idur
-ilp_cut_sust  = p53
-ilp_cut_rel   = p54 * idur
-ilp_res       = p55
-ilp_res_att   = p56 * idur
-ilp_res_dec   = p57 * idur
-ilp_res_sust  = p58
-ilp_res_rel   = p59 * idur
+ilp_cut       = p47
+ilp_cut_att   = p48 * idur
+ilp_cut_dec   = p49 * idur
+ilp_cut_sust  = p50
+ilp_cut_rel   = p51 * idur
+ilp_res       = p52
+ilp_res_att   = p53 * idur
+ilp_res_dec   = p54 * idur
+ilp_res_sust  = p55
+ilp_res_rel   = p56 * idur
 
-ihighpass_on  = p60
-ihp_cut       = p61
-ihp_cut_att   = p62 * idur
-ihp_cut_dec   = p63 * idur
-ihp_cut_sust  = p64
-ihp_cut_rel   = p65 * idur
-ihp_q         = p66
+ihighpass_on  = p57
+ihp_cut       = p58
+ihp_cut_att   = p59 * idur
+ihp_cut_dec   = p60 * idur
+ihp_cut_sust  = p61
+ihp_cut_rel   = p62 * idur
+ihp_q         = p63
 
-idist_on      = p67
-idist         = p68
-idist_att     = p69 * idur
-idist_dec     = p70 * idur
-idist_sust    = p71
-idist_rel     = p72 * idur
-idist_fnc     = p73
+idist_on      = p64
+idist         = p65
+idist_att     = p66 * idur
+idist_dec     = p67 * idur
+idist_sust    = p68
+idist_rel     = p69 * idur
+idist_fnc     = p70
 
-idec_on       = p74
-idec_bitrate  = p75
-idec_samps    = p76
-ifold_start   = p77
-ifold_end     = p78
+idec_on       = p71
+idec_bitrate  = p72
+idec_samps    = p73
+ifold_start   = p74
+ifold_end     = p75
 
-iflange_on    = p79
-iflange       = p80
-iflange_att   = p81 * idur
-iflange_dec   = p82 * idur
-iflange_sust  = p83
-iflange_rel   = p84 * idur
-iflange_fb    = p85
+iflange_on    = p76
+iflange       = p77
+iflange_att   = p78 * idur
+iflange_dec   = p79 * idur
+iflange_sust  = p80
+iflange_rel   = p81 * idur
+iflange_fb    = p82
 
-iphase_on     = p86
-iphase        = p87
-iphase_att    = p88 * idur
-iphase_dec    = p89 * idur
-iphase_sust   = p90
-iphase_rel    = p91 * idur
-iphase_fb     = p92
+iphase_on     = p83
+iphase        = p84
+iphase_att    = p85 * idur
+iphase_dec    = p86 * idur
+iphase_sust   = p87
+iphase_rel    = p88 * idur
+iphase_fb     = p89
 
-ilfo_start    = p93
-ilfo_end      = p94
-ilfo_shape    = p95
-ilfo_att      = p96 * idur
-ilfo_dec      = p97 * idur
-ilfo_sust     = p98
-ilfo_rel      = p99 * idur
+ilfo_start    = p90
+ilfo_end      = p91
+ilfo_shape    = p92
+ilfo_att      = p93 * idur
+ilfo_dec      = p94 * idur
+ilfo_sust     = p95
+ilfo_rel      = p96 * idur
 
-iattack       = p100 * idur
-idecay        = p101 * idur
-isustain_vol  = p102
-irelease      = p103 * idur
+iattack       = p97 * idur
+idecay        = p98 * idur
+isustain_vol  = p99
+irelease      = p100 * idur
 
 kpos        = abs(birnd(1))
 aout        = 0
 
-; =============================================================================
-; Vocoder Samples
-; =============================================================================
-
-if (ivcdr_on != 0) then
-  i101 ftgenonce 0, 0, 524288, 1, "samples/hellorcb.aif", isample_skiptime, 0, 1
-  i102 ftgenonce 0, 0, 524288, 1, "samples/amen.wav",     isample_skiptime, 0, 1
-  ; Add other samples here
-
-  if (isample == 101) then
-    isample = i101
-  elseif (isample == 102) then
-    isample = i102
-  endif
-endif
 
 ; =============================================================================
 ; Pitch Duration
@@ -296,11 +309,25 @@ else
 endif
 
 ; =============================================================================
+; Sample Pitch
+; =============================================================================
+
+if (ivcdr_on != 0 && isample_pitch != 0) then
+  ifftsize = 16
+  iwtype = 0
+  avcdr_sig     butterhp  gasamp, 50
+  fsig          pvsanal   avcdr_sig, ifftsize, ifftsize/4, ifftsize, iwtype
+  kfr           pvscent   fsig
+  kpitch = kfr
+  icps = i(kfr)
+endif
+
+; =============================================================================
 ; Scan
 ; =============================================================================
 
-      scanu iscan_init, irate, iscan_vel, iscan_mass, iscan_stiff, iscan_cntr, iscan_damp, imass, .01, icenter, idamp, .1, .9, kpos, 0, aout, 1, 0
-asig  scans iamp, kpitch, iscan_traj , 0
+      scanu iscan_init, irate, iscan_vel, iscan_mass, iscan_stiff, iscan_cntr, iscan_damp, imass, .01, icenter, idamp, .1, .9, kpos, 0, aout, 1, 1000
+asig  scans iamp, kpitch, iscan_traj , 1000
 aoscs limit asig, 0, 1
 
 
@@ -309,12 +336,8 @@ aoscs limit asig, 0, 1
 ; =============================================================================
 
 if (ivcdr_on != 0) then
-  if (isample_pitch == 0) then
-    avcdr_sig   paulstretch isample_stretch, 0.02, isample
-  endif
-
   kratio = 3
-  avcdr_sig   compress avcdr_sig, avcdr_sig, 0, 48, 60, kratio, .1, .5, .02
+  avcdr_sig   compress gasamp, gasamp, 0, 48, 60, kratio, .1, .5, .02
   avcdr_sig   balance  avcdr_sig, aoscs
   aoscs       Vocoder  aoscs, avcdr_sig, ivcdr_min, ivcdr_max, ivcdr_q, ivcdr_band, ivcdr_cnt
 endif
@@ -535,13 +558,159 @@ endin
 </CsInstruments>
 <CsScore>
 
-s
-i2      0       6       .9      7.00    0.00    [1/1]   10    [1/1]             ; Instrument
+
+; =============================================================================
+; P fields
+; =============================================================================
+
+; INSTRUMENT
+;p1  instr
+;p2  start time
+;p3  duration
+;p4  amplitude    range 0 - 1+
+;p5 pitch value 1, in octave point decimal
+;p6 pitch value 2
+;p7 pitch duration
+;p8 number of octave divisions for scale
+;p9 pitch fraction, off = 0
+;    Ex with C root:
+;    C       C#      D-      D       Eb-      Eb       E       F      F#-
+;    1/1     25/24   10/9    9/8     32/27    6/5      5/4     4/3    25/18
+;
+;    F#      G       G#      A       Bb-      Bb       B       C
+;    45/32   3/2     25/16   5/3     16/9     9/5      15/8    2/1
+
+; PANNING
+;p10 pan start, range: 0 - 1
+;p11 pan end, range: 0 - 1
+;p12 pan duration
+;p13 pan freq, for LFO pan
+;p14 pan LFO mode  ; sine = 0, tri = 1, square bi = 2, square uni = 3, saw up = 4, saw down = 5
+
+; VIBRATO
+;p15 average amplitude value of vibrato
+;p16 average frequency value of vibrato (in cps)
+;p17 amount of random amplitude deviation
+;p18 amount of random frequency deviation
+;p19 vibrato attack
+;p20 vibrato decay
+;p21 vibrato sustain
+;p22 vibrato release
+;p23 f-table function for vibrato shape
+
+; SCANNER
+;p24 scan rate,     range 0.0001 - 1
+;p25 scan mass,     range 0.5 - 120+  Don't go lower!
+;p26 scan center,   range 0+ - 0.1    Don't go higher!
+;p27 scan damp,     range -1 - 0      Don't go positive!
+
+; SCANNER F-Table Functions
+;p28 init
+;p29 center
+;p30 damp
+;p31 velocity
+;p32 mass
+;p33 stiffness
+;p34 trajectory
+
+; VOCODER
+;p35 Vocoder on = 1, off = 0
+;p36 sample pitch
+;p37 vocoder max freq
+;p38 vocoder min freq
+;p39 vocoder Q:  range 5+
+;p40 vocoder band:  range 5+
+;p41 vocoder count:  range 1+
+
+; LOWPASS FILTERS
+;p42 lowpass type, off = 0
+;p43 lp distortion, for lp type 1    range 0 - 1+
+;p44 lp feedback, for lp type 8      range 0 - 17
+;p45 lp q, for lp type 5             range 1 - 10
+;p46 lp stack, for lp type 7         range 1+
+
+;p47 lp cutoff freq in hz
+;p48 lp cutoff attack time
+;p49 lp cutoff decline time
+;p50 lp cutoff sustain freq in hz
+;p51 lp cutoff release time
+;p52 lp resonance value,   range 0 - 1
+;p53 lp resonance attack time
+;p54 lp resonance decline time
+;p55 lp resonance sustain value, range 0 - 1
+;p56 lp resonance release time
+
+; HIGHPASS FILTERS
+;p57 hp type, off = 0
+;p58 hp cutoff freq in hz
+;p59 hp cutoff attack time
+;p60 hp cutoff decline time
+;p61 hp cutoff sustain freq in hz
+;p62 hp cutoff release time
+;p63 hp cutoff q, for hp type 3     range 1 - 10
+
+; DISTORTION
+;p64 distortion on = 1, off = 0
+;p65 distortion value,    range 0 - 1
+;p66 distortion attack time
+;p67 distortiom decline time
+;p68 distortion sustain value,   range 0 - 1
+;p69 distortion release time
+;p70 distortion shape function
+
+; BITCRUSHER
+;p71 bitcrusher type, off = 0
+;p72 decimator bitrate, range 1 - 32
+;p73 decimator samples
+;p74 fold start value, amount of foldover expressed in multiple of sampling rate. range 1+
+;p75 fold end value
+
+; FLANGER
+;p76 flanger on = 1, off = 0
+;p77 flanger delay time value
+;p78 flanger delay attack time
+;p79 flanger delay decline time
+;p80 flanger delay time sustain value
+;p81 flanger release time
+;p82 flanger feedback, range 0 - 1
+
+; PHASER
+;p83 phaser on = 1, off = 0
+;p84 phaser freq in hz
+;p85 phaser attack time
+;p86 phaser decline time
+;p87 phaser sustain freq in hz
+;p88 phaser release time
+;p89 phaser feedback, range -1 - 1
+
+; LFO / TREMOLO
+;p90 lfo start freq in hz, off = 0
+;p91 lfo end freq in hz
+;p92 lfo shape,  sine = 0, tri = 1, square bi = 2, square uni = 3, saw up = 4, saw down = 5
+;p93 lfo attack time
+;p94 lfo decline time
+;p95 lfo sustain amplitude
+;p96 lfo release time
+
+; AMPLITUDE ENVELOPE
+;p97  adsr attack time
+;p98  adsr decay value
+;p99  adsr sustain volume, range 0 - 1
+;p100 adsr release time
+
+
+; =============================================================================
+; Score
+; =============================================================================
+
+i"samp" 0       10
+
+i"scan" 0       6       .9      4.00    0.00    [1/1]   10    [1/1]             ; Instrument
 .5      .5      [2/1]   0       0                                               ; Pan
 0       8       0       0       [1/2]   [1/4]   3       [0]    1                ; vibrato
-.02     5       0.01    -0.07                                                   ; Scanner Params
+.03     1       0.005   -0.1                                                    ; Scanner Params
 501     503     504     505     502     550     561                             ; Scanner Functions
-0       101     0       1       0       9000    100     10     50      2        ; Vocoder
+0       0       9000    100     10      50      2                               ; Vocoder
 0       0.25    15      9.0     20                                              ; lowpass settings
 5000    [1/4]   [1/2]   500     [1/4]   0.5     [0]     [0]  0.8       [1/2]    ; lowpass cutoff / res
 0       5000    [1/4]   [1/2]   100     [1/4]   9.5                             ; highpass
@@ -553,12 +722,12 @@ i2      0       6       .9      7.00    0.00    [1/1]   10    [1/1]             
 [0]     [0]     1       [0]                                                     ; adsr
 
 
-i2      6       10      .9      2.00    6.00    [1/1]   10    [1/1]             ; Instrument
+i"scan" 6       10      .9      2.00    6.00    [1/1]   10    [1/1]             ; Instrument
 .5      .5      [0]     0       0                                               ; Pan
 0       8       0       0       [1/2]   [1/4]   3       [0]    1                ; vibrato
 .05     .5      0.001   -0.07      	                                            ; Scanner Params
 501     503     504     505     502     550     561                             ; Scanner Functions
-0       101     0       1       0       9000    100     10     50      2        ; Vocoder
+0       0       9000    100     10      50      2                               ; Vocoder
 0       0.25    15      9.0     20                                              ; lowpass settings
 5000    [1/4]   [1/2]   500     [0]     0.5     [0]     [1/4]  0.8     [1/2]    ; lowpass cutoff / res
 0       5000    [1/4]   [1/2]   100     [1/4]   9.5                             ; highpass
