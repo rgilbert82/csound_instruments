@@ -53,78 +53,100 @@ gi32       ftgen 32, 0,    512,   7,  0,   128, .1, 128, .2, 128, .3, 128, 1
 
 
 ; =============================================================================
+; Reverb Sends
+; =============================================================================
+
+garvbsig1 init 0
+garvbsig2 init 0
+
+; =============================================================================
 ; Instrument
 ; =============================================================================
 
-instr 3
+instr pad_2
 
 idur          = p3
-iamp          = p4
-ifunc         = p5
-iattack       = p6 * idur
-idecline      = p7 * idur
-ipch_s1       = p8
-ipch_s2       = p9
-ipch_e1       = p10
-ipch_e2       = p11
-ipch_dur      = p12
-iscale        = p13
-ipch_fract    = p14
-isc           = iamp * .333
+iamp          = p4 * .5
+ifunc_l1      = p5
+ifunc_r1      = p6
+ifunc_env_l   = p7
+ifunc_env_r   = p8
+iattack       = p9 * idur
+irelease      = p10 * idur
+ipch_l1       = p11
+ipch_r1       = p12
+ipch_l2       = p13
+ipch_r2       = p14
+ipch_dur      = p15 * idur
+iscale        = p16
+ipch_fract    = p17
+irvgain       = p18
 
-icps_s1   cps2pch  ipch_s1, iscale
-icps_s2   cps2pch  ipch_s2, iscale
-icps_e1   cps2pch  ipch_e1, iscale
-icps_e2   cps2pch  ipch_e2, iscale
 
-kpitch_ramp1 linseg  icps_s1, ipch_dur, icps_e1, idur - ipch_dur, icps_e1
-kpitch_ramp2 linseg  icps_s2, ipch_dur, icps_e2, idur - ipch_dur, icps_e2
+icps_l1   cps2pch  ipch_l1, iscale
+icps_r1   cps2pch  ipch_r1, iscale
+icps_l2   cps2pch  ipch_l2, iscale
+icps_r2   cps2pch  ipch_r2, iscale
 
-if (iattack <= 0) then
-  kenv linseg isc, idur - idecline, isc, idecline, 0
-else
-  kenv linseg 0, iattack, isc, idur - iattack - idecline, isc, idecline, 0
-endif
+kpitch_ramp1 linseg  icps_l1, ipch_dur, icps_l2, idur - ipch_dur, icps_l2
+kpitch_ramp2 linseg  icps_r1, ipch_dur, icps_r2, idur - ipch_dur, icps_r2
 
 if (ipch_fract != 0) then
   kpitch_ramp1 = kpitch_ramp1 * ipch_fract
   kpitch_ramp2 = kpitch_ramp2 * ipch_fract
 endif
 
-k1 line 100,idur,1000
-k2 line 1000,idur,100
-k3 line 1000,idur,50
-k4 line 50,idur,1000
+if (iattack <= 0) then
+  kenv linseg   iamp, idur - irelease, iamp, irelease, 0
+else
+  kenv linseg   0, iattack, iamp, idur - iattack - irelease, iamp, irelease, 0
+endif
 
-a5  oscil kenv,kpitch_ramp1,ifunc
-a6  oscil kenv,kpitch_ramp1*.999,ifunc
-a7  oscil kenv,kpitch_ramp1*1.001,ifunc
-a8  oscil kenv,kpitch_ramp2,ifunc
-a9  oscil kenv,kpitch_ramp2*.999,ifunc
-a10 oscil kenv,kpitch_ramp2*1.001,ifunc
+k1 oscil kenv, 1/idur, ifunc_env_l
+k2 oscil kenv, 1/idur, ifunc_env_r
+k3 linen  3,.9,idur,.3
+k4 randi k3,10
+k5 randi k3,15
+k6 linen abs(birnd(1)),idur * .1,idur, abs(birnd(.8)) + .1
+k7 linen abs(birnd(1)),idur * .1,idur, abs(birnd(.8)) + .1
+k8 oscil k6,abs(birnd(10)) + 5,-1
+k9 oscil k7,abs(birnd(10)) + 5,-1
+a1 oscil k1, kpitch_ramp1 + k4 + k8, ifunc_l1
+a2 oscil k2, kpitch_ramp2 + k5 + k9, ifunc_r1
 
-a1  = a5 + a6 + a7
-a11 = a8 + a9 + a10
+outs a1,a2
 
-a2     butterbp a1,k1,50
-a3     butterbr a2,k3,25
-aleft  balance  a3,a1
-a12    butterbp a11,k2,50
-a13    butterbr a12,k4,25
-aright balance  a13,a11
+garvbsig1 = garvbsig1 + a1 * irvgain
+garvbsig2 = garvbsig2 + a2 * irvgain
 
-outs aleft, aright
+endin
 
+instr reverb_1
+irvtime = p4
+a1  reverb2 garvbsig1,irvtime,.5
+a2  reverb2 garvbsig2,irvtime,.25
+outs a1,a2
+garvbsig1=0
+garvbsig2=0
 endin
 
 </CsInstruments>
 <CsScore>
 
-;ins st  dur   db func   at  dec freq_s1   freq_s2   freq_e1  freq_e2   pch_dur scale   fraction
-i3   0   10   .9  28     .2   .4   5.01    5.001     6.05     6.051     .25     10      [0]
-i3   0   10   .8  28     .2   .4   5.04    5.041     6.05     6.051     .25     10      [3/2]
-i3   0   10   .7  26     .1   .3   7.001   7.00      8.05     8.051     .25     10      [0]
-i3   0   10   .7  26     .1   .3   7.001   7.00      8.05     8.051     .25     10      [3/2]
+; Instr       st  dur  rvb_time
+i"reverb_1"   0   30   4
+
+
+;Instr    st   dur  amp    fnc_l  fnc_r    env_fnc_l  env_fnc_r   attack    release
+;pch_l1   pch_r1    pch_l2        pch_r2   pch_dur    scale      fraction    rb_gain
+i"pad_2"  1    20   .6     9      9        12         12          .25       .4
+5.00      5.0023    5.03          5.034    .25        12         [0]         1
+
+i"pad_2"  4    16   .5     9      9        8          12          .25       .4
+6.00      6.002     6.03          6.034    .25        12         [0]         1
+
+i"pad_2"  8    15   .6     9      9        8          12          .5        .4
+6.08      6.082     8.02          8.034    .25        12         [0]         1
 
 e
 </CsScore>
