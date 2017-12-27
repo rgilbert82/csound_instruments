@@ -562,6 +562,52 @@
 ;p128 fold level      range 1+, 0 = off
 
 
+
+|==============================================================================|
+| PAD_2                                                                        |
+|==============================================================================|
+
+; INSTRUMENT
+;p1  instr number
+;p2  start time
+;p3  duration
+;p4  amplitude    range 0 - 1+
+;p5  left  osc f-table function
+;p6  right osc f-table function
+;p7  left  env f-table function
+;p8  right env f-table function
+;p9  env attack percentage
+;p10 env release percentage
+;p11 reverb gain    range 0-1+
+
+; PITCH
+;p12 pitch 1 start
+;p13 pitch 2 start
+;p14 pitch 1 end
+;p15 pitch 2 end
+;p16 pitch duration percentage
+;p17 pitch scale
+;p18 pitch fraction
+
+; PANNING
+;p19 pan start    range 0 - 1
+;p20 pan end      range 0 - 1
+;p21 pan duration
+;p22 pan freq for lfo in hz, lfo off = 0
+;p23 pad mode for lfo,       sine = 0, tri = 1, square bi = 2, square uni = 3, saw up = 4, saw down = 5
+
+; FEEDBACK
+;p24 feedback on = 1, off = 0
+;p25 fb freq 1 in Hz
+;p26 fb freq 2 in Hz
+;p27 fb level 1,     range 0-2
+;p28 fb level 2,     range 0-2
+;p29 fb level 3,     range 0-2
+;p30 fb time 1,      percentage of idur
+;p31 fb time 2,      percentage of idur
+;p32 fold level      range 1+, 0 = off
+
+
 |==============================================================================|
 | YI_RESON_MOD                                                                 |
 |==============================================================================|

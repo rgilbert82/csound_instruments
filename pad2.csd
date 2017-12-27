@@ -59,8 +59,12 @@ gi32       ftgen 32, 0,    512,   7,  0,   128, .1, 128, .2, 128, .3, 128, 1
 garvbsig1 init 0
 garvbsig2 init 0
 
+
+
 ; =============================================================================
-; Instrument
+; =============================================================================
+; PAD 2
+; =============================================================================
 ; =============================================================================
 
 instr pad_2
@@ -73,15 +77,31 @@ ifunc_env_l   = p7
 ifunc_env_r   = p8
 iattack       = p9 * idur
 irelease      = p10 * idur
-ipch_l1       = p11
-ipch_r1       = p12
-ipch_l2       = p13
-ipch_r2       = p14
-ipch_dur      = p15 * idur
-iscale        = p16
-ipch_fract    = p17
-irvgain       = p18
+irvgain       = p11
 
+ipch_l1       = p12
+ipch_r1       = p13
+ipch_l2       = p14
+ipch_r2       = p15
+ipch_dur      = p16 * idur
+iscale        = p17
+ipch_fract    = p18
+
+ipan_start    = p19
+ipan_end      = p20
+ipan_dur      = p21 * idur
+ipan_freq     = p22
+ipan_mode     = p23
+
+ifeedback     = p24       ;range 1-10
+ifb_freq_1    = p25
+ifb_freq_2    = p26
+ifb_1         = p27       ;range 0-2
+ifb_2         = p28
+ifb_3         = p29
+ifb_time_1    = p30
+ifb_time_2    = p31
+ifb_fold      = p32
 
 icps_l1   cps2pch  ipch_l1, iscale
 icps_r1   cps2pch  ipch_r1, iscale
@@ -111,15 +131,74 @@ k6 linen abs(birnd(1)),idur * .1,idur, abs(birnd(.8)) + .1
 k7 linen abs(birnd(1)),idur * .1,idur, abs(birnd(.8)) + .1
 k8 oscil k6,abs(birnd(10)) + 5,-1
 k9 oscil k7,abs(birnd(10)) + 5,-1
-a1 oscil k1, kpitch_ramp1 + k4 + k8, ifunc_l1
-a2 oscil k2, kpitch_ramp2 + k5 + k9, ifunc_r1
+afinal_l oscil k1, kpitch_ramp1 + k4 + k8, ifunc_l1
+afinal_r oscil k2, kpitch_ramp2 + k5 + k9, ifunc_r1
 
-outs a1,a2
 
-garvbsig1 = garvbsig1 + a1 * irvgain
-garvbsig2 = garvbsig2 + a2 * irvgain
+; =============================================================================
+; Panning
+; =============================================================================
+
+if (ipan_freq != 0) then
+  kpan     lfo   1, ipan_freq, ipan_mode
+elseif (ipan_start != ipan_end) then
+  kpan     linseg  ipan_start, ipan_dur, ipan_end
+else
+  kpan = ipan_start
+endif
+
+apan_l  = (1 - kpan) * (2 * ((afinal_l * (1 - (kpan * .5))) + (afinal_r * (kpan * .5))))
+apan_r  = (kpan) * (2 * ((afinal_l * (1 - (kpan * .5))) + (afinal_r * (kpan * .5))))
+
+
+
+; =============================================================================
+; Feedback / Outputs
+; =============================================================================
+
+if (ifeedback == 0) then
+  outs      apan_l, apan_r
+  garvbsig1 = garvbsig1 + apan_l * irvgain
+  garvbsig2 = garvbsig2 + apan_r * irvgain
+else
+  kfb_freq  linseg    ifb_freq_1, idur, ifb_freq_2
+  kfdbk     linseg    ifb_1, idur * ifb_time_1, ifb_2, idur * ifb_time_2, ifb_3
+  atemp_l   delayr    1/20
+  acomb_l   deltapi   1/kfb_freq
+  atemp_r   delayr    1/20
+  acomb_r   deltapi   1/kfb_freq
+
+  if (ifb_fold >= 1) then
+    asig_l    fold  kfdbk * acomb_l, ifb_fold
+    asig_r    fold  kfdbk * acomb_r, ifb_fold
+
+    aiir_l    dcblock   apan_l + asig_l
+    aiir_l    =         aiir_l - aiir_l * aiir_l * aiir_l/6
+    aiir_r    dcblock   apan_r + asig_r
+    aiir_r    =         aiir_r - aiir_r * aiir_r * aiir_r/6
+  else
+    aiir_l    dcblock   apan_l + (acomb_l * kfdbk)
+    aiir_l    =         aiir_l - aiir_l * aiir_l * aiir_l/6
+    aiir_r    dcblock   apan_r + (acomb_r * kfdbk)
+    aiir_r    =         aiir_r - aiir_r * aiir_r * aiir_r/6
+  endif
+
+  delayw    aiir_l
+  delayw    aiir_r
+
+  outs      acomb_l, acomb_r
+  garvbsig1 = garvbsig1 + acomb_l * irvgain
+  garvbsig2 = garvbsig2 + acomb_r * irvgain
+endif
 
 endin
+
+
+; =============================================================================
+; =============================================================================
+; REVERB
+; =============================================================================
+; =============================================================================
 
 instr reverb_1
 irvtime = p4
@@ -133,20 +212,74 @@ endin
 </CsInstruments>
 <CsScore>
 
+; =============================================================================
+; P fields
+; =============================================================================
+
+; INSTRUMENT
+;p1  instr number
+;p2  start time
+;p3  duration
+;p4  amplitude    range 0 - 1+
+;p5  left  osc f-table function
+;p6  right osc f-table function
+;p7  left  env f-table function
+;p8  right env f-table function
+;p9  env attack percentage
+;p10 env release percentage
+;p11 reverb gain    range 0-1+
+
+; PITCH
+;p12 pitch 1 start
+;p13 pitch 2 start
+;p14 pitch 1 end
+;p15 pitch 2 end
+;p16 pitch duration percentage
+;p17 pitch scale
+;p18 pitch fraction
+
+; PANNING
+;p19 pan start    range 0 - 1
+;p20 pan end      range 0 - 1
+;p21 pan duration
+;p22 pan freq for lfo in hz, lfo off = 0
+;p23 pad mode for lfo,       sine = 0, tri = 1, square bi = 2, square uni = 3, saw up = 4, saw down = 5
+
+; FEEDBACK
+;p24 feedback on = 1, off = 0
+;p25 fb freq 1 in Hz
+;p26 fb freq 2 in Hz
+;p27 fb level 1,     range 0-2
+;p28 fb level 2,     range 0-2
+;p29 fb level 3,     range 0-2
+;p30 fb time 1,      percentage of idur
+;p31 fb time 2,      percentage of idur
+;p32 fold level      range 1+, 0 = off
+
+
+
+; =============================================================================
+; Score
+; =============================================================================
+
 ; Instr       st  dur  rvb_time
 i"reverb_1"   0   30   4
 
 
-;Instr    st   dur  amp    fnc_l  fnc_r    env_fnc_l  env_fnc_r   attack    release
-;pch_l1   pch_r1    pch_l2        pch_r2   pch_dur    scale      fraction    rb_gain
-i"pad_2"  1    20   .6     9      9        12         12          .25       .4
-5.00      5.0023    5.03          5.034    .25        12         [0]         1
+i"pad_2"  1     20   .6     9      9        12      12      .25    .4    1      ;instrument
+5.00      5.0023     5.03          5.034    .25     12      [0]                 ;pitch
+.25       .75        .5     0      0                                            ;panning
+0         150        150    1      .5       .8      .5      .5     0            ;feedback
 
-i"pad_2"  4    16   .5     9      9        8          12          .25       .4
-6.00      6.002     6.03          6.034    .25        12         [0]         1
+i"pad_2"  4     16   .5     9      9        8       12      .25    .4    1      ;instrument
+6.00      6.002      6.03          6.034    .25     12      [0]                 ;pitch
+.25       .75        .5     0      0                                            ;panning
+0         150        150    1      .5       .8      .5      .5     0            ;feedback
 
-i"pad_2"  8    15   .6     9      9        8          12          .5        .4
-6.08      6.082     8.02          8.034    .25        12         [0]         1
+i"pad_2"  8     15   .6     9      9        8       12      .5     .4    1      ;instrument
+6.08      6.082      8.02          8.034    .25     12      [0]                 ;pitch
+.75       .25        .5     0      0                                            ;panning
+0         350        350    1      .5       .8      .5      .5     0            ;feedback
 
 e
 </CsScore>
