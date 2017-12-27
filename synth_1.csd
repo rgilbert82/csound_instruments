@@ -294,6 +294,16 @@ ieq_gain      = ampdb(p144)
 ieq_q         = p145
 ieq_mode      = p146
 
+ifeedback     = p147       ;range 1-10
+ifb_freq_1    = p148
+ifb_freq_2    = p149
+ifb_1         = p150       ;range 0-2
+ifb_2         = p151
+ifb_3         = p152
+ifb_time_1    = p153
+ifb_time_2    = p154
+ifb_fold      = p155
+
 icps_1   cps2pch  ipch_1, iscale
 icps_2   cps2pch  ipch_2, iscale
 icps_3   cps2pch  ipch_3, iscale
@@ -708,10 +718,39 @@ apan_l, apan_r  pan2  afinal, kpan
 
 
 ; =============================================================================
-; Outputs
+; Feedback / Outputs
 ; =============================================================================
 
-outs  apan_l, apan_r
+if (ifeedback == 0) then
+  outs      apan_l, apan_r
+else
+  kfb_freq  linseg    ifb_freq_1, idur, ifb_freq_2
+  kfdbk     linseg    ifb_1, idur * ifb_time_1, ifb_2, idur * ifb_time_2, ifb_3
+  atemp_l   delayr    1/20
+  acomb_l   deltapi   1/kfb_freq
+  atemp_r   delayr    1/20
+  acomb_r   deltapi   1/kfb_freq
+
+  if (ifb_fold >= 1) then
+    asig_l    fold  kfdbk * acomb_l, ifb_fold
+    asig_r    fold  kfdbk * acomb_r, ifb_fold
+
+    aiir_l    dcblock   apan_l + asig_l
+    aiir_l    =         aiir_l - aiir_l * aiir_l * aiir_l/6
+    aiir_r    dcblock   apan_r + asig_r
+    aiir_r    =         aiir_r - aiir_r * aiir_r * aiir_r/6
+  else
+    aiir_l    dcblock   apan_l + (acomb_l * kfdbk)
+    aiir_l    =         aiir_l - aiir_l * aiir_l * aiir_l/6
+    aiir_r    dcblock   apan_r + (acomb_r * kfdbk)
+    aiir_r    =         aiir_r - aiir_r * aiir_r * aiir_r/6
+  endif
+
+  delayw    aiir_l
+  delayw    aiir_r
+
+  outs      acomb_l, acomb_r
+endif
 
 endin
 
@@ -923,6 +962,17 @@ endin
 ;p145 eq q, range 0 - 1
 ;p146 eq mode, 0 = peaking, 1 = low shelf, 2 = high shelf
 
+; FEEDBACK
+;p147 feedback on = 1, off = 0
+;p148 fb freq 1 in Hz
+;p149 fb freq 2 in Hz
+;p150 fb level 1,     range 0-2
+;p151 fb level 2,     range 0-2
+;p152 fb level 3,     range 0-2
+;p153 fb time 1,      percentage of idur
+;p154 fb time 2,      percentage of idur
+;p155 fold level      range 1+, 0 = off
+
 
 ; =============================================================================
 ; Score
@@ -941,7 +991,7 @@ i"synth_1"  0      5      .5      .5      .5      [1/2]  0     0    0           
 5           0      1      0       0       1       2                             ; HBSoscil
 0           20     2.03   2.03    25      10                                    ; FM / Additive
 6           19     400    100                                                   ; FOF
-0           0      9000   100     10      50      2                             ; Vocoder
+1           0      9000   100     10      50      2                             ; Vocoder
 0           0.25   15     9.0     20                                            ; lowpass settings
             5000   [1/4]  [1/2]   500     [0]     0.5    [0]   [1/4] 0.8  [1/2] ; lowpass cutoff / res
 0           5000   [1/4]  [1/2]   100     [1/4]   9.5                           ; highpass
@@ -953,6 +1003,7 @@ i"synth_1"  0      5      .5      .5      .5      [1/2]  0     0    0           
 [0]        [0]     1      [0]                                                   ; adsr
 0           0      45     60      0.1     0.5     .05                           ; Compressor
 0           1000   -100   1       0                                             ; EQ
+0           150    150    1       .5      .8      .5     .5    0                ; Feedback
 
 e
 

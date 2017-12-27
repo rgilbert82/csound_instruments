@@ -189,6 +189,16 @@ ieq_gain      = ampdb(p108)
 ieq_q         = p109
 ieq_mode      = p110
 
+ifeedback     = p111       ;range 1-10
+ifb_freq_1    = p112
+ifb_freq_2    = p113
+ifb_1         = p114       ;range 0-2
+ifb_2         = p115
+ifb_3         = p116
+ifb_time_1    = p117
+ifb_time_2    = p118
+ifb_fold      = p119
+
 if (isampler_mode == 1) then
   ilen filelen iloop_filename
   iskiptime = iloop_skip_percent * ilen
@@ -512,7 +522,7 @@ endif
 
 
 ; =============================================================================
-; Panned Outputs
+; Panning
 ; =============================================================================
 
 if (ipan_start == ipan_end) then
@@ -524,7 +534,41 @@ endif
 apan_l  = (1 - kpan) * (2 * ((afinal_l * (1 - (kpan * .5))) + (afinal_r * (kpan * .5))))
 apan_r  = (kpan) * (2 * ((afinal_l * (1 - (kpan * .5))) + (afinal_r * (kpan * .5))))
 
-outs      apan_l, apan_r
+
+; =============================================================================
+; Feedback / Outputs
+; =============================================================================
+
+if (ifeedback == 0) then
+  outs      apan_l, apan_r
+else
+  kfb_freq  linseg    ifb_freq_1, idur, ifb_freq_2
+  kfdbk     linseg    ifb_1, idur * ifb_time_1, ifb_2, idur * ifb_time_2, ifb_3
+  atemp_l   delayr    1/20
+  acomb_l   deltapi   1/kfb_freq
+  atemp_r   delayr    1/20
+  acomb_r   deltapi   1/kfb_freq
+
+  if (ifb_fold >= 1) then
+    asig_l    fold  kfdbk * acomb_l, ifb_fold
+    asig_r    fold  kfdbk * acomb_r, ifb_fold
+
+    aiir_l    dcblock   apan_l + asig_l
+    aiir_l    =         aiir_l - aiir_l * aiir_l * aiir_l/6
+    aiir_r    dcblock   apan_r + asig_r
+    aiir_r    =         aiir_r - aiir_r * aiir_r * aiir_r/6
+  else
+    aiir_l    dcblock   apan_l + (acomb_l * kfdbk)
+    aiir_l    =         aiir_l - aiir_l * aiir_l * aiir_l/6
+    aiir_r    dcblock   apan_r + (acomb_r * kfdbk)
+    aiir_r    =         aiir_r - aiir_r * aiir_r * aiir_r/6
+  endif
+
+  delayw    aiir_l
+  delayw    aiir_r
+
+  outs      acomb_l, acomb_r
+endif
 
 endin
 
@@ -679,6 +723,17 @@ endin
 ;p109 eq q, range 0 - 1
 ;p110 eq mode, 0 = peaking, 1 = low shelf, 2 = high shelf
 
+; FEEDBACK
+;p111 feedback on = 1, off = 0
+;p112 fb freq 1 in Hz
+;p113 fb freq 2 in Hz
+;p114 fb level 1,     range 0-2
+;p115 fb level 2,     range 0-2
+;p116 fb level 3,     range 0-2
+;p117 fb time 1,      percentage of idur
+;p118 fb time 2,      percentage of idur
+;p119 fold level      range 1+, 0 = off
+
 
 ; =============================================================================
 ; SCORE
@@ -701,6 +756,7 @@ i"sampler_1"       0      5       1       .5     .5     [1/1]  101  0     2     
 [0]        [0]     1      [0]                                                   ; adsr
 0           0      45     60      0.1     0.5     .05                           ; Compressor
 0           1000   -100   1       0                                             ; EQ
+0           450    450    1       .5      .8      .5     .5    0                ; Feedback
 
 e
 

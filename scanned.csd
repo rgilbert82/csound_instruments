@@ -261,6 +261,16 @@ idecay        = p98 * idur
 isustain_vol  = p99
 irelease      = p100 * idur
 
+ifeedback     = p101       ;range 1-10
+ifb_freq_1    = p102
+ifb_freq_2    = p103
+ifb_1         = p104       ;range 0-2
+ifb_2         = p105
+ifb_3         = p106
+ifb_time_1    = p107
+ifb_time_2    = p108
+ifb_fold      = p109
+
 kpos        = abs(birnd(1))
 aout        = 0
 
@@ -559,11 +569,41 @@ endif
 
 apan_l, apan_r  pan2  aenv_sig, kpan
 
+
 ; =============================================================================
-; Outs
+; Feedback / Outputs
 ; =============================================================================
 
-outs apan_l, apan_r
+if (ifeedback == 0) then
+  outs      apan_l, apan_r
+else
+  kfb_freq  linseg    ifb_freq_1, idur, ifb_freq_2
+  kfdbk     linseg    ifb_1, idur * ifb_time_1, ifb_2, idur * ifb_time_2, ifb_3
+  atemp_l   delayr    1/20
+  acomb_l   deltapi   1/kfb_freq
+  atemp_r   delayr    1/20
+  acomb_r   deltapi   1/kfb_freq
+
+  if (ifb_fold >= 1) then
+    asig_l    fold  kfdbk * acomb_l, ifb_fold
+    asig_r    fold  kfdbk * acomb_r, ifb_fold
+
+    aiir_l    dcblock   apan_l + asig_l
+    aiir_l    =         aiir_l - aiir_l * aiir_l * aiir_l/6
+    aiir_r    dcblock   apan_r + asig_r
+    aiir_r    =         aiir_r - aiir_r * aiir_r * aiir_r/6
+  else
+    aiir_l    dcblock   apan_l + (acomb_l * kfdbk)
+    aiir_l    =         aiir_l - aiir_l * aiir_l * aiir_l/6
+    aiir_r    dcblock   apan_r + (acomb_r * kfdbk)
+    aiir_r    =         aiir_r - aiir_r * aiir_r * aiir_r/6
+  endif
+
+  delayw    aiir_l
+  delayw    aiir_r
+
+  outs      acomb_l, acomb_r
+endif
 
 endin
 
@@ -710,6 +750,17 @@ endin
 ;p99  adsr sustain volume, range 0 - 1
 ;p100 adsr release time
 
+; FEEDBACK
+;p101 feedback on = 1, off = 0
+;p102 fb freq 1 in Hz
+;p103 fb freq 2 in Hz
+;p104 fb level 1,     range 0-2
+;p105 fb level 2,     range 0-2
+;p106 fb level 3,     range 0-2
+;p107 fb time 1,      percentage of idur
+;p108 fb time 2,      percentage of idur
+;p109 fold level      range 1+, 0 = off
+
 
 ; =============================================================================
 ; Score
@@ -732,6 +783,7 @@ i"scan" 0       6       .9      4.00    0.00    [1/1]   10    [1/1]             
 0       5000    [1/4]   [1/2]   100     [1/4]   0.8                             ; phaser
 0       8       0       [1/4]   [1/2]   1       [1/4]                           ; tremolo / amp lfo
 [0]     [0]     1       [0]                                                     ; adsr
+0       150     150     1       .5      .8      .5      .5     10               ; Feedback
 
 
 i"scan" 6       10      .9      2.00    6.00    [1/1]   10    [1/1]             ; Instrument
@@ -749,6 +801,7 @@ i"scan" 6       10      .9      2.00    6.00    [1/1]   10    [1/1]             
 0       5000    [1/4]   [1/2]   100     [1/4]   0.8                             ; phaser
 0       8       0       [1/4]   [1/2]   1       [1/4]                           ; tremolo / amp lfo
 [0]     [0]     1       [0]                                                     ; adsr
+0       150     150     1       .5      .8      .5      .5     0                ; Feedback
 
 
 e
