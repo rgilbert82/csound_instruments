@@ -6,7 +6,6 @@
 ; For Non-realtime ouput leave only the line below:
 ; -o name_of_output_file.wav -W ;;; for file output any platform
 </CsOptions>
-
 <CsInstruments>
 
 sr     = 44100
@@ -16,10 +15,12 @@ nchnls = 2
 0dbfs  = 1
 
 
-
+; =============================================================================
 ; =============================================================================
 ; F Tables
 ; =============================================================================
+; =============================================================================
+
 
 gi1        ftgen 1,  0, 16384, 10, 1	;sine wave
 gi2        ftgen 2,  0, 16384, 10, 1, 0 , .33, 0, .2 , 0, .14, 0 , .11, 0, .09 ;odd harmonics
@@ -55,13 +56,15 @@ gi31       ftgen 31, 0,    512,   5,  1,   128, .4, 128, .3, 128, .2, 128, .01
 gi32       ftgen 32, 0,    512,   7,  0,   128, .1, 128, .2, 128, .3, 128, 1
 
 
-;
+
+; =============================================================================
 ; =============================================================================
 ; MEGASAMPLER
 ; =============================================================================
-;
+; =============================================================================
 
-instr sampler_1
+
+instr megasampler
 
 idur          = p3
 iamp          = p4
@@ -175,29 +178,15 @@ idecay        = p96 * idur
 isustain_vol  = p97
 irelease      = p98 * idur
 
-icomp_ratio   = p99
-icomp_thresh  = p100
-icomp_loknee  = p101
-icomp_hiknee  = p102
-icomp_att     = p103
-icomp_rel     = p104
-icomp_look    = p105
-
-ieq_on        = p106
-ieq_freq      = p107
-ieq_gain      = ampdb(p108)
-ieq_q         = p109
-ieq_mode      = p110
-
-ifeedback     = p111       ;range 1-10
-ifb_freq_1    = p112
-ifb_freq_2    = p113
-ifb_1         = p114       ;range 0-2
-ifb_2         = p115
-ifb_3         = p116
-ifb_time_1    = p117
-ifb_time_2    = p118
-ifb_fold      = p119
+ifeedback     = p99        ;range 1-10
+ifb_freq_1    = p100
+ifb_freq_2    = p101
+ifb_1         = p102       ;range 0-2
+ifb_2         = p103
+ifb_3         = p104
+ifb_time_1    = p105
+ifb_time_2    = p106
+ifb_fold      = p107
 
 if (isampler_mode == 1) then
   ilen filelen iloop_filename
@@ -206,9 +195,11 @@ if (isampler_mode == 1) then
   iloop_length = idur / ((ilen - iskiptime) * istretch_percent)
 endif
 
+
 ; =============================================================================
 ; Samples
 ; =============================================================================
+
 
 i101 ftgenonce 0, 0, 524288, 1, "samples/amen.wav",     iskiptime, 0, 2
 ; add other samples here
@@ -224,12 +215,14 @@ ichannels = ftchnls(p8)
 ; Pitch ramp
 ; =============================================================================
 
+
 kpitch_ramp   linseg      ipitch_start, ipitch_dur, ipitch_end
 
 
 ; =============================================================================
 ; Vibrato
 ; =============================================================================
+
 
 if (ivib_avg_amp == 0) then
   kpitch = kpitch_ramp
@@ -251,6 +244,7 @@ endif
 ; Sample length ramp
 ; =============================================================================
 
+
 if (iloop_size_1 == iloop_size_2) then
   kloop = k(iloop_size_1)
 elseif (iloop_fract == 1) then
@@ -259,9 +253,11 @@ else
   kloop    expseg    iloop_start + iloop_size_1, iloop_size_dur - iloop_start, iloop_start + iloop_size_2, idur - iloop_size_dur - iloop_start, iloop_start + iloop_size_2
 endif
 
+
 ; =============================================================================
 ; Stereo audio file reader
 ; =============================================================================
+
 
 if (isampler_mode == 3) then
   iidx    =	sr/ftlen(1) ;scaling to reflect sample rate and table length
@@ -290,6 +286,7 @@ endif
 ; =============================================================================
 ; Lowpass Filters
 ; =============================================================================
+
 
 if (ilowpass_on != 0) then
   atemp_l = a1
@@ -335,13 +332,18 @@ elseif (ilowpass_on == 8) then
 endif
 
 if (ilowpass_on != 0) then
-  a1      balance   a1, atemp_l
-  a2      balance   a2, atemp_r
+  klpf_env  linseg  0, 0.001, 1, idur - 0.002, 1, 0.001, 0
+  a1        balance   a1, atemp_l
+  a2        balance   a2, atemp_r
+  a1        = a1 * klpf_env
+  a2        = a2 * klpf_env
 endif
+
 
 ; =============================================================================
 ; Highpass Filters
 ; =============================================================================
+
 
 if (ihighpass_on != 0 && ihp_cut_att == 0) then
   khp_cut linseg   ihp_cut, ihp_cut_dec, ihp_cut_sust, idur - ihp_cut_dec - ihp_cut_rel, ihp_cut_sust, ihp_cut_rel, 10
@@ -373,12 +375,15 @@ if (idist_on == 1) then
     kdist   linseg   0, idist_att, idist, idist_dec, idist_sust, idur - idist_att - idist_dec - idist_rel, idist_sust, idist_rel, 0
   endif
 
-  atemp_l  = a1
-  atemp_r  = a1
-  a1      distort   a1, kdist, idist_fnc
-  a2      distort   a2, kdist, idist_fnc
-  a1      balance   a1, atemp_l
-  a2      balance   a2, atemp_r
+  atemp_l   = a1
+  atemp_r   = a1
+  klpf_env  linseg  0, 0.001, 1, idur - 0.002, 1, 0.001, 0
+  a1        distort   a1, kdist, idist_fnc
+  a2        distort   a2, kdist, idist_fnc
+  a1        balance   a1, atemp_l
+  a2        balance   a2, atemp_r
+  a1        = a1 * klpf_env
+  a2        = a2 * klpf_env
 endif
 
 
@@ -455,6 +460,7 @@ endif
 ; Tremolo
 ; =============================================================================
 
+
 if (ilfo_start == 0) then
   alfo = 0
 else
@@ -471,6 +477,7 @@ endif
 ; =============================================================================
 ; Envelope
 ; =============================================================================
+
 
 iremaining_time = idur - iattack - idecay
 
@@ -495,35 +502,14 @@ endif
 
 afadeout  linseg    1, idur - 0.001, 1, 0.001, 0
 
-aenv_sig_l = aadsr * afadeout * (1 - alfo) * a1
-aenv_sig_r = aadsr * afadeout * (1 - alfo) * a2
-
-
-; =============================================================================
-; Compressor
-; =============================================================================
-
-if (icomp_ratio <= 1) then
-  afinal_l = aenv_sig_l
-  afinal_r = aenv_sig_r
-else
-  afinal_l    compress  aenv_sig_l, aenv_sig_l, icomp_thresh, icomp_loknee, icomp_hiknee, icomp_ratio, icomp_att, icomp_rel, icomp_look
-  afinal_r    compress  aenv_sig_r, aenv_sig_r, icomp_thresh, icomp_loknee, icomp_hiknee, icomp_ratio, icomp_att, icomp_rel, icomp_look
-endif
-
-; =============================================================================
-; EQ
-; =============================================================================
-
-if (ieq_on != 0) then
-  afinal_l    pareq     afinal_l, ieq_freq, ieq_gain, ieq_q, ieq_mode
-  afinal_r    pareq     afinal_r, ieq_freq, ieq_gain, ieq_q, ieq_mode
-endif
+afinal_l = aadsr * afadeout * (1 - alfo) * a1
+afinal_r = aadsr * afadeout * (1 - alfo) * a2
 
 
 ; =============================================================================
 ; Panning
 ; =============================================================================
+
 
 if (ipan_start == ipan_end) then
   kpan = ipan_start
@@ -538,6 +524,7 @@ apan_r  = (kpan) * (2 * ((afinal_l * (1 - (kpan * .5))) + (afinal_r * (kpan * .5
 ; =============================================================================
 ; Feedback / Outputs
 ; =============================================================================
+
 
 if (ifeedback == 0) then
   outs      apan_l, apan_r
@@ -573,12 +560,19 @@ endif
 endin
 
 ; =============================================================================
+; =============================================================================
+
 </CsInstruments>
 <CsScore>
 
+
+
+; =============================================================================
 ; =============================================================================
 ; P fields
 ; =============================================================================
+; =============================================================================
+
 
 ; INSTRUMENT
 ;p1  instr
@@ -707,39 +701,26 @@ endin
 ;p97 adsr sustain volume, range 0 - 1
 ;p98 adsr release time
 
-; COMPRESSOR
-;p99  compression ratio, a value of <= 1 will cause no compression
-;p100 compressor threshold, normally <= 0
-;p101 compressor low knee in db
-;p102 compressor high knee in db
-;p103 compressor attack time
-;p104 compressor release time
-;p105 compressor lookahead time, typical value is 0.5
-
-; EQ
-;p106 eq on = 1, off = 0
-;p107 eq freq in hz
-;p108 eq gain in db
-;p109 eq q, range 0 - 1
-;p110 eq mode, 0 = peaking, 1 = low shelf, 2 = high shelf
-
 ; FEEDBACK
-;p111 feedback on = 1, off = 0
-;p112 fb freq 1 in Hz
-;p113 fb freq 2 in Hz
-;p114 fb level 1,     range 0-2
-;p115 fb level 2,     range 0-2
-;p116 fb level 3,     range 0-2
-;p117 fb time 1,      percentage of idur
-;p118 fb time 2,      percentage of idur
-;p119 fold level      range 1+, 0 = off
+;p99  feedback on = 1, off = 0
+;p100 fb freq 1 in Hz
+;p101 fb freq 2 in Hz
+;p102 fb level 1,     range 0-2
+;p103 fb level 2,     range 0-2
+;p104 fb level 3,     range 0-2
+;p105 fb time 1,      percentage of idur
+;p106 fb time 2,      percentage of idur
+;p107 fold level      range 1+, 0 = off
 
 
+; =============================================================================
 ; =============================================================================
 ; SCORE
 ; =============================================================================
+; =============================================================================
 
-i"sampler_1"       0      5       1       .5     .5     [1/1]  101  0     2     ; instrument
+
+i"megasampler"     0      5       1       .5     .5     [1/1]  101  0     2     ; instrument
 .8          .8     [1/2]                                                        ; pitch
 0           10     0      0       [1/2]   [1/4]   3     [0]    1                ; vibrato
 0           [1/1]  [1/132]        [1/1]   0.001   0                             ; timing / loop
@@ -754,11 +735,11 @@ i"sampler_1"       0      5       1       .5     .5     [1/1]  101  0     2     
 0           5000   [1/4]  [1/2]   100     [1/4]   0.8                           ; phaser
 0           8      0      [1/4]   [1/2]   1       [1/4]                         ; tremolo / amp lfo
 [0]        [0]     1      [0]                                                   ; adsr
-0           0      45     60      0.1     0.5     .05                           ; Compressor
-0           1000   -100   1       0                                             ; EQ
 0           450    450    1       .5      .8      .5     .5    0                ; Feedback
 
 e
 
+; =============================================================================
+; =============================================================================
 </CsScore>
 </CsoundSynthesizer>
