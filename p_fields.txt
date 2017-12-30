@@ -129,32 +129,16 @@
 ;p97 adsr sustain volume, range 0 - 1
 ;p98 adsr release time
 
-; COMPRESSOR    * not in Blue instrument version
-;p99  compression ratio, a value of <= 1 will cause no compression
-;p100 compressor threshold, normally <= 0
-;p101 compressor low knee in db
-;p102 compressor high knee in db
-;p103 compressor attack time
-;p104 compressor release time
-;p105 compressor lookahead time, typical value is 0.5
-
-; EQ    * not in Blue instrument version
-;p106 eq on = 1, off = 0
-;p107 eq freq in hz
-;p108 eq gain in db
-;p109 eq q, range 0 - 1
-;p110 eq mode, 0 = peaking, 1 = low shelf, 2 = high shelf
-
 ; FEEDBACK
-;p111 feedback on = 1, off = 0
-;p112 fb freq 1 in Hz
-;p113 fb freq 2 in Hz
-;p114 fb level 1,     range 0-2
-;p115 fb level 2,     range 0-2
-;p116 fb level 3,     range 0-2
-;p117 fb time 1,      percentage of idur
-;p118 fb time 2,      percentage of idur
-;p119 fold level      range 1+, 0 = off
+;p99  feedback on = 1, off = 0
+;p100 fb freq 1 in Hz
+;p101 fb freq 2 in Hz
+;p102 fb level 1,     range 0-2
+;p103 fb level 2,     range 0-2
+;p104 fb level 3,     range 0-2
+;p105 fb time 1,      percentage of idur
+;p106 fb time 2,      percentage of idur
+;p107 fold level      range 1+, 0 = off
 
 
 |==============================================================================|
