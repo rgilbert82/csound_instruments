@@ -74,6 +74,7 @@ giadditive_amps  ftgen 998, 0, 32, 7, 0, 32, 0
 ; =============================================================================
 ; =============================================================================
 
+
 opcode Vocoder, a, aakkkpp
   avocoder_synth,avocoder_sig,kvocoder_min,kvocoder_max,kvocoder_q,ivocoder_band,ivocoder_cnt  xin
 
@@ -111,6 +112,7 @@ endop
 ; =============================================================================
 ; =============================================================================
 
+
 instr samp
 
 isample = 101
@@ -141,6 +143,7 @@ endin
 ; MEGASYNTH
 ; =============================================================================
 ; =============================================================================
+
 
 instr msynth
 
@@ -356,81 +359,33 @@ if (isequencer_on != 0) then
   if (ipitch < 0) then
     ipitch       = 1
     iempty_note  = 0
+  elseif (ipch_2 == 0) then
+    ipitch         cps2pch   (ioctave + ipitch/100), iscale
   else
+    koct_pch       linseg    ipch_1, ipch_dur_1, ipch_2, ipch_dur_2, ipch_3, ipch_dur_3, ipch_4
     ipitch         cps2pch   (ioctave + ipitch/100), iscale
   endif
-endif
 
+else
 
 ; =============================================================================
 ; Pitch Envelope
 ; =============================================================================
 
-if (ipch_2 == 0) then
-  kpitch_ramp = icps_1
-elseif (ipch_ramp == 0) then
-  kpitch_ramp    linseg  icps_1, ipch_dur_1, icps_2, ipch_dur_2, icps_3, ipch_dur_3, icps_4
-else
-  kpitch_ramp    expseg  icps_1, ipch_dur_1, icps_2, ipch_dur_2, icps_3, ipch_dur_3, icps_4
-endif
-
-
-; =============================================================================
-; Pitch Fractioning
-; =============================================================================
-
-; For Different intonations. For example, Just Intonation in C would be:
-;
-;    C       C#      D-      D       Eb-      Eb       E       F      F#-
-;    1/1     25/24   10/9    9/8     32/27    6/5      5/4     4/3    25/18
-;
-;    F#      G       G#      A       Bb-      Bb       B       C
-;    45/32   3/2     25/16   5/3     16/9     9/5      15/8    2/1
-
-
-if (ipch_fract != 0) then
-  kpitch_ramp = kpitch_ramp * ipch_fract
-endif
-
-
-; =============================================================================
-; Vibrato
-; =============================================================================
-
-if (ivib_avg_amp == 0) then
-  kpitch = kpitch_ramp
-elseif (ivib_att == 0 && ivib_rel == 0) then
-  kvib       vibrato   ivib_avg_amp * kpitch_ramp, ivib_avg_freq, ivib_rand_amp, ivib_rand_freq, 3, 5, 3, 5, ivib_fnc
-  kpitch = kpitch_ramp + kvib
-elseif (ivib_att == 0) then
-  kvib_env   linseg    1, ivib_dec, ivib_sust, ieventdur - ivib_att - ivib_dec - ivib_rel, ivib_sust, ivib_rel, 0
-  kvib       vibrato   ivib_avg_amp * kpitch_ramp, ivib_avg_freq, ivib_rand_amp, ivib_rand_freq, 3, 5, 3, 5, ivib_fnc
-  kpitch = kpitch_ramp + (kvib * kvib_env)
-else
-  kvib_env   linseg    0, ivib_att, 1, ivib_dec, ivib_sust, ieventdur - ivib_att - ivib_dec - ivib_rel, ivib_sust, ivib_rel, 0
-  kvib       vibrato   ivib_avg_amp * kpitch_ramp, ivib_avg_freq, ivib_rand_amp, ivib_rand_freq, 3, 5, 3, 5, ivib_fnc
-  kpitch = kpitch_ramp + (kvib * kvib_env)
-endif
-
-
-; =============================================================================
-; Set Synth Pitch To Sample Pitch
-; =============================================================================
-
-if (ivcdr_on != 0 && isample_pitch != 0) then
-  ifftsize = 16
-  iwtype = 0
-  avcdr_sig     butterhp  gasamp, 50
-  fsig          pvsanal   avcdr_sig, ifftsize, ifftsize/4, ifftsize, iwtype
-  kfr           pvscent   fsig
-  kpitch = kfr
-  icps = i(kfr)
+  if (ipch_2 == 0) then
+    kpitch =  icps_1
+  elseif (ipch_ramp == 0) then
+    kpitch    linseg  icps_1, ipch_dur_1, icps_2, ipch_dur_2, icps_3, ipch_dur_3, icps_4
+  else
+    kpitch    expseg  icps_1, ipch_dur_1, icps_2, ipch_dur_2, icps_3, ipch_dur_3, icps_4
+  endif
 endif
 
 
 ; =============================================================================
 ; Step Sequencer
 ; =============================================================================
+
 
 if (isequencer_on != 0) then
   ; TWISTING THE KNOBS FROM THE SCORE
@@ -448,8 +403,15 @@ if (isequencer_on != 0) then
       ipitch       = 1
       iempty_note  = 0
       goto noslide
+    elseif (ipch_2 == 0) then
+      ipitch       cps2pch   (ioctave + ipitch/100), iscale
+      iempty_note  = 1
     else
-      ipitch         cps2pch   (ioctave + ipitch/100), iscale
+      ioct_pch     = i(koct_pch)
+      iint         = floor(ioct_pch)
+      idiff        = (ioct_pch - iint) * iscale / 100
+      ioct_pch     = iint + idiff
+      ipitch       cps2pch   ((ioct_pch < 1 ? ioctave : ioct_pch) + ipitch/100), iscale
       iempty_note  = 1
     endif
 
@@ -530,9 +492,68 @@ endif
 
 
 ; =============================================================================
+; Set Synth Pitch To Sample Pitch
+; =============================================================================
+
+
+if (ivcdr_on != 0 && isample_pitch != 0) then
+  ifftsize = 16
+  iwtype = 0
+  avcdr_sig     butterhp  gasamp, 50
+  fsig          pvsanal   avcdr_sig, ifftsize, ifftsize/4, ifftsize, iwtype
+  kfr           pvscent   fsig
+  kpitch = kfr
+
+  goto synths
+endif
+
+
+; =============================================================================
+; Pitch Fractioning
+; =============================================================================
+
+
+; For Different intonations. For example, Just Intonation in C would be:
+;
+;    C       C#      D-      D       Eb-      Eb       E       F      F#-
+;    1/1     25/24   10/9    9/8     32/27    6/5      5/4     4/3    25/18
+;
+;    F#      G       G#      A       Bb-      Bb       B       C
+;    45/32   3/2     25/16   5/3     16/9     9/5      15/8    2/1
+
+
+if (ipch_fract != 0) then
+  kpitch = kpitch * ipch_fract
+endif
+
+
+; =============================================================================
+; Vibrato
+; =============================================================================
+
+
+if (ivib_avg_amp == 0) then
+  goto synths
+elseif (ivib_att == 0 && ivib_rel == 0) then
+  kvib       vibrato   ivib_avg_amp * kpitch, ivib_avg_freq, ivib_rand_amp, ivib_rand_freq, 3, 5, 3, 5, ivib_fnc
+  kpitch = kpitch + kvib
+elseif (ivib_att == 0) then
+  kvib_env   linseg    1, ivib_dec, ivib_sust, ieventdur - ivib_att - ivib_dec - ivib_rel, ivib_sust, ivib_rel, 0
+  kvib       vibrato   ivib_avg_amp * kpitch, ivib_avg_freq, ivib_rand_amp, ivib_rand_freq, 3, 5, 3, 5, ivib_fnc
+  kpitch = kpitch + (kvib * kvib_env)
+else
+  kvib_env   linseg    0, ivib_att, 1, ivib_dec, ivib_sust, ieventdur - ivib_att - ivib_dec - ivib_rel, ivib_sust, ivib_rel, 0
+  kvib       vibrato   ivib_avg_amp * kpitch, ivib_avg_freq, ivib_rand_amp, ivib_rand_freq, 3, 5, 3, 5, ivib_fnc
+  kpitch = kpitch + (kvib * kvib_env)
+endif
+
+
+; =============================================================================
 ; Synth Modes
 ; =============================================================================
 
+
+synths:
 
 if (isynth_type == 0) then
   aosc1    oscil kamp, kpitch + (birnd(ipch_rand) * kpitch), isynth_fnc_1, iosc_phase_1
@@ -650,7 +671,7 @@ elseif (isynth_type == 7) then    ; FOF
   if (iempty_note == 0) then
     aoscs = aoscs * 0
   endif
-else
+else        ; Noise
   aoscs    fractalnoise  iamp, 0
   if (iempty_note == 0) then
     aoscs = aoscs * 0
@@ -661,6 +682,7 @@ endif
 ; =============================================================================
 ; Vocoder
 ; =============================================================================
+
 
 if (ivcdr_on != 0) then
   kratio = 3
@@ -677,6 +699,7 @@ endif
 ; =============================================================================
 ; Lowpass Filters
 ; =============================================================================
+
 
 if (ilowpass_on == 0) then
   a1 = aoscs
@@ -742,6 +765,7 @@ endif
 ; Highpass Filters
 ; =============================================================================
 
+
 if (ihighpass_on != 0 && ihp_cut_att == 0) then
   khp_cut linseg   ihp_cut, ihp_cut_dec, ihp_cut_sust, ieventdur - ihp_cut_dec - ihp_cut_rel, ihp_cut_sust, ihp_cut_rel, 10
 elseif (ihighpass_on != 0 && ihp_cut_att != 0) then
@@ -761,6 +785,7 @@ endif
 ; Distortion
 ; =============================================================================
 
+
 if (idist_on == 1) then
   if (idist_att == 0) then
     kdist   linseg   idist, idist_dec, idist_sust, ieventdur - idist_dec - idist_rel, idist_sust, idist_rel, 0
@@ -775,6 +800,7 @@ endif
 ; =============================================================================
 ; Bitcrusher
 ; =============================================================================
+
 
 if (idec_on == 1) then
   kbit	   ctrl7	1, 1, 1, 16
@@ -800,6 +826,7 @@ endif
 ; Flanger
 ; =============================================================================
 
+
 if (iflange_on == 1) then
   if (iflange_att == 0) then
     aflange   linseg   iflange, iflange_dec, iflange_sust, idur - iflange_dec - iflange_rel, iflange_sust, iflange_rel, 0
@@ -815,6 +842,7 @@ endif
 ; Phaser
 ; =============================================================================
 
+
 if (iphase_on == 1) then
   if (iphase_att == 0) then
     kphase   linseg   iphase, iphase_dec, iphase_sust, idur - iphase_dec - iphase_rel, iphase_sust, iphase_rel, 0
@@ -829,6 +857,7 @@ endif
 ; =============================================================================
 ; Tremolo
 ; =============================================================================
+
 
 if (ilfo_start == 0) then
   alfo = 0
@@ -846,6 +875,7 @@ endif
 ; =============================================================================
 ; Envelope
 ; =============================================================================
+
 
 afadeout  linseg    1, ieventdur - 0.001, 1, 0.001, 0
 
@@ -889,6 +919,7 @@ endif
 ; Panning
 ; =============================================================================
 
+
 if (ipan_freq != 0) then
   kpan     lfo   1, ipan_freq, ipan_mode
 elseif (ipan_start != ipan_end) then
@@ -903,6 +934,7 @@ apan_l, apan_r  pan2  afinal, kpan
 ; =============================================================================
 ; Feedback / Outputs
 ; =============================================================================
+
 
 if (ifeedback == 0) then
   outs      apan_l, apan_r
@@ -937,9 +969,11 @@ endif
 
 endin
 
+</CsInstruments>
+
+; =============================================================================
 ; =============================================================================
 
-</CsInstruments>
 <CsScore>
 
 
@@ -948,6 +982,7 @@ endin
 ; P fields
 ; =============================================================================
 ; =============================================================================
+
 
 ; INSTRUMENT
 ;p1  instr
@@ -1164,14 +1199,15 @@ endin
 ; =============================================================================
 ; =============================================================================
 
+
 t 0 85
 
 i"samp"     0      16
 
 i"msynth"   0      16     .8      .5      .5      [1/2]  0     0    2           ; Instrument
 1     601   701    751    1       1       .6      .1     .3    .1   85    1     ; Sequencer
-6.00        0      6.02   5.08    [1/10]  [3/10]  [6/10] 0     0    12    [0]   ; Pitch
-0           8      0      0       [1/2]   [1/4]   3      [0]   1                ; vibrato
+6.00        0      8.02   3.08    [1/10]  [3/10]  [6/10] 0     0    12    [0]   ; Pitch
+0           8      0      0       [0]     [1/4]   3      [0]   1                ; vibrato
 3           3      26     26                                                    ; Osc functions
 0           0      0      0                                                     ; Osc phase
 4           28     [1/2]                                                        ; Harmonics
@@ -1196,3 +1232,7 @@ e
 
 </CsScore>
 </CsoundSynthesizer>
+
+; =============================================================================
+; =============================================================================
+; =============================================================================
