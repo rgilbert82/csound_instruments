@@ -723,25 +723,37 @@ endif
 
 if (ilowpass_on == 1) then
   a1      lpf18     aoscs, klp_cut, klp_res, ilp_dist
-  a1 = a1 * 1.3
+  a1 = a1 * 1.5
 elseif (ilowpass_on == 2) then
   a1      moogladder     aoscs, klp_cut, klp_res
-  a1 = a1 * 1.9
+  a1      moogladder     a1, klp_cut, klp_res
+  a1 = a1 * 6
 elseif (ilowpass_on == 3) then
-  a1      moogvcf2   aoscs, klp_cut, klp_res
-  a1 = a1 * 1.9
+  a1      moogvcf2   aoscs, klp_cut, klp_res / 2/ 2
+  a1      moogvcf2   a1, klp_cut, klp_res / 2
+  a1      moogvcf2   a1, klp_cut, klp_res
+  a1 = a1 * 6
 elseif (ilowpass_on == 4) then
-  a1      mvclpf3    aoscs, klp_cut, klp_res
-  a1 = a1 * 1.9
+  abutter1      mvclpf3    aoscs, klp_cut, klp_res
+  abutter2      butterbp   abutter1, klp_cut, 50
+  a1 = ((abutter1 * .5) + (abutter2 * 5)) * 4
 elseif (ilowpass_on == 5) then
   a1      K35_lpf    aoscs, klp_cut, klp_q
 elseif (ilowpass_on == 6) then
-  a1      butterlp   aoscs, klp_cut
+  abutter1      butterlp   aoscs, klp_cut
+  abutter2      butterbp   abutter1, klp_cut, 50
+  a1 = ((abutter1 * .3) + (abutter2 * 5)) * 2
 elseif (ilowpass_on == 7) then
   a1      tonex     aoscs, klp_cut, ilp_stack
-elseif (ilowpass_on >= 8) then
+elseif (ilowpass_on == 8) then
   a1      diode_ladder aoscs, klp_cut, ilp_fb
-  a1 = a1 * 2.5
+  a1 = a1 * 6
+elseif (ilowpass_on >= 9) then
+  a1        tone      aoscs, klp_cut
+  a1        tone      a1, klp_cut
+  a1        tone      a1, klp_cut
+  a1        tone      a1, klp_cut
+  a1        atone     a1, 10
 endif
 
 
@@ -775,7 +787,9 @@ endif
 if (ihighpass_on == 1) then
   a1      butterhp  a1, khp_cut
 elseif (ihighpass_on == 2) then
-  a1      mvchpf    a1, khp_cut
+  ahpb1      mvchpf     a1, khp_cut
+  ahpb2      butterbp   ahpb1, khp_cut, 5000
+  a1 = ((ahpb1 * .3) + (ahpb2 * 4))
 elseif (ihighpass_on == 3) then
   a1      K35_hpf   a1, khp_cut, ihp_q
 endif
@@ -1217,9 +1231,9 @@ i"msynth"   0      16     .8      .5      .5      [1/2]  0     0    2           
 0           20     2.03   2.03    25      10                                    ; FM / Additive
 6           19     400    100                                                   ; FOF
 0           0      9000   100     10      50      2                             ; Vocoder
-1           0.25   15     9.0     20                                            ; lowpass settings
+2           0.25   15     9.0     20                                            ; lowpass settings
             6000   [1/32] [3/4]   600     [0]     0.5    [0]   [1/4] 0.8  [1/2] ; lowpass cutoff / res
-0           5000   [1/4]  [1/2]   500     [1/4]   9.5                           ; highpass
+0           5000   [1/8]  [1/2]   500     [1/4]   9.5                           ; highpass
 0           1      [1/32] [1/2]   .2      [1/4]   1                             ; distortion
 0           16     20     30      5                                             ; bitcrusher
 0           0.8    [1/4]  [1/2]   .3      [1/4]   .5                            ; flanger
