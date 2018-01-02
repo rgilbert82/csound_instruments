@@ -56,6 +56,7 @@ gi29       ftgen 29, 0,    512,   7,  0,   128, .3, 128, .5, 128, 1, 128, 0
 gi30       ftgen 30, 0,   4096,  10,  .6, .4, 1, .22, .09, .24, .02, .06, .05
 gi31       ftgen 31, 0,    512,   5,  1,   128, .4, 128, .3, 128, .2, 128, .01
 gi32       ftgen 32, 0,    512,   7,  0,   128, .1, 128, .2, 128, .3, 128, 1
+gi33       ftgen 33, 0,    1024,  7,  -1,  512, -1, 0, 1, 512, 1    ; Pulse
 
 gi600      ftgen 600, 0, 8193, 8, 0, 512, 1, 1024, 1, 512, .5, 2048, .2, 4096, 0
 gi601      ftgen 601, 0, 16, -2,    6, 5, 1, 12,         3, 9, -1, 6,   0, 5, 10, 0,    -1, 25, 3, 20
@@ -210,127 +211,130 @@ iosc_phase_4  = p50
 iharmon_start = p51
 iharmon_end   = p52
 iharmon_dur   = p53 * ieventdur
+ipwmlfo       = p54	 			; DEPTH OF PWM, range 0 - 1
+icompar_funct = p55
+ilfo_func     = p56
 
-ivco_mode_1   = p54
-ivco_mode_2   = p55
-ivco_mode_3   = p56
-ivco_mode_4   = p57
-ivco_pw       = p58
-ivco_nyx      = p59
+ivco_mode_1   = p57
+ivco_mode_2   = p58
+ivco_mode_3   = p59
+ivco_mode_4   = p60
+ivco_pw       = p61
+ivco_nyx      = p62
 
-ipvs_type1    = p60
-ipvs_type2    = p61
-ipvs_type3    = p62
-ipvs_type4    = p63
+ipvs_type1    = p63
+ipvs_type2    = p64
+ipvs_type3    = p65
+ipvs_type4    = p66
 
-ihsb_oct_count = p64
-ihsb_tone_start= p65
-ihsb_tone_end  = p66
-ibrite_1       = p67
-ibrite_2       = p68
-ibrite_3       = p69
-ibrite_4       = p70
+ihsb_oct_count = p67
+ihsb_tone_start= p68
+ihsb_tone_end  = p69
+ibrite_1       = p70
+ibrite_2       = p71
+ibrite_3       = p72
+ibrite_4       = p73
 
-ifm_idx_start  = p71
-ifm_idx_end    = p72
-ifm_car_start  = p73
-ifm_car_end    = p74
-iadditive_cnt  = p75
-iadditive_func = p76
+ifm_idx_start  = p74
+ifm_idx_end    = p75
+ifm_car_start  = p76
+ifm_car_end    = p77
+iadditive_cnt  = p78
+iadditive_func = p79
 
-ifof_fnc_1      = p77
-ifof_fnc_2      = p78
-ifof_form_start = p79
-ifof_form_end   = p80
+ifof_fnc_1      = p80
+ifof_fnc_2      = p81
+ifof_form_start = p82
+ifof_form_end   = p83
 
-ivcdr_on        = p81
-isample_pitch   = p82
-ivcdr_max       = p83
-ivcdr_min       = p84
-ivcdr_q         = p85
-ivcdr_band      = p86
-ivcdr_cnt       = p87
+ivcdr_on        = p84
+isample_pitch   = p85
+ivcdr_max       = p86
+ivcdr_min       = p87
+ivcdr_q         = p88
+ivcdr_band      = p89
+ivcdr_cnt       = p90
 
-ilowpass_on   = p88
-ilp_dist      = p89
-ilp_fb        = p90
-klp_q         = p91
-ilp_stack     = p92
+ilowpass_on   = p91
+ilp_dist      = p92
+ilp_fb        = p93
+klp_q         = p94
+ilp_stack     = p95
 
-ilp_cut       = p93
-ilp_cut_att   = p94  * ieventdur
-ilp_cut_dec   = p95  * ieventdur
-ilp_cut_sust  = p96
-ilp_cut_rel   = p97  * ieventdur
-ilp_res       = p98
-ilp_res_att   = p99  * ieventdur
-ilp_res_dec   = p100 * ieventdur
-ilp_res_sust  = p101
-ilp_res_rel   = p102 * ieventdur
+ilp_cut       = p96
+ilp_cut_att   = p97   * ieventdur
+ilp_cut_dec   = p98   * ieventdur
+ilp_cut_sust  = p99
+ilp_cut_rel   = p100  * ieventdur
+ilp_res       = p101
+ilp_res_att   = p102  * ieventdur
+ilp_res_dec   = p103  * ieventdur
+ilp_res_sust  = p104
+ilp_res_rel   = p105  * ieventdur
 
-ihighpass_on  = p103
-ihp_cut       = p104
-ihp_cut_att   = p105 * ieventdur
-ihp_cut_dec   = p106 * ieventdur
-ihp_cut_sust  = p107
-ihp_cut_rel   = p108 * ieventdur
-ihp_q         = p109
+ihighpass_on  = p106
+ihp_cut       = p107
+ihp_cut_att   = p108 * ieventdur
+ihp_cut_dec   = p109 * ieventdur
+ihp_cut_sust  = p110
+ihp_cut_rel   = p111 * ieventdur
+ihp_q         = p112
 
-idist_on      = p110
-idist         = p111
-idist_att     = p112 * ieventdur
-idist_dec     = p113 * ieventdur
-idist_sust    = p114
-idist_rel     = p115 * ieventdur
-idist_fnc     = p116
+idist_on      = p113
+idist         = p114
+idist_att     = p115 * ieventdur
+idist_dec     = p116 * ieventdur
+idist_sust    = p117
+idist_rel     = p118 * ieventdur
+idist_fnc     = p119
 
-idec_on       = p117
-idec_bitrate  = p118
-idec_samps    = p119
-ifold_start   = p120
-ifold_end     = p121
+idec_on       = p120
+idec_bitrate  = p121
+idec_samps    = p122
+ifold_start   = p123
+ifold_end     = p124
 
-iflange_on    = p122
-iflange       = p123
-iflange_att   = p124 * idur
-iflange_dec   = p125 * idur
-iflange_sust  = p126
-iflange_rel   = p127 * idur
-iflange_fb    = p128
+iflange_on    = p125
+iflange       = p126
+iflange_att   = p127 * idur
+iflange_dec   = p128 * idur
+iflange_sust  = p129
+iflange_rel   = p130 * idur
+iflange_fb    = p131
 
-iphase_on     = p129
-iphase        = p130
-iphase_att    = p131 * idur
-iphase_dec    = p132 * idur
-iphase_sust   = p133
-iphase_rel    = p134 * idur
-iphase_fb     = p135
+iphase_on     = p132
+iphase        = p133
+iphase_att    = p134 * idur
+iphase_dec    = p135 * idur
+iphase_sust   = p136
+iphase_rel    = p137 * idur
+iphase_fb     = p138
 
-ilfo_start    = p136
-ilfo_end      = p137
-ilfo_shape    = p138
-ilfo_att      = p139 * ieventdur
-ilfo_dec      = p140 * ieventdur
-ilfo_sust     = p141
-ilfo_rel      = p142 * ieventdur
+ilfo_start    = p139
+ilfo_end      = p140
+ilfo_shape    = p141
+ilfo_att      = p142 * ieventdur
+ilfo_dec      = p143 * ieventdur
+ilfo_sust     = p144
+ilfo_rel      = p145 * ieventdur
 
-iattack_val   = p143
-idecay_val    = p144
-isustain_vol  = p145
-irelease_val  = p146
+iattack_val   = p146
+idecay_val    = p147
+isustain_vol  = p148
+irelease_val  = p149
 iattack       = ieventdur * iattack_val
 idecay        = ieventdur * idecay_val
 irelease      = ieventdur * irelease_val
 
-ifeedback     = p147       ;range 1-10
-ifb_freq_1    = p148
-ifb_freq_2    = p149
-ifb_1         = p150       ;range 0-2
-ifb_2         = p151
-ifb_3         = p152
-ifb_time_1    = p153
-ifb_time_2    = p154
-ifb_fold      = p155
+ifeedback     = p150       ;range 1-10
+ifb_freq_1    = p151
+ifb_freq_2    = p152
+ifb_1         = p153       ;range 0-2
+ifb_2         = p154
+ifb_3         = p155
+ifb_time_1    = p156
+ifb_time_2    = p157
+ifb_fold      = p158
 
 icps_1   cps2pch  ipch_1, iscale
 icps_2   cps2pch  ipch_2, iscale
@@ -678,6 +682,22 @@ else        ; Noise
   endif
 endif
 
+
+; =============================================================================
+; PWM
+; =============================================================================
+
+
+if (ipwmlfo > 0) then
+  ilforate  = 		2.3					; LFO SPEED IN Hz
+  ioscslvl  = 		0.5	 				; LEVEL OF SAWTOOTH WAVEFORM
+  ipwmlvl   = 		0.5	 				; LEVEL OF PULSE WAVEFORM
+  ipwm	   	= 		0.2	 				; DC OFFSET OF PULSE width
+
+  kpwm_lfo	 	oscil   	1, ilforate, ilfo_func	   		; GENERATE LFO
+  apwm	 	    table   	aoscs/2+(kpwm_lfo*ipwmlfo+ipwm),icompar_funct,1,0.5
+  aoscs   	  =	    	ioscslvl*aoscs+ipwmlvl*apwm	; MIX THE WAVEFORMS
+endif
 
 ; =============================================================================
 ; Vocoder
@@ -1071,140 +1091,144 @@ endin
 ;p51 number of harmonics start
 ;p52 number of harmonics end
 ;p53 number of harmonics duration
+; PWM
+;p54 depth of PWM, range 0 - 1
+;p55 PWM comparator function
+;p56 PWM lfo function
 
 ; VCO - for synth type 2
-;p54 vco mode 1: 12 = tri, 10 = square, 8 = integrated saw, 6 = pulse, 4 = saw/tri/ramp, 2 = square/PWM, 0 = saw
-;p55 vco mode 2
-;p56 vco mode 3
-;p57 vco mode 4
-;p58 pulse width of square wave, range 0 - 1
-;p59 bandwidth of waveform, range 0 - 1, default 0.5
+;p57 vco mode 1: 12 = tri, 10 = square, 8 = integrated saw, 6 = pulse, 4 = saw/tri/ramp, 2 = square/PWM, 0 = saw
+;p58 vco mode 2
+;p59 vco mode 3
+;p60 vco mode 4
+;p61 pulse width of square wave, range 0 - 1
+;p62 bandwidth of waveform, range 0 - 1, default 0.5
 
 ; PVS SYNTH - for synth type 3
-;p60 pvs type 1: 1 = saw, 2 = square, 3 = pulse, 4 = cosine
-;p61 pvs type 2
-;p62 pvs type 3
-;p63 pvs type 4
+;p63 pvs type 1: 1 = saw, 2 = square, 3 = pulse, 4 = cosine
+;p64 pvs type 2
+;p65 pvs type 3
+;p66 pvs type 4
 
 ; HSB SYNTH - for synth type 4
-;p64 octave count, range 2 - 10
-;p65 tone start, range 0 - 1
-;p66 tone end
-;p67 brightness 1: 1 is octiave above 0, -1 is octave below, etc
-;p68 brightness 2
-;p69 brightness 3
-;p70 brightness 4
+;p67 octave count, range 2 - 10
+;p68 tone start, range 0 - 1
+;p69 tone end
+;p70 brightness 1: 1 is octiave above 0, -1 is octave below, etc
+;p71 brightness 2
+;p72 brightness 3
+;p73 brightness 4
 
 ; FM SYNTH - for synth type 5
-;p71 fm index start value, range 0+
-;p72 fm index end
-;p73 fm mod start. gives modulating freq when multiplied by the carrier freq
-;p74 fm mod end
+;p74 fm index start value, range 0+
+;p75 fm index end
+;p76 fm mod start. gives modulating freq when multiplied by the carrier freq
+;p77 fm mod end
 ; ADDITIVE SYNTH - for synth type 6
-;p75 additive osc count, range 1 - 30
-;p76 additive osc wave function
+;p78 additive osc count, range 1 - 30
+;p79 additive osc wave function
 
 ; FOF SYNTH - for synth type 7
-;p77 fof osc function 1
-;p78 fof osc function 2, preferably linear or sinusoid
-;p79 fof formant freq start, in hz
-;p80 fof formant freq end
+;p80 fof osc function 1
+;p81 fof osc function 2, preferably linear or sinusoid
+;p82 fof formant freq start, in hz
+;p83 fof formant freq end
 
 ; VOCODER
-;p81 Vocoder on = 1, off = 0
-;p82 sample pitch
-;p83 vocoder max freq
-;p84 vocoder min freq
-;p85 vocoder Q:  range 5+
-;p86 vocoder band:  range 5+
-;p87 vocoder count:  range 1+
+;p84 Vocoder on = 1, off = 0
+;p85 sample pitch
+;p86 vocoder max freq
+;p87 vocoder min freq
+;p88 vocoder Q:  range 5+
+;p89 vocoder band:  range 5+
+;p90 vocoder count:  range 1+
 
 ; LOWPASS FILTERS
-;p88 lowpass type, off = 0
-;p89 lp distortion, for lp type 1    range 0 - 1+
-;p90 lp feedback, for lp type 8      range 0 - 17
-;p91 lp q, for lp type 5             range 1 - 10
-;p92 lp stack, for lp type 7         range 1+
+;p91 lowpass type, off = 0
+;p92 lp distortion, for lp type 1    range 0 - 1+
+;p93 lp feedback, for lp type 8      range 0 - 17
+;p94 lp q, for lp type 5             range 1 - 10
+;p95 lp stack, for lp type 7         range 1+
 
-;p93  lp cutoff freq in hz
-;p94  lp cutoff attack time
-;p95  lp cutoff decline time
-;p96  lp cutoff sustain freq in hz
-;p97  lp cutoff release time
-;p98  lp resonance value,   range 0 - 1
-;p99  lp resonance attack time
-;p100 lp resonance decline time
-;p101 lp resonance sustain value, range 0 - 1
-;p102 lp resonance release time
+;p96  lp cutoff freq in hz
+;p97  lp cutoff attack time
+;p98  lp cutoff decline time
+;p99  lp cutoff sustain freq in hz
+;p100 lp cutoff release time
+;p101 lp resonance value,   range 0 - 1
+;p102 lp resonance attack time
+;p103 lp resonance decline time
+;p104 lp resonance sustain value, range 0 - 1
+;p105 lp resonance release time
 
 ; HIGHPASS FILTERS
-;p103 hp type, off = 0
-;p104 hp cutoff freq in hz
-;p105 hp cutoff attack time
-;p106 hp cutoff decline time
-;p107 hp cutoff sustain freq in hz
-;p108 hp cutoff release time
-;p109 hp cutoff q, for hp type 3     range 1 - 10
+;p106 hp type, off = 0
+;p107 hp cutoff freq in hz
+;p108 hp cutoff attack time
+;p109 hp cutoff decline time
+;p110 hp cutoff sustain freq in hz
+;p111 hp cutoff release time
+;p112 hp cutoff q, for hp type 3     range 1 - 10
 
 ; DISTORTION
-;p110 distortion on = 1, off = 0
-;p111 distortion value,    range 0 - 1
-;p112 distortion attack time
-;p113 distortiom decline time
-;p114 distortion sustain value,   range 0 - 1
-;p115 distortion release time
-;p116 distortion shape function
+;p113 distortion on = 1, off = 0
+;p114 distortion value,    range 0 - 1
+;p115 distortion attack time
+;p116 distortiom decline time
+;p117 distortion sustain value,   range 0 - 1
+;p118 distortion release time
+;p119 distortion shape function
 
 ; BITCRUSHER
-;p117 bitcrusher type, off = 0
-;p118 decimator bitrate, range 1 - 32
-;p119 decimator samples
-;p120 fold start value, amount of foldover expressed in multiple of sampling rate. range 1+
-;p121 fold end value
+;p120 bitcrusher type, off = 0
+;p121 decimator bitrate, range 1 - 32
+;p122 decimator samples
+;p123 fold start value, amount of foldover expressed in multiple of sampling rate. range 1+
+;p124 fold end value
 
 ; FLANGER
-;p122 flanger on = 1, off = 0
-;p123 flanger delay time value
-;p124 flanger delay attack time
-;p125 flanger delay decline time
-;p126 flanger delay time sustain value
-;p127 flanger release time
-;p128 flanger feedback, range 0 - 1
+;p125 flanger on = 1, off = 0
+;p126 flanger delay time value
+;p127 flanger delay attack time
+;p128 flanger delay decline time
+;p129 flanger delay time sustain value
+;p130 flanger release time
+;p131 flanger feedback, range 0 - 1
 
 ; PHASER
-;p129 phaser on = 1, off = 0
-;p130 phaser freq in hz
-;p131 phaser attack time
-;p132 phaser decline time
-;p133 phaser sustain freq in hz
-;p134 phaser release time
-;p135 phaser feedback, range -1 - 1
+;p132 phaser on = 1, off = 0
+;p133 phaser freq in hz
+;p134 phaser attack time
+;p135 phaser decline time
+;p136 phaser sustain freq in hz
+;p137 phaser release time
+;p138 phaser feedback, range -1 - 1
 
 ; LFO / TREMOLO
-;p136 lfo start freq in hz, off = 0
-;p137 lfo end freq in hz
-;p138 lfo shape,  sine = 0, tri = 1, square bi = 2, square uni = 3, saw up = 4, saw down = 5
-;p139 lfo attack time
-;p140 lfo decline time
-;p141 lfo sustain amplitude
-;p142 lfo release time
+;p139 lfo start freq in hz, off = 0
+;p140 lfo end freq in hz
+;p141 lfo shape,  sine = 0, tri = 1, square bi = 2, square uni = 3, saw up = 4, saw down = 5
+;p142 lfo attack time
+;p143 lfo decline time
+;p144 lfo sustain amplitude
+;p145 lfo release time
 
 ; AMPLITUDE ENVELOPE
-;p143 adsr attack time
-;p144 adsr decay value          expon env if value < 0
-;p145 adsr sustain volume, range 0 - 1
-;p146 adsr release time
+;p146 adsr attack time
+;p147 adsr decay value          expon env if value < 0
+;p148 adsr sustain volume, range 0 - 1
+;p149 adsr release time
 
 ; FEEDBACK
-;p147 feedback on = 1, off = 0
-;p148 fb freq 1 in Hz
-;p149 fb freq 2 in Hz
-;p150 fb level 1,     range 0-2
-;p151 fb level 2,     range 0-2
-;p152 fb level 3,     range 0-2
-;p153 fb time 1,      percentage of idur
-;p154 fb time 2,      percentage of idur
-;p155 fold level      range 1+, 0 = off
+;p150 feedback on = 1, off = 0
+;p151 fb freq 1 in Hz
+;p152 fb freq 2 in Hz
+;p153 fb level 1,     range 0-2
+;p154 fb level 2,     range 0-2
+;p155 fb level 3,     range 0-2
+;p156 fb time 1,      percentage of idur
+;p157 fb time 2,      percentage of idur
+;p158 fold level      range 1+, 0 = off
 
 
 ; =============================================================================
@@ -1224,7 +1248,7 @@ i"msynth"   0      16     .8      .5      .5      [1/2]  0     0    2           
 0           8      0      0       [0]     [1/4]   3      [0]   1                ; vibrato
 3           3      26     26                                                    ; Osc functions
 0           0      0      0                                                     ; Osc phase
-4           28     [1/2]                                                        ; Harmonics
+4           28     [1/2]          0       33      1                             ; Harmonics / PWM
 12          12     10     10      0.8     0.5                                   ; VCO
 2           2      2      2                                                     ; PVS osc types
 5           0      1      0       0       1       2                             ; HBSoscil

@@ -218,140 +218,144 @@
 ;p51 number of harmonics start
 ;p52 number of harmonics end
 ;p53 number of harmonics duration
+; PWM
+;p54 depth of PWM, range 0 - 1
+;p55 PWM comparator function
+;p56 PWM lfo function
 
 ; VCO - for synth type 2
-;p54 vco mode 1: 12 = tri, 10 = square, 8 = integrated saw, 6 = pulse, 4 = saw/tri/ramp, 2 = square/PWM, 0 = saw
-;p55 vco mode 2
-;p56 vco mode 3
-;p57 vco mode 4
-;p58 pulse width of square wave, range 0 - 1
-;p59 bandwidth of waveform, range 0 - 1, default 0.5
+;p57 vco mode 1: 12 = tri, 10 = square, 8 = integrated saw, 6 = pulse, 4 = saw/tri/ramp, 2 = square/PWM, 0 = saw
+;p58 vco mode 2
+;p59 vco mode 3
+;p60 vco mode 4
+;p61 pulse width of square wave, range 0 - 1
+;p62 bandwidth of waveform, range 0 - 1, default 0.5
 
 ; PVS SYNTH - for synth type 3
-;p60 pvs type 1: 1 = saw, 2 = square, 3 = pulse, 4 = cosine
-;p61 pvs type 2
-;p62 pvs type 3
-;p63 pvs type 4
+;p63 pvs type 1: 1 = saw, 2 = square, 3 = pulse, 4 = cosine
+;p64 pvs type 2
+;p65 pvs type 3
+;p66 pvs type 4
 
 ; HSB SYNTH - for synth type 4
-;p64 octave count, range 2 - 10
-;p65 tone start, range 0 - 1
-;p66 tone end
-;p67 brightness 1: 1 is octiave above 0, -1 is octave below, etc
-;p68 brightness 2
-;p69 brightness 3
-;p70 brightness 4
+;p67 octave count, range 2 - 10
+;p68 tone start, range 0 - 1
+;p69 tone end
+;p70 brightness 1: 1 is octiave above 0, -1 is octave below, etc
+;p71 brightness 2
+;p72 brightness 3
+;p73 brightness 4
 
 ; FM SYNTH - for synth type 5
-;p71 fm index start value, range 0+
-;p72 fm index end
-;p73 fm mod start. gives modulating freq when multiplied by the carrier freq
-;p74 fm mod end
+;p74 fm index start value, range 0+
+;p75 fm index end
+;p76 fm mod start. gives modulating freq when multiplied by the carrier freq
+;p77 fm mod end
 ; ADDITIVE SYNTH - for synth type 6
-;p75 additive osc count, range 1 - 30
-;p76 additive osc wave function
+;p78 additive osc count, range 1 - 30
+;p79 additive osc wave function
 
 ; FOF SYNTH - for synth type 7
-;p77 fof osc function 1
-;p78 fof osc function 2, preferably linear or sinusoid
-;p79 fof formant freq start, in hz
-;p80 fof formant freq end
+;p80 fof osc function 1
+;p81 fof osc function 2, preferably linear or sinusoid
+;p82 fof formant freq start, in hz
+;p83 fof formant freq end
 
 ; VOCODER
-;p81 Vocoder on = 1, off = 0
-;p82 sample pitch
-;p83 vocoder max freq
-;p84 vocoder min freq
-;p85 vocoder Q:  range 5+
-;p86 vocoder band:  range 5+
-;p87 vocoder count:  range 1+
+;p84 Vocoder on = 1, off = 0
+;p85 sample pitch
+;p86 vocoder max freq
+;p87 vocoder min freq
+;p88 vocoder Q:  range 5+
+;p89 vocoder band:  range 5+
+;p90 vocoder count:  range 1+
 
 ; LOWPASS FILTERS
-;p88 lowpass type, off = 0
-;p89 lp distortion, for lp type 1    range 0 - 1+
-;p90 lp feedback, for lp type 8      range 0 - 17
-;p91 lp q, for lp type 5             range 1 - 10
-;p92 lp stack, for lp type 7         range 1+
+;p91 lowpass type, off = 0
+;p92 lp distortion, for lp type 1    range 0 - 1+
+;p93 lp feedback, for lp type 8      range 0 - 17
+;p94 lp q, for lp type 5             range 1 - 10
+;p95 lp stack, for lp type 7         range 1+
 
-;p93  lp cutoff freq in hz
-;p94  lp cutoff attack time
-;p95  lp cutoff decline time
-;p96  lp cutoff sustain freq in hz
-;p97  lp cutoff release time
-;p98  lp resonance value,   range 0 - 1
-;p99  lp resonance attack time
-;p100 lp resonance decline time
-;p101 lp resonance sustain value, range 0 - 1
-;p102 lp resonance release time
+;p96  lp cutoff freq in hz
+;p97  lp cutoff attack time
+;p98  lp cutoff decline time
+;p99  lp cutoff sustain freq in hz
+;p100 lp cutoff release time
+;p101 lp resonance value,   range 0 - 1
+;p102 lp resonance attack time
+;p103 lp resonance decline time
+;p104 lp resonance sustain value, range 0 - 1
+;p105 lp resonance release time
 
 ; HIGHPASS FILTERS
-;p103 hp type, off = 0
-;p104 hp cutoff freq in hz
-;p105 hp cutoff attack time
-;p106 hp cutoff decline time
-;p107 hp cutoff sustain freq in hz
-;p108 hp cutoff release time
-;p109 hp cutoff q, for hp type 3     range 1 - 10
+;p106 hp type, off = 0
+;p107 hp cutoff freq in hz
+;p108 hp cutoff attack time
+;p109 hp cutoff decline time
+;p110 hp cutoff sustain freq in hz
+;p111 hp cutoff release time
+;p112 hp cutoff q, for hp type 3     range 1 - 10
 
 ; DISTORTION
-;p110 distortion on = 1, off = 0
-;p111 distortion value,    range 0 - 1
-;p112 distortion attack time
-;p113 distortiom decline time
-;p114 distortion sustain value,   range 0 - 1
-;p115 distortion release time
-;p116 distortion shape function
+;p113 distortion on = 1, off = 0
+;p114 distortion value,    range 0 - 1
+;p115 distortion attack time
+;p116 distortiom decline time
+;p117 distortion sustain value,   range 0 - 1
+;p118 distortion release time
+;p119 distortion shape function
 
 ; BITCRUSHER
-;p117 bitcrusher type, off = 0
-;p118 decimator bitrate, range 1 - 32
-;p119 decimator samples
-;p120 fold start value, amount of foldover expressed in multiple of sampling rate. range 1+
-;p121 fold end value
+;p120 bitcrusher type, off = 0
+;p121 decimator bitrate, range 1 - 32
+;p122 decimator samples
+;p123 fold start value, amount of foldover expressed in multiple of sampling rate. range 1+
+;p124 fold end value
 
 ; FLANGER
-;p122 flanger on = 1, off = 0
-;p123 flanger delay time value
-;p124 flanger delay attack time
-;p125 flanger delay decline time
-;p126 flanger delay time sustain value
-;p127 flanger release time
-;p128 flanger feedback, range 0 - 1
+;p125 flanger on = 1, off = 0
+;p126 flanger delay time value
+;p127 flanger delay attack time
+;p128 flanger delay decline time
+;p129 flanger delay time sustain value
+;p130 flanger release time
+;p131 flanger feedback, range 0 - 1
 
 ; PHASER
-;p129 phaser on = 1, off = 0
-;p130 phaser freq in hz
-;p131 phaser attack time
-;p132 phaser decline time
-;p133 phaser sustain freq in hz
-;p134 phaser release time
-;p135 phaser feedback, range -1 - 1
+;p132 phaser on = 1, off = 0
+;p133 phaser freq in hz
+;p134 phaser attack time
+;p135 phaser decline time
+;p136 phaser sustain freq in hz
+;p137 phaser release time
+;p138 phaser feedback, range -1 - 1
 
 ; LFO / TREMOLO
-;p136 lfo start freq in hz, off = 0
-;p137 lfo end freq in hz
-;p138 lfo shape,  sine = 0, tri = 1, square bi = 2, square uni = 3, saw up = 4, saw down = 5
-;p139 lfo attack time
-;p140 lfo decline time
-;p141 lfo sustain amplitude
-;p142 lfo release time
+;p139 lfo start freq in hz, off = 0
+;p140 lfo end freq in hz
+;p141 lfo shape,  sine = 0, tri = 1, square bi = 2, square uni = 3, saw up = 4, saw down = 5
+;p142 lfo attack time
+;p143 lfo decline time
+;p144 lfo sustain amplitude
+;p145 lfo release time
 
 ; AMPLITUDE ENVELOPE
-;p143 adsr attack time
-;p144 adsr decay value          expon env if value < 0
-;p145 adsr sustain volume, range 0 - 1
-;p146 adsr release time
+;p146 adsr attack time
+;p147 adsr decay value          expon env if value < 0
+;p148 adsr sustain volume, range 0 - 1
+;p149 adsr release time
 
 ; FEEDBACK
-;p147 feedback on = 1, off = 0
-;p148 fb freq 1 in Hz
-;p149 fb freq 2 in Hz
-;p150 fb level 1,     range 0-2
-;p151 fb level 2,     range 0-2
-;p152 fb level 3,     range 0-2
-;p153 fb time 1,      percentage of idur
-;p154 fb time 2,      percentage of idur
-;p155 fold level      range 1+, 0 = off
+;p150 feedback on = 1, off = 0
+;p151 fb freq 1 in Hz
+;p152 fb freq 2 in Hz
+;p153 fb level 1,     range 0-2
+;p154 fb level 2,     range 0-2
+;p155 fb level 3,     range 0-2
+;p156 fb time 1,      percentage of idur
+;p157 fb time 2,      percentage of idur
+;p158 fold level      range 1+, 0 = off
 
 
 |==============================================================================|
