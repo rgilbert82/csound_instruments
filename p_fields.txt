@@ -632,6 +632,33 @@
 
 
 |==============================================================================|
+| PAD 4 / GM_STRINGS_MOD                                                               |
+|==============================================================================|
+
+;p1 Instrument
+;p2 Start time
+;p3 Duration
+;p4 Amplitude     range 0 - 1+
+;p5 Pitch Start
+;p6 Pitch End
+;p7 Pitch Duration
+;p8 pitch envelope ramp type, 0 = linear, 1 = exponential
+;p9 number of octave divisions for scale
+;p10 relative index level, range 0 - 1+
+;p11 code for envelope rise and fall times
+;                    1 = fast rise/fast fall, 2 = fast rise/slow fall
+;                    3 = slow rise/fast fall, 4 = slow rise/slow fall
+;p12 code for index envelope rise time
+;                    0 = fast, 1 = slow
+;p13 Osc Ftable function
+;p14 pan start    range 0 - 1
+;p15 pan end      range 0 - 1
+;p16 pan duration
+;p17 pan freq for lfo in hz, lfo off = 0
+;p18 pan mode for lfo,       sine = 0, tri = 1, square bi = 2, square uni = 3, saw up = 4, saw down = 5
+
+
+|==============================================================================|
 | YI_RESON_MOD                                                                 |
 |==============================================================================|
 
@@ -691,32 +718,6 @@
 ;p14 pan freq for lfo in hz, lfo off = 0
 ;p15 pan mode for lfo,       sine = 0, tri = 1, square bi = 2, square uni = 3, saw up = 4, saw down = 5
 ;p16 ftable wave function, 0 defaults to sine
-
-|==============================================================================|
-| GM_STRINGS_MOD                                                               |
-|==============================================================================|
-
-;p1 Instrument
-;p2 Start time
-;p3 Duration
-;p4 Amplitude     range 0 - 1+
-;p5 Pitch Start
-;p6 Pitch End
-;p7 Pitch Duration
-;p8 pitch envelope ramp type, 0 = linear, 1 = exponential
-;p9 number of octave divisions for scale
-;p10 relative index level, range 0 - 1+
-;p11 code for envelope rise and fall times
-;                    1 = fast rise/fast fall, 2 = fast rise/slow fall
-;                    3 = slow rise/fast fall, 4 = slow rise/slow fall
-;p12 code for index envelope rise time
-;                    0 = fast, 1 = slow
-;p13 Osc Ftable function
-;p14 pan start    range 0 - 1
-;p15 pan end      range 0 - 1
-;p16 pan duration
-;p17 pan freq for lfo in hz, lfo off = 0
-;p18 pan mode for lfo,       sine = 0, tri = 1, square bi = 2, square uni = 3, saw up = 4, saw down = 5
 
 
 |==============================================================================|

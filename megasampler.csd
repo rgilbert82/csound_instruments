@@ -720,12 +720,12 @@ endin
 ; =============================================================================
 
 
-i"megasampler"     0      5       1       .5     .5     [1/1]  101  0     2     ; instrument
+i"megasampler"     0      5       1       .5     .5     [1/1]  101  0     1     ; instrument
 .8          .8     [1/2]                                                        ; pitch
 0           10     0      0       [1/2]   [1/4]   3     [0]    1                ; vibrato
 0           [1/1]  [1/132]        [1/1]   0.001   0                             ; timing / loop
-0           [1/4]         "samples/amen.wav"                                    ; tempo stretch loop
-20          .001   1      .05     .2      .001    0     1                       ; grain
+0           [1/2]         "samples/amen.wav"                                    ; tempo stretch loop
+20          .001   1      .005     .2      .001    0     1                      ; grain
 0           0.25   15     9.0     20                                            ; lowpass settings
             5000   [1/4]  [1/2]   500     [1/4]   0.5   [1/4] [1/2] 0.8 [1/4]   ; lowpass cutoff / res
 0           5000   [1/4]  [1/2]   100     [1/4]   9.5                           ; highpass
