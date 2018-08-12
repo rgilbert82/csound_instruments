@@ -1,0 +1,14 @@
+<instrument type='blue.orchestra.GenericInstrument'>
+  <name>basic_reverb_stereo</name>
+  <comment></comment>
+  <globalOrc></globalOrc>
+  <globalSco></globalSco>
+  <instrumentText>irvtime = p4
+a1  reverb2 garvbsig1,irvtime,.5
+a2  reverb2 garvbsig2,irvtime,.25
+blueMixerOut a1,a2
+garvbsig1=0
+garvbsig2=0
+</instrumentText>
+  <opcodeList/>
+</instrument>

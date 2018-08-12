@@ -1,0 +1,136 @@
+<instrument type='blue.orchestra.GenericInstrument'>
+  <name>rg_pad_3</name>
+  <comment></comment>
+  <globalOrc></globalOrc>
+  <globalSco></globalSco>
+  <instrumentText>; =============================================================================
+; =============================================================================
+; PAD 3
+; =============================================================================
+; =============================================================================
+
+ienv_fnc ftgenonce 0, 0, 4096, 8,  0.020000, 208, 0.780000, 3302, 0.660000, 481, 0.220000, 105, 0.01
+iosc_fnc ftgenonce 0, 0, 4096, 10, 1, .5, .333, .25, .2, .167, .1428, .125, .111, .1, .0909, .0833, .0769, .0714, .0667, .0625
+
+idur          = p3
+iamp          = p4
+iattack       = p5
+irelease      = p6
+ipan_start    = p7
+ipan_end      = p8
+ipan_dur      = p9 * idur
+ipan_freq     = p10
+ipan_mode     = p11
+irvbgain      = p12
+
+inote1        = p13
+inote2        = p14
+ipch_dur      = p15 * idur
+ipch_fract    = p16
+iscale        = p17
+
+ifeedback     = p18       ;range 1-10
+ifb_freq_1    = p19
+ifb_freq_2    = p20
+ifb_1         = p21       ;range 0-2
+ifb_2         = p22
+ifb_3         = p23
+ifb_time_1    = p24
+ifb_time_2    = p25
+ifb_fold      = p26
+
+; =============================================================================
+; Pitch
+; =============================================================================
+
+icps_1   cps2pch  inote1, iscale
+icps_2   cps2pch  inote2, iscale
+
+kpitch_ramp linseg  icps_1, ipch_dur, icps_2, idur - ipch_dur, icps_2
+
+if (ipch_fract != 0) then
+  kpitch_ramp = kpitch_ramp * ipch_fract
+endif
+
+; =============================================================================
+; ADSR
+; =============================================================================
+
+if (iattack &lt;= 0) then
+  kadsr linseg   iamp, idur - irelease, iamp, irelease, 0
+else
+  kadsr linseg   0, iattack, iamp, idur - iattack - irelease, iamp, irelease, 0
+endif
+
+; =============================================================================
+; Oscillators
+; =============================================================================
+
+kenv oscil 1,1/idur,ienv_fnc
+a1 oscil .2*kenv,kpitch_ramp,iosc_fnc
+amod oscil 2,.25,-1
+adel vdelay a1,amod,20
+adel2 vdelay adel,amod,20
+adel3 vdelay adel2,amod,20
+adel4 vdelay adel3,amod,20
+adel5 vdelay adel4,amod,20
+aout=(adel3+adel2+adel+adel4+adel5+a1)/6
+abal balance aout,a1
+afinal = abal * kadsr
+
+; =============================================================================
+; Panning
+; =============================================================================
+
+if (ipan_freq != 0) then
+  kpan     lfo   1, ipan_freq, ipan_mode
+elseif (ipan_start != ipan_end) then
+  kpan     linseg  ipan_start, ipan_dur, ipan_end
+else
+  kpan = ipan_start
+endif
+
+apan_l, apan_r  pan2  afinal, kpan
+
+
+; =============================================================================
+; Feedback / Outputs
+; =============================================================================
+
+if (ifeedback == 0) then
+  blueMixerOut      apan_l, apan_r
+  garvbsig1 = garvbsig1 + (apan_l * irvbgain)
+  garvbsig2 = garvbsig2 + (apan_r * irvbgain)
+else
+  kfb_freq  linseg    ifb_freq_1, idur, ifb_freq_2
+  kfdbk     linseg    ifb_1, idur * ifb_time_1, ifb_2, idur * ifb_time_2, ifb_3
+  atemp_l   delayr    1/20
+  acomb_l   deltapi   1/kfb_freq
+  atemp_r   delayr    1/20
+  acomb_r   deltapi   1/kfb_freq
+
+  if (ifb_fold &gt;= 1) then
+    asig_l    fold  kfdbk * acomb_l, ifb_fold
+    asig_r    fold  kfdbk * acomb_r, ifb_fold
+
+    aiir_l    dcblock   apan_l + asig_l
+    aiir_l    =         aiir_l - aiir_l * aiir_l * aiir_l/6
+    aiir_r    dcblock   apan_r + asig_r
+    aiir_r    =         aiir_r - aiir_r * aiir_r * aiir_r/6
+  else
+    aiir_l    dcblock   apan_l + (acomb_l * kfdbk)
+    aiir_l    =         aiir_l - aiir_l * aiir_l * aiir_l/6
+    aiir_r    dcblock   apan_r + (acomb_r * kfdbk)
+    aiir_r    =         aiir_r - aiir_r * aiir_r * aiir_r/6
+  endif
+
+  delayw    aiir_l
+  delayw    aiir_r
+
+  blueMixerOut      acomb_l, acomb_r
+
+  garvbsig1 = garvbsig1 + acomb_l * irvbgain
+  garvbsig2 = garvbsig2 + acomb_r * irvbgain
+endif</instrumentText>
+  <opcodeList/>
+</instrument>

@@ -1,0 +1,130 @@
+<instrument type='blue.orchestra.GenericInstrument'>
+  <name>rg_pad_1</name>
+  <comment></comment>
+  <globalOrc></globalOrc>
+  <globalSco></globalSco>
+  <instrumentText>idur          = p3
+iamp          = p4
+ifunc         = p5
+iattack       = p6 * idur
+idecline      = p7 * idur
+ipan_start    = p8
+ipan_end      = p9
+ipan_dur      = p10 * idur
+ipan_freq     = p11
+ipan_mode     = p12
+
+ipch_s1       = p13
+ipch_s2       = p14
+ipch_e1       = p15
+ipch_e2       = p16
+ipch_dur      = p17
+iscale        = p18
+ipch_fract    = p19
+
+ifeedback     = p20       ;range 1-10
+ifb_freq_1    = p21
+ifb_freq_2    = p22
+ifb_1         = p23       ;range 0-2
+ifb_2         = p24
+ifb_3         = p25
+ifb_time_1    = p26
+ifb_time_2    = p27
+ifb_fold      = p28
+
+isc           = iamp * .333
+
+icps_s1   cps2pch  ipch_s1, iscale
+icps_s2   cps2pch  ipch_s2, iscale
+icps_e1   cps2pch  ipch_e1, iscale
+icps_e2   cps2pch  ipch_e2, iscale
+
+kpitch_ramp1 linseg  icps_s1, ipch_dur, icps_e1, idur - ipch_dur, icps_e1
+kpitch_ramp2 linseg  icps_s2, ipch_dur, icps_e2, idur - ipch_dur, icps_e2
+
+if (iattack &lt;= 0) then
+  kenv linseg isc, idur - idecline, isc, idecline, 0
+else
+  kenv linseg 0, iattack, isc, idur - iattack - idecline, isc, idecline, 0
+endif
+
+if (ipch_fract != 0) then
+  kpitch_ramp1 = kpitch_ramp1 * ipch_fract
+  kpitch_ramp2 = kpitch_ramp2 * ipch_fract
+endif
+
+k1 line 100,idur,1000
+k2 line 1000,idur,100
+k3 line 1000,idur,50
+k4 line 50,idur,1000
+
+a5  oscil kenv,kpitch_ramp1,ifunc
+a6  oscil kenv,kpitch_ramp1*.999,ifunc
+a7  oscil kenv,kpitch_ramp1*1.001,ifunc
+a8  oscil kenv,kpitch_ramp2,ifunc
+a9  oscil kenv,kpitch_ramp2*.999,ifunc
+a10 oscil kenv,kpitch_ramp2*1.001,ifunc
+
+a1  = a5 + a6 + a7
+a11 = a8 + a9 + a10
+
+a2        butterbp a1,k1,50
+a3        butterbr a2,k3,25
+afinal_l  balance  a3,a1
+a12       butterbp a11,k2,50
+a13       butterbr a12,k4,25
+afinal_r  balance  a13,a11
+
+
+; =============================================================================
+; Panning
+; =============================================================================
+
+if (ipan_freq != 0) then
+  kpan     lfo   1, ipan_freq, ipan_mode
+elseif (ipan_start != ipan_end) then
+  kpan     linseg  ipan_start, ipan_dur, ipan_end
+else
+  kpan = ipan_start
+endif
+
+apan_l  = (1 - kpan) * (2 * ((afinal_l * (1 - (kpan * .5))) + (afinal_r * (kpan * .5))))
+apan_r  = (kpan) * (2 * ((afinal_l * (1 - (kpan * .5))) + (afinal_r * (kpan * .5))))
+
+
+; =============================================================================
+; Feedback / Outputs
+; =============================================================================
+
+if (ifeedback == 0) then
+  blueMixerOut      apan_l, apan_r
+else
+  kfb_freq  linseg    ifb_freq_1, idur, ifb_freq_2
+  kfdbk     linseg    ifb_1, idur * ifb_time_1, ifb_2, idur * ifb_time_2, ifb_3
+  atemp_l   delayr    1/20
+  acomb_l   deltapi   1/kfb_freq
+  atemp_r   delayr    1/20
+  acomb_r   deltapi   1/kfb_freq
+
+  if (ifb_fold &gt;= 1) then
+    asig_l    fold  kfdbk * acomb_l, ifb_fold
+    asig_r    fold  kfdbk * acomb_r, ifb_fold
+
+    aiir_l    dcblock   apan_l + asig_l
+    aiir_l    =         aiir_l - aiir_l * aiir_l * aiir_l/6
+    aiir_r    dcblock   apan_r + asig_r
+    aiir_r    =         aiir_r - aiir_r * aiir_r * aiir_r/6
+  else
+    aiir_l    dcblock   apan_l + (acomb_l * kfdbk)
+    aiir_l    =         aiir_l - aiir_l * aiir_l * aiir_l/6
+    aiir_r    dcblock   apan_r + (acomb_r * kfdbk)
+    aiir_r    =         aiir_r - aiir_r * aiir_r * aiir_r/6
+  endif
+
+  delayw    aiir_l
+  delayw    aiir_r
+
+  blueMixerOut      acomb_l, acomb_r
+endif</instrumentText>
+  <opcodeList/>
+</instrument>

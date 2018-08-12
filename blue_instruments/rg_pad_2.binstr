@@ -1,0 +1,134 @@
+<instrument type='blue.orchestra.GenericInstrument'>
+  <name>rg_pad_2</name>
+  <comment></comment>
+  <globalOrc></globalOrc>
+  <globalSco></globalSco>
+  <instrumentText>; =============================================================================
+; =============================================================================
+; PAD 2
+; =============================================================================
+; =============================================================================
+
+idur          = p3
+iamp          = p4 * .5
+ifunc_l1      = p5
+ifunc_r1      = p6
+ifunc_env_l   = p7
+ifunc_env_r   = p8
+iattack       = p9 * idur
+irelease      = p10 * idur
+irvgain       = p11
+
+ipch_l1       = p12
+ipch_r1       = p13
+ipch_l2       = p14
+ipch_r2       = p15
+ipch_dur      = p16 * idur
+iscale        = p17
+ipch_fract    = p18
+
+ipan_start    = p19
+ipan_end      = p20
+ipan_dur      = p21 * idur
+ipan_freq     = p22
+ipan_mode     = p23
+
+ifeedback     = p24       ;range 1-10
+ifb_freq_1    = p25
+ifb_freq_2    = p26
+ifb_1         = p27       ;range 0-2
+ifb_2         = p28
+ifb_3         = p29
+ifb_time_1    = p30
+ifb_time_2    = p31
+ifb_fold      = p32
+
+icps_l1   cps2pch  ipch_l1, iscale
+icps_r1   cps2pch  ipch_r1, iscale
+icps_l2   cps2pch  ipch_l2, iscale
+icps_r2   cps2pch  ipch_r2, iscale
+
+kpitch_ramp1 linseg  icps_l1, ipch_dur, icps_l2, idur - ipch_dur, icps_l2
+kpitch_ramp2 linseg  icps_r1, ipch_dur, icps_r2, idur - ipch_dur, icps_r2
+
+if (ipch_fract != 0) then
+  kpitch_ramp1 = kpitch_ramp1 * ipch_fract
+  kpitch_ramp2 = kpitch_ramp2 * ipch_fract
+endif
+
+if (iattack &lt;= 0) then
+  kenv linseg   iamp, idur - irelease, iamp, irelease, 0
+else
+  kenv linseg   0, iattack, iamp, idur - iattack - irelease, iamp, irelease, 0
+endif
+
+k1 oscil kenv, 1/idur, ifunc_env_l
+k2 oscil kenv, 1/idur, ifunc_env_r
+k3 linen  3,.9,idur,.3
+k4 randi k3,10
+k5 randi k3,15
+k6 linen abs(birnd(1)),idur * .1,idur, abs(birnd(.8)) + .1
+k7 linen abs(birnd(1)),idur * .1,idur, abs(birnd(.8)) + .1
+k8 oscil k6,abs(birnd(10)) + 5,-1
+k9 oscil k7,abs(birnd(10)) + 5,-1
+afinal_l oscil k1, kpitch_ramp1 + k4 + k8, ifunc_l1
+afinal_r oscil k2, kpitch_ramp2 + k5 + k9, ifunc_r1
+
+
+; =============================================================================
+; Panning
+; =============================================================================
+
+if (ipan_freq != 0) then
+  kpan     lfo   1, ipan_freq, ipan_mode
+elseif (ipan_start != ipan_end) then
+  kpan     linseg  ipan_start, ipan_dur, ipan_end
+else
+  kpan = ipan_start
+endif
+
+apan_l  = (1 - kpan) * (2 * ((afinal_l * (1 - (kpan * .5))) + (afinal_r * (kpan * .5))))
+apan_r  = (kpan) * (2 * ((afinal_l * (1 - (kpan * .5))) + (afinal_r * (kpan * .5))))
+
+
+
+; =============================================================================
+; Feedback / Outputs
+; =============================================================================
+
+if (ifeedback == 0) then
+  blueMixerOut      apan_l, apan_r
+  garvbsig1 = garvbsig1 + apan_l * irvgain
+  garvbsig2 = garvbsig2 + apan_r * irvgain
+else
+  kfb_freq  linseg    ifb_freq_1, idur, ifb_freq_2
+  kfdbk     linseg    ifb_1, idur * ifb_time_1, ifb_2, idur * ifb_time_2, ifb_3
+  atemp_l   delayr    1/20
+  acomb_l   deltapi   1/kfb_freq
+  atemp_r   delayr    1/20
+  acomb_r   deltapi   1/kfb_freq
+
+  if (ifb_fold &gt;= 1) then
+    asig_l    fold  kfdbk * acomb_l, ifb_fold
+    asig_r    fold  kfdbk * acomb_r, ifb_fold
+
+    aiir_l    dcblock   apan_l + asig_l
+    aiir_l    =         aiir_l - aiir_l * aiir_l * aiir_l/6
+    aiir_r    dcblock   apan_r + asig_r
+    aiir_r    =         aiir_r - aiir_r * aiir_r * aiir_r/6
+  else
+    aiir_l    dcblock   apan_l + (acomb_l * kfdbk)
+    aiir_l    =         aiir_l - aiir_l * aiir_l * aiir_l/6
+    aiir_r    dcblock   apan_r + (acomb_r * kfdbk)
+    aiir_r    =         aiir_r - aiir_r * aiir_r * aiir_r/6
+  endif
+
+  delayw    aiir_l
+  delayw    aiir_r
+
+  blueMixerOut      acomb_l, acomb_r
+  garvbsig1 = garvbsig1 + acomb_l * irvgain
+  garvbsig2 = garvbsig2 + acomb_r * irvgain
+endif</instrumentText>
+  <opcodeList/>
+</instrument>
