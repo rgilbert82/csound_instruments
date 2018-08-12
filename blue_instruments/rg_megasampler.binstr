@@ -149,7 +149,9 @@
   <globalOrc></globalOrc>
   <globalSco></globalSco>
   <instrumentText>; =============================================================================
-; MEGA_SAMPLER
+; =============================================================================
+; MEGASAMPLER
+; =============================================================================
 ; =============================================================================
 
 idur          = p3
@@ -264,6 +266,15 @@ idecay        = p96 * idur
 isustain_vol  = p97
 irelease      = p98 * idur
 
+ifeedback     = p99        ;range 1-10
+ifb_freq_1    = p100
+ifb_freq_2    = p101
+ifb_1         = p102       ;range 0-2
+ifb_2         = p103
+ifb_3         = p104
+ifb_time_1    = p105
+ifb_time_2    = p106
+ifb_fold      = p107
 
 if (isampler_mode == 1) then
   ilen filelen iloop_filename
@@ -272,21 +283,17 @@ if (isampler_mode == 1) then
   iloop_length = idur / ((ilen - iskiptime) * istretch_percent)
 endif
 
+
 ; =============================================================================
 ; Samples
 ; =============================================================================
 
-i101 ftgenonce 0, 0, 524288, 1, &quot;samples/amen.wav&quot;,   iskiptime, 0, 2
-i102 ftgenonce 0, 0, 524288, 1, &quot;samples/bd.wav&quot;,     iskiptime, 0, 1
-i103 ftgenonce 0, 0, 524288, 1, &quot;samples/sd.wav&quot;,     iskiptime, 0, 1
+
+i101 ftgenonce 0, 0, 524288, 1, &quot;samples/amen.wav&quot;,     iskiptime, 0, 2
 ; add other samples here
 
 if (isample == 101) then
   isample = i101
-elseif (isample == 102) then
-  isample = i102
-elseif (isample == 103) then
-  isample = i103
 endif
 
 ichannels = ftchnls(p8)
@@ -296,12 +303,14 @@ ichannels = ftchnls(p8)
 ; Pitch ramp
 ; =============================================================================
 
+
 kpitch_ramp   linseg      ipitch_start, ipitch_dur, ipitch_end
 
 
 ; =============================================================================
 ; Vibrato
 ; =============================================================================
+
 
 if (ivib_avg_amp == 0) then
   kpitch = kpitch_ramp
@@ -323,6 +332,7 @@ endif
 ; Sample length ramp
 ; =============================================================================
 
+
 if (iloop_size_1 == iloop_size_2) then
   kloop = k(iloop_size_1)
 elseif (iloop_fract == 1) then
@@ -331,9 +341,11 @@ else
   kloop    expseg    iloop_start + iloop_size_1, iloop_size_dur - iloop_start, iloop_start + iloop_size_2, idur - iloop_size_dur - iloop_start, iloop_start + iloop_size_2
 endif
 
+
 ; =============================================================================
 ; Stereo audio file reader
 ; =============================================================================
+
 
 if (isampler_mode == 3) then
   iidx    =	sr/ftlen(1) ;scaling to reflect sample rate and table length
@@ -362,6 +374,7 @@ endif
 ; =============================================================================
 ; Lowpass Filters
 ; =============================================================================
+
 
 if (ilowpass_on != 0) then
   atemp_l = a1
@@ -407,13 +420,18 @@ elseif (ilowpass_on == 8) then
 endif
 
 if (ilowpass_on != 0) then
-  a1      balance   a1, atemp_l
-  a2      balance   a2, atemp_r
+  klpf_env  linseg  0, 0.001, 1, idur - 0.002, 1, 0.001, 0
+  a1        balance   a1, atemp_l
+  a2        balance   a2, atemp_r
+  a1        = a1 * klpf_env
+  a2        = a2 * klpf_env
 endif
+
 
 ; =============================================================================
 ; Highpass Filters
 ; =============================================================================
+
 
 if (ihighpass_on != 0 &amp;&amp; ihp_cut_att == 0) then
   khp_cut linseg   ihp_cut, ihp_cut_dec, ihp_cut_sust, idur - ihp_cut_dec - ihp_cut_rel, ihp_cut_sust, ihp_cut_rel, 10
@@ -445,12 +463,15 @@ if (idist_on == 1) then
     kdist   linseg   0, idist_att, idist, idist_dec, idist_sust, idur - idist_att - idist_dec - idist_rel, idist_sust, idist_rel, 0
   endif
 
-  atemp_l  = a1
-  atemp_r  = a1
-  a1      distort   a1, kdist, idist_fnc
-  a2      distort   a2, kdist, idist_fnc
-  a1      balance   a1, atemp_l
-  a2      balance   a2, atemp_r
+  atemp_l   = a1
+  atemp_r   = a1
+  klpf_env  linseg  0, 0.001, 1, idur - 0.002, 1, 0.001, 0
+  a1        distort   a1, kdist, idist_fnc
+  a2        distort   a2, kdist, idist_fnc
+  a1        balance   a1, atemp_l
+  a2        balance   a2, atemp_r
+  a1        = a1 * klpf_env
+  a2        = a2 * klpf_env
 endif
 
 
@@ -527,6 +548,7 @@ endif
 ; Tremolo
 ; =============================================================================
 
+
 if (ilfo_start == 0) then
   alfo = 0
 else
@@ -543,6 +565,7 @@ endif
 ; =============================================================================
 ; Envelope
 ; =============================================================================
+
 
 iremaining_time = idur - iattack - idecay
 
@@ -571,10 +594,10 @@ afinal_l = aadsr * afadeout * (1 - alfo) * a1
 afinal_r = aadsr * afadeout * (1 - alfo) * a2
 
 
+; =============================================================================
+; Panning
+; =============================================================================
 
-; =============================================================================
-; Panned Outputs
-; =============================================================================
 
 if (ipan_start == ipan_end) then
   kpan = ipan_start
@@ -586,7 +609,41 @@ apan_l  = (1 - kpan) * (2 * ((afinal_l * (1 - (kpan * .5))) + (afinal_r * (kpan 
 apan_r  = (kpan) * (2 * ((afinal_l * (1 - (kpan * .5))) + (afinal_r * (kpan * .5))))
 
 
+; =============================================================================
+; Feedback / Outputs
+; =============================================================================
 
-blueMixerOut      apan_l, apan_r</instrumentText>
+
+if (ifeedback == 0) then
+  outs      apan_l, apan_r
+else
+  kfb_freq  linseg    ifb_freq_1, idur, ifb_freq_2
+  kfdbk     linseg    ifb_1, idur * ifb_time_1, ifb_2, idur * ifb_time_2, ifb_3
+  atemp_l   delayr    1/20
+  acomb_l   deltapi   1/kfb_freq
+  atemp_r   delayr    1/20
+  acomb_r   deltapi   1/kfb_freq
+
+  if (ifb_fold &gt;= 1) then
+    asig_l    fold  kfdbk * acomb_l, ifb_fold
+    asig_r    fold  kfdbk * acomb_r, ifb_fold
+
+    aiir_l    dcblock   apan_l + asig_l
+    aiir_l    =         aiir_l - aiir_l * aiir_l * aiir_l/6
+    aiir_r    dcblock   apan_r + asig_r
+    aiir_r    =         aiir_r - aiir_r * aiir_r * aiir_r/6
+  else
+    aiir_l    dcblock   apan_l + (acomb_l * kfdbk)
+    aiir_l    =         aiir_l - aiir_l * aiir_l * aiir_l/6
+    aiir_r    dcblock   apan_r + (acomb_r * kfdbk)
+    aiir_r    =         aiir_r - aiir_r * aiir_r * aiir_r/6
+  endif
+
+  delayw    aiir_l
+  delayw    aiir_r
+
+  blueMixerOut      acomb_l, acomb_r
+endif
+</instrumentText>
   <opcodeList/>
 </instrument>

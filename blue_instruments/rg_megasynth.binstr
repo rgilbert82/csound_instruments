@@ -188,12 +188,16 @@
   <globalOrc></globalOrc>
   <globalSco></globalSco>
   <instrumentText>; =============================================================================
-; MEGA_SYNTH
+; =============================================================================
+; MEGASYNTH
+; =============================================================================
 ; =============================================================================
 
-kindex = 0
+kindex        = 0
+ipitch        = 0
 
 idur          = p3
+ieventdur     = idur
 iamp          = p4
 ipan_start    = p5
 ipan_end      = p6
@@ -202,152 +206,180 @@ ipan_freq     = p8
 ipan_mode     = p9
 isynth_type   = p10
 
-ipch_1        = p11
-ipch_2        = p12
-ipch_3        = p13
-ipch_4        = p14
-ipch_dur_1    = p15 * idur
-ipch_dur_2    = p16 * idur
-ipch_dur_3    = p17 * idur
-ipch_ramp     = p18
-ipch_rand     = p19
-iscale        = p20
-ipch_fract    = p21
+iaccent_curve = 600
+iempty_note   = 1
+isequencer_on = p11
+isequence     = p12
+idurations    = p13
+iacc_sequence = p14
+icutoff_start = p15
+icutoff_end   = p16
+ires_start    = p17
+ires_end      = p18
+ienv_attack   = p19
+ienv_release  = p20
+ibpm          = p21
+iseq_speed    = p22
 
-ivib_avg_amp  = p22
-ivib_avg_freq = p23
-ivib_rand_amp = p24
-ivib_rand_freq= p25
-ivib_att      = p26 * idur
-ivib_dec      = p27 * idur
-ivib_sust     = p28
-ivib_rel      = p29 * idur
-ivib_fnc      = p30
+ipch_1        = p23
+ipch_2        = p24
+ipch_3        = p25
+ipch_4        = p26
+ipch_dur_1    = p27 * idur
+ipch_dur_2    = p28 * idur
+ipch_dur_3    = p29 * idur
+ipch_ramp     = p30
+ipch_rand     = p31
+iscale        = p32
+ipch_fract    = p33
 
-isynth_fnc_1  = p31
-isynth_fnc_2  = p32
-isynth_fnc_3  = p33
-isynth_fnc_4  = p34
+ivib_avg_amp  = p34
+ivib_avg_freq = p35
+ivib_rand_amp = p36
+ivib_rand_freq= p37
+ivib_att      = p38 * ieventdur
+ivib_dec      = p39 * ieventdur
+ivib_sust     = p40
+ivib_rel      = p41 * ieventdur
+ivib_fnc      = p42
 
-iosc_phase_1  = p35
-iosc_phase_2  = p36
-iosc_phase_3  = p37
-iosc_phase_4  = p38
+isynth_fnc_1  = p43
+isynth_fnc_2  = p44
+isynth_fnc_3  = p45
+isynth_fnc_4  = p46
 
-iharmon_start = p39
-iharmon_end   = p40
-iharmon_dur   = p41 * idur
+iosc_phase_1  = p47
+iosc_phase_2  = p48
+iosc_phase_3  = p49
+iosc_phase_4  = p50
 
-ivco_mode_1   = p42
-ivco_mode_2   = p43
-ivco_mode_3   = p44
-ivco_mode_4   = p45
-ivco_pw       = p46
-ivco_nyx      = p47
+iharmon_start = p51
+iharmon_end   = p52
+iharmon_dur   = p53 * ieventdur
+ipwmlfo       = p54	 			; DEPTH OF PWM, range 0 - 1
+icompar_funct = p55
+ilfo_func     = p56
 
-ipvs_type1    = p48
-ipvs_type2    = p49
-ipvs_type3    = p50
-ipvs_type4    = p51
+ivco_mode_1   = p57
+ivco_mode_2   = p58
+ivco_mode_3   = p59
+ivco_mode_4   = p60
+ivco_pw       = p61
+ivco_nyx      = p62
 
-ihsb_oct_count = p52
-ihsb_tone_start= p53
-ihsb_tone_end  = p54
-ibrite_1       = p55
-ibrite_2       = p56
-ibrite_3       = p57
-ibrite_4       = p58
+ipvs_type1    = p63
+ipvs_type2    = p64
+ipvs_type3    = p65
+ipvs_type4    = p66
 
-ifm_idx_start  = p59
-ifm_idx_end    = p60
-ifm_car_start  = p61
-ifm_car_end    = p62
-iadditive_cnt  = p63
-iadditive_func = p64
+ihsb_oct_count = p67
+ihsb_tone_start= p68
+ihsb_tone_end  = p69
+ibrite_1       = p70
+ibrite_2       = p71
+ibrite_3       = p72
+ibrite_4       = p73
 
-ifof_fnc_1      = p65
-ifof_fnc_2      = p66
-ifof_form_start = p67
-ifof_form_end   = p68
+ifm_idx_start  = p74
+ifm_idx_end    = p75
+ifm_car_start  = p76
+ifm_car_end    = p77
+iadditive_cnt  = p78
+iadditive_func = p79
 
-ivcdr_on         = p69
-isample          = p70
-isample_pitch    = p71
-isample_stretch  = p72
-isample_skiptime = p73 / isample_stretch
-ivcdr_max        = p74
-ivcdr_min        = p75
-ivcdr_q          = p76
-ivcdr_band       = p77
-ivcdr_cnt        = p78
+ifof_fnc_1      = p80
+ifof_fnc_2      = p81
+ifof_form_start = p82
+ifof_form_end   = p83
 
-ilowpass_on   = p79
-ilp_dist      = p80
-ilp_fb        = p81
-klp_q         = p82
-ilp_stack     = p83
+ivcdr_on        = p84
+isample_pitch   = p85
+ivcdr_max       = p86
+ivcdr_min       = p87
+ivcdr_q         = p88
+ivcdr_band      = p89
+ivcdr_cnt       = p90
 
-ilp_cut       = p84
-ilp_cut_att   = p85 * idur
-ilp_cut_dec   = p86 * idur
-ilp_cut_sust  = p87
-ilp_cut_rel   = p88 * idur
-ilp_res       = p89
-ilp_res_att   = p90 * idur
-ilp_res_dec   = p91 * idur
-ilp_res_sust  = p92
-ilp_res_rel   = p93 * idur
+ilowpass_on   = p91
+ilp_dist      = p92
+ilp_fb        = p93
+klp_q         = p94
+ilp_stack     = p95
 
-ihighpass_on  = p94
-ihp_cut       = p95
-ihp_cut_att   = p96 * idur
-ihp_cut_dec   = p97 * idur
-ihp_cut_sust  = p98
-ihp_cut_rel   = p99 * idur
-ihp_q         = p100
+ilp_cut       = p96
+ilp_cut_att   = p97   * ieventdur
+ilp_cut_dec   = p98   * ieventdur
+ilp_cut_sust  = p99
+ilp_cut_rel   = p100  * ieventdur
+ilp_res       = p101
+ilp_res_att   = p102  * ieventdur
+ilp_res_dec   = p103  * ieventdur
+ilp_res_sust  = p104
+ilp_res_rel   = p105  * ieventdur
 
-idist_on      = p101
-idist         = p102
-idist_att     = p103 * idur
-idist_dec     = p104 * idur
-idist_sust    = p105
-idist_rel     = p106 * idur
-idist_fnc     = p107
+ihighpass_on  = p106
+ihp_cut       = p107
+ihp_cut_att   = p108 * ieventdur
+ihp_cut_dec   = p109 * ieventdur
+ihp_cut_sust  = p110
+ihp_cut_rel   = p111 * ieventdur
+ihp_q         = p112
 
-idec_on       = p108
-idec_bitrate  = p109
-idec_samps    = p110
-ifold_start   = p111
-ifold_end     = p112
+idist_on      = p113
+idist         = p114
+idist_att     = p115 * ieventdur
+idist_dec     = p116 * ieventdur
+idist_sust    = p117
+idist_rel     = p118 * ieventdur
+idist_fnc     = p119
 
-iflange_on    = p113
-iflange       = p114
-iflange_att   = p115 * idur
-iflange_dec   = p116 * idur
-iflange_sust  = p117
-iflange_rel   = p118 * idur
-iflange_fb    = p119
+idec_on       = p120
+idec_bitrate  = p121
+idec_samps    = p122
+ifold_start   = p123
+ifold_end     = p124
 
-iphase_on     = p120
-iphase        = p121
-iphase_att    = p122 * idur
-iphase_dec    = p123 * idur
-iphase_sust   = p124
-iphase_rel    = p125 * idur
-iphase_fb     = p126
+iflange_on    = p125
+iflange       = p126
+iflange_att   = p127 * idur
+iflange_dec   = p128 * idur
+iflange_sust  = p129
+iflange_rel   = p130 * idur
+iflange_fb    = p131
 
-ilfo_start    = p127
-ilfo_end      = p128
-ilfo_shape    = p129
-ilfo_att      = p130 * idur
-ilfo_dec      = p131 * idur
-ilfo_sust     = p132
-ilfo_rel      = p133 * idur
+iphase_on     = p132
+iphase        = p133
+iphase_att    = p134 * idur
+iphase_dec    = p135 * idur
+iphase_sust   = p136
+iphase_rel    = p137 * idur
+iphase_fb     = p138
 
-iattack       = p134 * idur
-idecay        = p135 * idur
-isustain_vol  = p136
-irelease      = p137 * idur
+ilfo_start    = p139
+ilfo_end      = p140
+ilfo_shape    = p141
+ilfo_att      = p142 * ieventdur
+ilfo_dec      = p143 * ieventdur
+ilfo_sust     = p144
+ilfo_rel      = p145 * ieventdur
+
+iattack_val   = p146
+idecay_val    = p147
+isustain_vol  = p148
+irelease_val  = p149
+iattack       = ieventdur * iattack_val
+idecay        = ieventdur * idecay_val
+irelease      = ieventdur * irelease_val
+
+ifeedback     = p150       ;range 1-10
+ifb_freq_1    = p151
+ifb_freq_2    = p152
+ifb_1         = p153       ;range 0-2
+ifb_2         = p154
+ifb_3         = p155
+ifb_time_1    = p156
+ifb_time_2    = p157
+ifb_fold      = p158
 
 icps_1   cps2pch  ipch_1, iscale
 icps_2   cps2pch  ipch_2, iscale
@@ -355,38 +387,180 @@ icps_3   cps2pch  ipch_3, iscale
 icps_4   cps2pch  ipch_4, iscale
 
 
-; =============================================================================
-; Vocoder Samples
-; =============================================================================
+if (isequencer_on != 0) then
+  kaccurve       init      0
+  ioctave        =         ipch_1
+  imaxfreq       =         1000           ; max.filter cutoff freq. when ienvmod = 0
+  imaxsweep      =         10000          ; sr/2... max.filter freq. at kenvmod &amp; kaccent= 1
+  ireson         =         1.3            ; scale the resonance as you like (you can make the filter to oscillate...)
+  inotedur       =         15/ibpm/iseq_speed
+  icount         init      0                                  ; sequence counter (for notes)
+  icount2        init      0                                  ; id. for durations
+  ipcount2       init      0
+  idecaydur      =         inotedur
+  imindecay      =         (idecaydur&lt;.2 ? .2 : idecaydur)    ; set minimum decay to .2 or inotedur
+  idecay_start   = 1
+  idecay_end     = 1
+  iaccent_start  = .4
+  iaccent_end    = .7
+  ipitch         table     0, isequence; first note in the sequence
 
-if (ivcdr_on != 0) then
-  i101 ftgenonce 0, 0, 524288, 1, &quot;samples/hellorcb.aif&quot;, isample_skiptime, 0, 1
-  i102 ftgenonce 0, 0, 524288, 1, &quot;samples/amen.wav&quot;,     isample_skiptime, 0, 1
-  ; Add other samples here
-
-  if (isample == 101) then
-    isample = i101
-  elseif (isample == 102) then
-    isample = i102
+  if (ipitch &lt; 0) then
+    ipitch       = 1
+    iempty_note  = 0
+  elseif (ipch_2 == 0) then
+    ipitch         cps2pch   (ioctave + ipitch/100), iscale
+  else
+    koct_pch       linseg    ipch_1, ipch_dur_1, ipch_2, ipch_dur_2, ipch_3, ipch_dur_3, ipch_4
+    ipitch         cps2pch   (ioctave + ipitch/100), iscale
   endif
-endif
+
+else
 
 ; =============================================================================
 ; Pitch Envelope
 ; =============================================================================
 
-if (ipch_2 == 0) then
-  kpitch_ramp = icps_1
-elseif (ipch_ramp == 0) then
-  kpitch_ramp    linseg  icps_1, ipch_dur_1, icps_2, ipch_dur_2, icps_3, ipch_dur_3, icps_4
+  if (ipch_2 == 0) then
+    kpitch =  icps_1
+  elseif (ipch_ramp == 0) then
+    kpitch    linseg  icps_1, ipch_dur_1, icps_2, ipch_dur_2, icps_3, ipch_dur_3, icps_4
+  else
+    kpitch    expseg  icps_1, ipch_dur_1, icps_2, ipch_dur_2, icps_3, ipch_dur_3, icps_4
+  endif
+endif
+
+
+; =============================================================================
+; Step Sequencer
+; =============================================================================
+
+
+if (isequencer_on != 0) then
+  ; TWISTING THE KNOBS FROM THE SCORE
+  kfco           line      icutoff_start, idur, icutoff_end
+  kres           line      ires_start, idur, ires_end
+  kenvmod        line      ienv_attack, idur, ienv_release
+  kdecay         line      idecay_start, idur, idecay_end
+  kaccent        line      iaccent_start, idur, iaccent_end
+
+  start:
+    ippitch        =         ipitch
+    ipitch         table     ftlen(isequence)*frac(icount/ftlen(isequence)),isequence
+
+    if (ipitch &lt; 0) then
+      ipitch       = 1
+      iempty_note  = 0
+      goto noslide
+    elseif (ipch_2 == 0) then
+      ipitch       cps2pch   (ioctave + ipitch/100), iscale
+      iempty_note  = 1
+    else
+      ioct_pch     = i(koct_pch)
+      iint         = floor(ioct_pch)
+      idiff        = (ioct_pch - iint) * iscale / 100
+      ioct_pch     = iint + idiff
+      ipitch       cps2pch   ((ioct_pch &lt; 1 ? ioctave : ioct_pch) + ipitch/100), iscale
+      iempty_note  = 1
+    endif
+
+    if ipcount2    !=        icount2 goto noslide
+    kpitch         linseg    ippitch, .06, ipitch, inotedur-.06, ipitch
+    goto next
+
+  noslide:
+    kpitch         =         ipitch
+
+  next:
+    ipcount2       =         icount2
+                  timout    0, inotedur, contin
+    icount         =         icount + 1
+                  reinit    start
+                  rireturn
+
+  contin:
+    iacc           table     ftlen(iacc_sequence)*frac((icount-1)/ftlen(iacc_sequence)), iacc_sequence
+    if iacc == 0   goto noaccent
+    ienvdecay      =         0                                            ; accented notes are the shortest ones
+    iremacc        =         i(kaccurve)
+    kaccurve       oscil1i   0, 1, .4, iaccent_curve
+    kaccurve       =         kaccurve+iremacc                             ; successive accents cause hysterical raising cutoff
+    goto sequencer
+
+  noaccent:
+    kaccurve       =         0                                            ; no accent &amp; &quot;discharges&quot; accent curve
+    ienvdecay      =         i(kdecay)
+    sequencer:
+    aremovedc      init      0                                            ; set feedback to 0 at every event
+    imult          table     ftlen(idurations)*frac(icount2/ftlen(idurations)),idurations
+    if imult       !=        0 goto noproblemo                            ; compensate for zero padding in the sequencer
+    icount2        =         icount2 + 1
+    goto sequencer
+
+  noproblemo:
+    ieventdur      =         inotedur*imult
+
+    ; TWO ENVELOPES
+    kmeg           expseg    1, imindecay+((ieventdur-imindecay)*ienvdecay),ienvdecay+.000001
+    kveg           linen     1, .01, ieventdur, .016                      ; attack should be 4 ms. but there would be clicks...
+
+    ; AMPLITUDE ENVELOPE
+    iattack  = ieventdur * iattack_val
+    irelease = ieventdur * irelease_val
+
+
+    if (idecay &lt; 0) then
+      if (iattack_val &lt;= 0) then
+        kadsr expseg  1, ieventdur - irelease, 1, irelease, 0.0001
+      else
+        kadsr expseg  0.0001, iattack, 1, ieventdur - iattack - irelease, 1, irelease, 0.0001
+      endif
+    else
+      if (iattack_val &lt;= 0) then
+        kadsr linseg  1, ieventdur - irelease, 1, irelease, 0
+      else
+        kadsr linseg  0, iattack, 1, ieventdur - iattack - irelease, 1, irelease, 0
+      endif
+    endif
+
+    kamp           =         kveg*((1-i(kenvmod)) + kmeg*i(kenvmod)*(.5+.5*iacc*kaccent))
+    kamp           =         kamp * iamp * kadsr
+
+    ; FILTER ENVELOPE
+    ksweep         =         kveg * (imaxfreq + (.75*kmeg+.25*kaccurve*kaccent)*kenvmod*(imaxsweep-imaxfreq))
+    kfco           =         20 + kfco * ksweep                           ; cutoff always greater than 20 Hz ...
+    kfco           =         (kfco &gt; sr/2 ? sr/2 : kfco)                  ; could be necessary
+                  timout    0, ieventdur, out
+    icount2        =         icount2 + 1
+                  reinit    contin
+
+  out:
 else
-  kpitch_ramp    expseg  icps_1, ipch_dur_1, icps_2, ipch_dur_2, icps_3, ipch_dur_3, icps_4
+  kamp = k(iamp)
+endif
+
+
+; =============================================================================
+; Set Synth Pitch To Sample Pitch
+; =============================================================================
+
+
+if (ivcdr_on != 0 &amp;&amp; isample_pitch != 0) then
+  ifftsize = 16
+  iwtype = 0
+  avcdr_sig     butterhp  gasamp, 50
+  fsig          pvsanal   avcdr_sig, ifftsize, ifftsize/4, ifftsize, iwtype
+  kfr           pvscent   fsig
+  kpitch = kfr
+
+  goto synths
 endif
 
 
 ; =============================================================================
 ; Pitch Fractioning
 ; =============================================================================
+
 
 ; For Different intonations. For example, Just Intonation in C would be:
 ;
@@ -398,7 +572,7 @@ endif
 
 
 if (ipch_fract != 0) then
-  kpitch_ramp = kpitch_ramp * ipch_fract
+  kpitch = kpitch * ipch_fract
 endif
 
 
@@ -406,83 +580,76 @@ endif
 ; Vibrato
 ; =============================================================================
 
+
 if (ivib_avg_amp == 0) then
-  kpitch = kpitch_ramp
+  goto synths
 elseif (ivib_att == 0 &amp;&amp; ivib_rel == 0) then
-  kvib       vibrato   ivib_avg_amp * kpitch_ramp, ivib_avg_freq, ivib_rand_amp, ivib_rand_freq, 3, 5, 3, 5, ivib_fnc
-  kpitch = kpitch_ramp + kvib
+  kvib       vibrato   ivib_avg_amp * kpitch, ivib_avg_freq, ivib_rand_amp, ivib_rand_freq, 3, 5, 3, 5, ivib_fnc
+  kpitch = kpitch + kvib
 elseif (ivib_att == 0) then
-  kvib_env   linseg    1, ivib_dec, ivib_sust, idur - ivib_att - ivib_dec - ivib_rel, ivib_sust, ivib_rel, 0
-  kvib       vibrato   ivib_avg_amp * kpitch_ramp, ivib_avg_freq, ivib_rand_amp, ivib_rand_freq, 3, 5, 3, 5, ivib_fnc
-  kpitch = kpitch_ramp + (kvib * kvib_env)
+  kvib_env   linseg    1, ivib_dec, ivib_sust, ieventdur - ivib_att - ivib_dec - ivib_rel, ivib_sust, ivib_rel, 0
+  kvib       vibrato   ivib_avg_amp * kpitch, ivib_avg_freq, ivib_rand_amp, ivib_rand_freq, 3, 5, 3, 5, ivib_fnc
+  kpitch = kpitch + (kvib * kvib_env)
 else
-  kvib_env   linseg    0, ivib_att, 1, ivib_dec, ivib_sust, idur - ivib_att - ivib_dec - ivib_rel, ivib_sust, ivib_rel, 0
-  kvib       vibrato   ivib_avg_amp * kpitch_ramp, ivib_avg_freq, ivib_rand_amp, ivib_rand_freq, 3, 5, 3, 5, ivib_fnc
-  kpitch = kpitch_ramp + (kvib * kvib_env)
+  kvib_env   linseg    0, ivib_att, 1, ivib_dec, ivib_sust, ieventdur - ivib_att - ivib_dec - ivib_rel, ivib_sust, ivib_rel, 0
+  kvib       vibrato   ivib_avg_amp * kpitch, ivib_avg_freq, ivib_rand_amp, ivib_rand_freq, 3, 5, 3, 5, ivib_fnc
+  kpitch = kpitch + (kvib * kvib_env)
 endif
 
-; =============================================================================
-; Sample Pitch
-; =============================================================================
-
-if (ivcdr_on != 0 &amp;&amp; isample_pitch != 0) then
-  ifftsize = 16
-  iwtype = 0
-  avcdr_sig     paulstretch isample_stretch, 0.02, isample
-  avcdr_sig     butterhp  avcdr_sig, 50
-  fsig          pvsanal   avcdr_sig, ifftsize, ifftsize/4, ifftsize, iwtype
-  kfr           pvscent   fsig
-  kpitch = kfr
-  icps = i(kfr)
-endif
 
 ; =============================================================================
 ; Synth Modes
 ; =============================================================================
 
+
+synths:
+
 if (isynth_type == 0) then
-  aosc1    oscil iamp, kpitch + (birnd(ipch_rand) * kpitch), isynth_fnc_1, iosc_phase_1
-  aosc2    oscil iamp, kpitch + (birnd(ipch_rand) * kpitch), isynth_fnc_2, iosc_phase_2
-  aosc3    oscil iamp, kpitch + (birnd(ipch_rand) * kpitch), isynth_fnc_3, iosc_phase_3
-  aosc4    oscil iamp, kpitch + (birnd(ipch_rand) * kpitch), isynth_fnc_4, iosc_phase_4
+  aosc1    oscil kamp, kpitch + (birnd(ipch_rand) * kpitch), isynth_fnc_1, iosc_phase_1
+  aosc2    oscil kamp, kpitch + (birnd(ipch_rand) * kpitch), isynth_fnc_2, iosc_phase_2
+  aosc3    oscil kamp, kpitch + (birnd(ipch_rand) * kpitch), isynth_fnc_3, iosc_phase_3
+  aosc4    oscil kamp, kpitch + (birnd(ipch_rand) * kpitch), isynth_fnc_4, iosc_phase_4
   aoscs = (aosc1 + aosc2 + aosc3 + aosc4) * 0.25
 elseif (isynth_type == 1) then
   kharmon  linseg  iharmon_start, iharmon_dur, iharmon_end
-  aosc1    buzz  iamp, kpitch + (birnd(ipch_rand) * kpitch), kharmon, 1
-  aosc2    buzz  iamp, kpitch + (birnd(ipch_rand) * kpitch), kharmon, 1
-  aosc3    buzz  iamp, kpitch + (birnd(ipch_rand) * kpitch), kharmon, 1
-  aosc4    buzz  iamp, kpitch + (birnd(ipch_rand) * kpitch), kharmon, 1
-  aoscs = (aosc1 + aosc2 + aosc3 + aosc4) * 0.25
+  aosc1    buzz  kamp, kpitch + (birnd(ipch_rand) * kpitch), kharmon, 1
+  aosc2    buzz  kamp, kpitch + (birnd(ipch_rand) * kpitch), kharmon, 1
+  aosc3    buzz  kamp, kpitch + (birnd(ipch_rand) * kpitch), kharmon, 1
+  aosc4    buzz  kamp, kpitch + (birnd(ipch_rand) * kpitch), kharmon, 1
+  aoscs = (aosc1 + aosc2 + aosc3 + aosc4) * 0.5
 elseif (isynth_type == 2) then
-  aosc1    vco2  iamp, kpitch + (birnd(ipch_rand) * kpitch), ivco_mode_1, ivco_pw, iosc_phase_1, ivco_nyx
-  aosc2    vco2  iamp, kpitch + (birnd(ipch_rand) * kpitch), ivco_mode_2, ivco_pw, iosc_phase_2, ivco_nyx
-  aosc3    vco2  iamp, kpitch + (birnd(ipch_rand) * kpitch), ivco_mode_3, ivco_pw, iosc_phase_3, ivco_nyx
-  aosc4    vco2  iamp, kpitch + (birnd(ipch_rand) * kpitch), ivco_mode_4, ivco_pw, iosc_phase_4, ivco_nyx
+  aosc1    vco2  kamp, kpitch + (birnd(ipch_rand) * kpitch), ivco_mode_1, ivco_pw, iosc_phase_1, ivco_nyx
+  aosc2    vco2  kamp, kpitch + (birnd(ipch_rand) * kpitch), ivco_mode_2, ivco_pw, iosc_phase_2, ivco_nyx
+  aosc3    vco2  kamp, kpitch + (birnd(ipch_rand) * kpitch), ivco_mode_3, ivco_pw, iosc_phase_3, ivco_nyx
+  aosc4    vco2  kamp, kpitch + (birnd(ipch_rand) * kpitch), ivco_mode_4, ivco_pw, iosc_phase_4, ivco_nyx
   aoscs = (aosc1 + aosc2 + aosc3 + aosc4) * 0.25
 elseif (isynth_type == 3) then
-  fsig1    pvsosc  iamp, kpitch + (birnd(ipch_rand) * kpitch), ipvs_type1, 1024
-  fsig2    pvsosc  iamp, kpitch + (birnd(ipch_rand) * kpitch), ipvs_type2, 1024
-  fsig3    pvsosc  iamp, kpitch + (birnd(ipch_rand) * kpitch), ipvs_type3, 1024
-  fsig4    pvsosc  iamp, kpitch + (birnd(ipch_rand) * kpitch), ipvs_type4, 1024
+  fsig1    pvsosc  kamp, kpitch + (birnd(ipch_rand) * kpitch), ipvs_type1, 1024
+  fsig2    pvsosc  kamp, kpitch + (birnd(ipch_rand) * kpitch), ipvs_type2, 1024
+  fsig3    pvsosc  kamp, kpitch + (birnd(ipch_rand) * kpitch), ipvs_type3, 1024
+  fsig4    pvsosc  kamp, kpitch + (birnd(ipch_rand) * kpitch), ipvs_type4, 1024
   aosc1    pvsynth fsig1
   aosc2    pvsynth fsig2
   aosc3    pvsynth fsig3
   aosc4    pvsynth fsig4
   aoscs = (aosc1 + aosc2 + aosc3 + aosc4) * .5
 elseif (isynth_type == 4) then
-  ktone    linseg ihsb_tone_start, idur, ihsb_tone_end
-  aosc1    hsboscil iamp, ktone, ibrite_1, icps_1, isynth_fnc_1, 18, ihsb_oct_count
-  aosc2    hsboscil iamp, ktone, ibrite_2, icps_1, isynth_fnc_2, 18, ihsb_oct_count
-  aosc3    hsboscil iamp, ktone, ibrite_3, icps_1, isynth_fnc_3, 18, ihsb_oct_count
-  aosc4    hsboscil iamp, ktone, ibrite_4, icps_1, isynth_fnc_4, 18, ihsb_oct_count
+  ktone    linseg ihsb_tone_start, ieventdur, ihsb_tone_end
+  aosc1    hsboscil kamp, ktone, ibrite_1, icps_1, isynth_fnc_1, 18, ihsb_oct_count
+  aosc2    hsboscil kamp, ktone, ibrite_2, icps_1, isynth_fnc_2, 18, ihsb_oct_count
+  aosc3    hsboscil kamp, ktone, ibrite_3, icps_1, isynth_fnc_3, 18, ihsb_oct_count
+  aosc4    hsboscil kamp, ktone, ibrite_4, icps_1, isynth_fnc_4, 18, ihsb_oct_count
   aoscs = (aosc1 + aosc2 + aosc3 + aosc4) * 0.25
+  if (iempty_note == 0) then
+    aoscs = aoscs * 0
+  endif
 elseif (isynth_type == 5) then    ; FM
-  kfm_idx  linseg ifm_idx_start, idur, ifm_idx_end
-  kfm_car  linseg ifm_car_start, idur, ifm_car_end
-  aosc1    foscil  iamp, kpitch + (birnd(ipch_rand) * kpitch), 1, kfm_car, kfm_idx, isynth_fnc_1
-  aosc2    foscil  iamp, kpitch + (birnd(ipch_rand) * kpitch), 1, kfm_car, kfm_idx, isynth_fnc_2
-  aosc3    foscil  iamp, kpitch + (birnd(ipch_rand) * kpitch), 1, kfm_car, kfm_idx, isynth_fnc_3
-  aosc4    foscil  iamp, kpitch + (birnd(ipch_rand) * kpitch), 1, kfm_car, kfm_idx, isynth_fnc_4
+  kfm_idx  linseg ifm_idx_start, ieventdur, ifm_idx_end
+  kfm_car  linseg ifm_car_start, ieventdur, ifm_car_end
+  aosc1    foscil  kamp, kpitch + (birnd(ipch_rand) * kpitch), 1, kfm_car, kfm_idx, isynth_fnc_1
+  aosc2    foscil  kamp, kpitch + (birnd(ipch_rand) * kpitch), 1, kfm_car, kfm_idx, isynth_fnc_2
+  aosc3    foscil  kamp, kpitch + (birnd(ipch_rand) * kpitch), 1, kfm_car, kfm_idx, isynth_fnc_3
+  aosc4    foscil  kamp, kpitch + (birnd(ipch_rand) * kpitch), 1, kfm_car, kfm_idx, isynth_fnc_4
   aoscs = (aosc1 + aosc2 + aosc3 + aosc4) * 0.25
 elseif (isynth_type == 6) then    ; Additive
   loop:
@@ -506,111 +673,168 @@ elseif (isynth_type == 6) then    ; Additive
     kindex = kindex + 1
     if (kindex &lt; iadditive_cnt) kgoto loop
 
-    aoscs adsynt iamp, kpitch, iadditive_func, giadditive_freqs, giadditive_amps, iadditive_cnt
+    aoscs adsynt kamp, kpitch, iadditive_func, giadditive_freqs, giadditive_amps, iadditive_cnt
+    aoscs = aoscs * .6
 elseif (isynth_type == 7) then    ; FOF
+  iadded_hz = (ipitch &gt; 0 ? ipitch : 0)
+
   ; First formant.
-  k1amp = iamp
-  k1form line ifof_form_start, idur, ifof_form_end
-  k1band line 100, idur, 80
+  k1amp = kamp
+  k1form line ifof_form_start + iadded_hz, ieventdur, ifof_form_end + iadded_hz
+  k1band line 100, ieventdur, 80
   ; Second formant.
-  k2amp line iamp * 0.8, idur, iamp * 0.6
+  k2amp line iamp * 0.8, ieventdur, iamp * 0.6
   k2form = k1form * 3.3197
   k2band = k1band * 3.2124
   ; Third formant.
-  k3amp line iamp * 0.06, idur, iamp * 0.04
+  k3amp line iamp * 0.06, ieventdur, iamp * 0.04
   k3form = k1form * 6
   k3band = k1band * 6
   ; Fourth formant.
-  k4amp = iamp * 0.025
+  k4amp = kamp * 0.025
   k4form = k1form * 8
   k4band = k1band * 8
   ; Fifth formant.
-  k5amp = iamp * 0.015
+  k5amp = kamp * 0.015
   k5form init 4950
-  k5band line 140, idur, 200
+  k5band line 140, ieventdur, 200
   ; Sixth formant.
-  k6amp = iamp * 0.005
+  k6amp = kamp * 0.005
   k6form init 7006
-  k6band line 160, idur, 220
+  k6band line 160, ieventdur, 220
 
   afof1 fof k1amp, icps_1, k1form, 0, k1band, 0.003, \
-         0.02, 0.007, 100, ifof_fnc_1, ifof_fnc_2, idur
+         0.02, 0.007, 100, ifof_fnc_1, ifof_fnc_2, ieventdur
   afof2 fof k2amp, icps_1, k2form, 0, k2band, 0.003, \
-         0.02, 0.007, 100, ifof_fnc_1, ifof_fnc_2, idur
+         0.02, 0.007, 100, ifof_fnc_1, ifof_fnc_2, ieventdur
   afof3 fof k3amp, icps_1, k3form, 0, k3band, 0.003, \
-         0.02, 0.007, 100, ifof_fnc_1, ifof_fnc_2, idur
+         0.02, 0.007, 100, ifof_fnc_1, ifof_fnc_2, ieventdur
   afof4 fof k4amp, icps_1, k4form, 0, k4band, 0.003, \
-         0.02, 0.007, 100, ifof_fnc_1, ifof_fnc_2, idur
+         0.02, 0.007, 100, ifof_fnc_1, ifof_fnc_2, ieventdur
   afof5 fof k5amp, icps_1, k5form, 0, k5band, 0.003, \
-         0.02, 0.007, 100, ifof_fnc_1, ifof_fnc_2, idur
+         0.02, 0.007, 100, ifof_fnc_1, ifof_fnc_2, ieventdur
   afof6 fof k6amp, icps_1, k6form, 0, k6band, 0.003, \
-         0.02, 0.007, 100, ifof_fnc_1, ifof_fnc_2, idur
+         0.02, 0.007, 100, ifof_fnc_1, ifof_fnc_2, ieventdur
 
   aoscs = (afof1 + afof2 + afof3 + afof4 + afof5 + afof6)
-else
+  if (iempty_note == 0) then
+    aoscs = aoscs * 0
+  endif
+else        ; Noise
   aoscs    fractalnoise  iamp, 0
+  if (iempty_note == 0) then
+    aoscs = aoscs * 0
+  endif
+endif
+
+
+; =============================================================================
+; PWM
+; =============================================================================
+
+
+if (ipwmlfo &gt; 0) then
+  ilforate  = 		2.3					; LFO SPEED IN Hz
+  ioscslvl  = 		0.5	 				; LEVEL OF SAWTOOTH WAVEFORM
+  ipwmlvl   = 		0.5	 				; LEVEL OF PULSE WAVEFORM
+  ipwm	   	= 		0.2	 				; DC OFFSET OF PULSE width
+
+  kpwm_lfo	 	oscil   	1, ilforate, ilfo_func	   		; GENERATE LFO
+  apwm	 	    table   	aoscs/2+(kpwm_lfo*ipwmlfo+ipwm),icompar_funct,1,0.5
+  aoscs   	  =	    	ioscslvl*aoscs+ipwmlvl*apwm	; MIX THE WAVEFORMS
 endif
 
 ; =============================================================================
 ; Vocoder
 ; =============================================================================
 
-if (ivcdr_on != 0) then
-  if (isample_pitch == 0) then
-    avcdr_sig   paulstretch isample_stretch, 0.02, isample
-  endif
 
+if (ivcdr_on != 0) then
   kratio = 3
-  avcdr_sig   compress  avcdr_sig, avcdr_sig, 0, 48, 60, kratio, .1, .5, .02
-  avcdr_sig   balance avcdr_sig, aoscs
-  aoscs       Vocoder aoscs, avcdr_sig, ivcdr_min, ivcdr_max, ivcdr_q, ivcdr_band, ivcdr_cnt
+  avcdr_sig   compress  gasamp, gasamp, 0, 48, 60, kratio, .1, .5, .02
+  avcdr_sig   balance   avcdr_sig, aoscs
+  aoscs       Vocoder   aoscs, avcdr_sig, ivcdr_min, ivcdr_max, ivcdr_q, ivcdr_band, ivcdr_cnt
+
+  if (iempty_note == 0) then
+    aoscs = aoscs * 0
+  endif
 endif
+
 
 ; =============================================================================
 ; Lowpass Filters
 ; =============================================================================
 
+
 if (ilowpass_on == 0) then
   a1 = aoscs
 else
+  imin_cutoff = 50
+  imin_res    = 0.001
+
   if (ilowpass_on != 0 &amp;&amp; ilp_cut_att == 0) then
-    klp_cut linseg   ilp_cut, ilp_cut_dec, ilp_cut_sust, idur - ilp_cut_dec - ilp_cut_rel, ilp_cut_sust, ilp_cut_rel, 10
+    klp_cut linseg   ilp_cut, ilp_cut_dec, ilp_cut_sust, ieventdur - ilp_cut_dec - ilp_cut_rel, ilp_cut_sust, ilp_cut_rel, imin_cutoff
   elseif (ilowpass_on != 0 &amp;&amp; ilp_cut_att != 0) then
-    klp_cut linseg   10, ilp_cut_att, ilp_cut, ilp_cut_dec, ilp_cut_sust, idur - ilp_cut_att - ilp_cut_dec - ilp_cut_rel, ilp_cut_sust, ilp_cut_rel, 10
+    klp_cut linseg   imin_cutoff, ilp_cut_att, ilp_cut, ilp_cut_dec, ilp_cut_sust, ieventdur - ilp_cut_att - ilp_cut_dec - ilp_cut_rel, ilp_cut_sust, ilp_cut_rel, imin_cutoff
   endif
 
   if (ilowpass_on != 0 &amp;&amp; ilp_res_att == 0) then
-    klp_res linseg   ilp_res, ilp_res_dec, ilp_res_sust, idur - ilp_res_dec - ilp_res_rel, ilp_res_sust, ilp_res_rel, 0.001
+    klp_res linseg   ilp_res, ilp_res_dec, ilp_res_sust, ieventdur - ilp_res_dec - ilp_res_rel, ilp_res_sust, ilp_res_rel, imin_res
   elseif (ilowpass_on != 0 &amp;&amp; ilp_res_att != 0) then
-    klp_res linseg   0.001, ilp_res_att, ilp_res, ilp_res_dec, ilp_res_sust, idur - ilp_res_att - ilp_res_dec - ilp_res_rel, ilp_res_sust, ilp_res_rel, 0.001
+    klp_res linseg   imin_res, ilp_res_att, ilp_res, ilp_res_dec, ilp_res_sust, ieventdur - ilp_res_att - ilp_res_dec - ilp_res_rel, ilp_res_sust, ilp_res_rel, imin_res
   endif
 endif
 
 
 if (ilowpass_on == 1) then
   a1      lpf18     aoscs, klp_cut, klp_res, ilp_dist
-  a1      balance a1, aoscs
+  a1 = a1 * 1.5
 elseif (ilowpass_on == 2) then
   a1      moogladder     aoscs, klp_cut, klp_res
-  a1      balance a1, aoscs
+  a1      moogladder     a1, klp_cut, klp_res
+  a1 = a1 * 6
 elseif (ilowpass_on == 3) then
-  a1      moogvcf2   aoscs, klp_cut, klp_res
-  a1      balance a1, aoscs
+  a1      moogvcf2   aoscs, klp_cut, klp_res / 2/ 2
+  a1      moogvcf2   a1, klp_cut, klp_res / 2
+  a1      moogvcf2   a1, klp_cut, klp_res
+  a1 = a1 * 6
 elseif (ilowpass_on == 4) then
-  a1      mvclpf3    aoscs, klp_cut, klp_res
-  a1      balance a1, aoscs
+  abutter1      mvclpf3    aoscs, klp_cut, klp_res
+  abutter2      butterbp   abutter1, klp_cut, 50
+  a1 = ((abutter1 * .5) + (abutter2 * 5)) * 4
 elseif (ilowpass_on == 5) then
   a1      K35_lpf    aoscs, klp_cut, klp_q
-  a1      balance a1, aoscs
 elseif (ilowpass_on == 6) then
-  a1      butterlp   aoscs, klp_cut
-  a1      balance a1, aoscs
+  abutter1      butterlp   aoscs, klp_cut
+  abutter2      butterbp   abutter1, klp_cut, 50
+  a1 = ((abutter1 * .3) + (abutter2 * 5)) * 2
 elseif (ilowpass_on == 7) then
   a1      tonex     aoscs, klp_cut, ilp_stack
-  a1      balance a1, aoscs
-elseif (ilowpass_on &gt;= 8) then
+elseif (ilowpass_on == 8) then
   a1      diode_ladder aoscs, klp_cut, ilp_fb
-  a1      balance a1, aoscs
+  a1 = a1 * 6
+elseif (ilowpass_on &gt;= 9) then
+  a1        tone      aoscs, klp_cut
+  a1        tone      a1, klp_cut
+  a1        tone      a1, klp_cut
+  a1        tone      a1, klp_cut
+  a1        atone     a1, 10
+endif
+
+
+; RESONANT 4-POLE LPF for sequencer
+if (isequencer_on != 0) then
+  if (icutoff_start == 1 &amp;&amp; icutoff_end == 1) then
+    a1          atone     a1,   10
+  else
+    kseq_env    linseg    0, 0.01, 1, ieventdur - 0.02, 1, 0.01, 0
+    ainpt       =         a1 - aremovedc*kres*ireson
+    alpf        tone      ainpt,kfco
+    alpf        tone      alpf,kfco
+    alpf        tone      alpf,kfco
+    alpf        tone      alpf,kfco
+    a1          atone     alpf, 10
+  endif
 endif
 
 
@@ -618,16 +842,19 @@ endif
 ; Highpass Filters
 ; =============================================================================
 
+
 if (ihighpass_on != 0 &amp;&amp; ihp_cut_att == 0) then
-  khp_cut linseg   ihp_cut, ihp_cut_dec, ihp_cut_sust, idur - ihp_cut_dec - ihp_cut_rel, ihp_cut_sust, ihp_cut_rel, 10
+  khp_cut linseg   ihp_cut, ihp_cut_dec, ihp_cut_sust, ieventdur - ihp_cut_dec - ihp_cut_rel, ihp_cut_sust, ihp_cut_rel, 10
 elseif (ihighpass_on != 0 &amp;&amp; ihp_cut_att != 0) then
-  khp_cut linseg   10, ihp_cut_att, ihp_cut, ihp_cut_dec, ihp_cut_sust, idur - ihp_cut_att - ihp_cut_dec - ihp_cut_rel, ihp_cut_sust, ihp_cut_rel, 10
+  khp_cut linseg   10, ihp_cut_att, ihp_cut, ihp_cut_dec, ihp_cut_sust, ieventdur - ihp_cut_att - ihp_cut_dec - ihp_cut_rel, ihp_cut_sust, ihp_cut_rel, 10
 endif
 
 if (ihighpass_on == 1) then
   a1      butterhp  a1, khp_cut
 elseif (ihighpass_on == 2) then
-  a1      mvchpf    a1, khp_cut
+  ahpb1      mvchpf     a1, khp_cut
+  ahpb2      butterbp   ahpb1, khp_cut, 5000
+  a1 = ((ahpb1 * .3) + (ahpb2 * 4))
 elseif (ihighpass_on == 3) then
   a1      K35_hpf   a1, khp_cut, ihp_q
 endif
@@ -637,22 +864,22 @@ endif
 ; Distortion
 ; =============================================================================
 
+
 if (idist_on == 1) then
   if (idist_att == 0) then
-    kdist   linseg   idist, idist_dec, idist_sust, idur - idist_dec - idist_rel, idist_sust, idist_rel, 0
+    kdist   linseg   idist, idist_dec, idist_sust, ieventdur - idist_dec - idist_rel, idist_sust, idist_rel, 0
   else
-    kdist   linseg   0, idist_att, idist, idist_dec, idist_sust, idur - idist_att - idist_dec - idist_rel, idist_sust, idist_rel, 0
+    kdist   linseg   0, idist_att, idist, idist_dec, idist_sust, ieventdur - idist_att - idist_dec - idist_rel, idist_sust, idist_rel, 0
   endif
 
-  atemp   = a1
   a1      distort   a1, kdist, idist_fnc
-  a1      balance   a1, atemp
 endif
 
 
 ; =============================================================================
 ; Bitcrusher
 ; =============================================================================
+
 
 if (idec_on == 1) then
   kbit	   ctrl7	1, 1, 1, 16
@@ -669,13 +896,15 @@ if (idec_on == 1) then
 
   a1      fold  a1, kfold
 elseif (idec_on == 2) then
-  kfold   linseg  ifold_start, idur, ifold_end
+  kfold   linseg  ifold_start, ieventdur, ifold_end
   a1      fold  a1, kfold
 endif
+
 
 ; =============================================================================
 ; Flanger
 ; =============================================================================
+
 
 if (iflange_on == 1) then
   if (iflange_att == 0) then
@@ -692,6 +921,7 @@ endif
 ; Phaser
 ; =============================================================================
 
+
 if (iphase_on == 1) then
   if (iphase_att == 0) then
     kphase   linseg   iphase, iphase_dec, iphase_sust, idur - iphase_dec - iphase_rel, iphase_sust, iphase_rel, 0
@@ -707,14 +937,15 @@ endif
 ; Tremolo
 ; =============================================================================
 
+
 if (ilfo_start == 0) then
   alfo = 0
 else
-  klfo_ramp  linseg      ilfo_start, idur, ilfo_end
+  klfo_ramp  linseg      ilfo_start, ieventdur, ilfo_end
   if (ilfo_att == 0) then
-    klfo_env   linseg      1, ilfo_dec, ilfo_sust, idur - ilfo_dec - ilfo_rel, ilfo_sust, ilfo_rel, 0
+    klfo_env   linseg      1, ilfo_dec, ilfo_sust, ieventdur - ilfo_dec - ilfo_rel, ilfo_sust, ilfo_rel, 0
   else
-    klfo_env   linseg      0, ilfo_att, 1, ilfo_dec, ilfo_sust, idur - ilfo_att - ilfo_dec - ilfo_rel, ilfo_sust, ilfo_rel, 0
+    klfo_env   linseg      0, ilfo_att, 1, ilfo_dec, ilfo_sust, ieventdur - ilfo_att - ilfo_dec - ilfo_rel, ilfo_sust, ilfo_rel, 0
   endif
   alfo       lfo       klfo_env, klfo_ramp, ilfo_shape
 endif
@@ -724,34 +955,49 @@ endif
 ; Envelope
 ; =============================================================================
 
-iremaining_time = idur - iattack - idecay
 
-if ((iattack + idecay) &gt;= idur ) then
-  idecay = idur - iattack
-  irelease = 0
-elseif (iremaining_time &lt; irelease) then
-  irelease = iremaining_time
-endif
+afadeout  linseg    1, ieventdur - 0.001, 1, 0.001, 0
 
-if ((iattack &lt;= 0 &amp;&amp; idecay &lt;= 0) &amp;&amp; irelease &lt;= 0) then
-  aadsr = 1
-elseif (iattack &lt;= 0 &amp;&amp; irelease &lt;= 0) then
-  aadsr   linseg  1, idecay, isustain_vol
-elseif (iattack &lt;= 0 &amp;&amp; idecay &lt;= 0) then
-  aadsr   linseg  1, idur - irelease, 1, irelease, 0
-elseif (iattack &lt;= 0) then
-  aadsr   linseg  1, idecay, isustain_vol, idur - idecay - irelease, isustain_vol, irelease, 0
+if (isequencer_on == 0 &amp;&amp; idecay &lt; 0) then
+  if (iattack_val &lt;= 0) then
+    aadsr expseg  1, ieventdur - irelease, 1, irelease, 0.0001
+  else
+    aadsr expseg  0.0001, iattack, 1, ieventdur - iattack - irelease, 1, irelease, 0.0001
+  endif
+
+  afinal = aadsr * afadeout * (1 - alfo) * a1
+elseif (isequencer_on == 0) then
+  iremaining_time = ieventdur - iattack - idecay
+
+  if ((iattack + idecay) &gt;= ieventdur ) then
+    idecay = ieventdur - iattack
+    irelease = 0
+  elseif (iremaining_time &lt; irelease) then
+    irelease = iremaining_time
+  endif
+
+  if ((iattack &lt;= 0 &amp;&amp; idecay &lt;= 0) &amp;&amp; irelease &lt;= 0) then
+    aadsr = 1
+  elseif (iattack &lt;= 0 &amp;&amp; irelease &lt;= 0) then
+    aadsr   linseg  1, idecay, isustain_vol
+  elseif (iattack &lt;= 0 &amp;&amp; idecay &lt;= 0) then
+    aadsr   linseg  1, ieventdur - irelease, 1, irelease, 0
+  elseif (iattack &lt;= 0) then
+    aadsr   linseg  1, idecay, isustain_vol, ieventdur - idecay - irelease, isustain_vol, irelease, 0
+  else
+    aadsr   adsr    iattack, idecay, isustain_vol, irelease
+  endif
+
+  afinal = aadsr * afadeout * (1 - alfo) * a1
 else
-  aadsr   adsr    iattack, idecay, isustain_vol, irelease
+  afinal = afadeout * (1 - alfo) * a1
 endif
-
-afadeout  linseg    1, idur - 0.001, 1, 0.001, 0
-afinal = aadsr * afadeout * (1 - alfo) * a1
 
 
 ; =============================================================================
 ; Panning
 ; =============================================================================
+
 
 if (ipan_freq != 0) then
   kpan     lfo   1, ipan_freq, ipan_mode
@@ -765,10 +1011,41 @@ apan_l, apan_r  pan2  afinal, kpan
 
 
 ; =============================================================================
-; Outputs
+; Feedback / Outputs
 ; =============================================================================
 
-blueMixerOut  apan_l, apan_r</instrumentText>
+
+if (ifeedback == 0) then
+  outs      apan_l, apan_r
+else
+  kfb_freq  linseg    ifb_freq_1, idur, ifb_freq_2
+  kfdbk     linseg    ifb_1, idur * ifb_time_1, ifb_2, idur * ifb_time_2, ifb_3
+  atemp_l   delayr    1/20
+  acomb_l   deltapi   1/kfb_freq
+  atemp_r   delayr    1/20
+  acomb_r   deltapi   1/kfb_freq
+
+  if (ifb_fold &gt;= 1) then
+    asig_l    fold  kfdbk * acomb_l, ifb_fold
+    asig_r    fold  kfdbk * acomb_r, ifb_fold
+
+    aiir_l    dcblock   apan_l + asig_l
+    aiir_l    =         aiir_l - aiir_l * aiir_l * aiir_l/6
+    aiir_r    dcblock   apan_r + asig_r
+    aiir_r    =         aiir_r - aiir_r * aiir_r * aiir_r/6
+  else
+    aiir_l    dcblock   apan_l + (acomb_l * kfdbk)
+    aiir_l    =         aiir_l - aiir_l * aiir_l * aiir_l/6
+    aiir_r    dcblock   apan_r + (acomb_r * kfdbk)
+    aiir_r    =         aiir_r - aiir_r * aiir_r * aiir_r/6
+  endif
+
+  delayw    aiir_l
+  delayw    aiir_r
+
+
+  blueMixerOut      acomb_l, acomb_r
+endif</instrumentText>
   <opcodeList>
     <udo>
       <opcodeName>Vocoder</opcodeName>
