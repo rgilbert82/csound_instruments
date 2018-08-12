@@ -1016,7 +1016,7 @@ apan_l, apan_r  pan2  afinal, kpan
 
 
 if (ifeedback == 0) then
-  outs      apan_l, apan_r
+  blueMixerOut      apan_l, apan_r
 else
   kfb_freq  linseg    ifb_freq_1, idur, ifb_freq_2
   kfdbk     linseg    ifb_1, idur * ifb_time_1, ifb_2, idur * ifb_time_2, ifb_3
