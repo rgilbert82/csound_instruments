@@ -1,0 +1,33 @@
+<instrument type='blue.orchestra.GenericInstrument'>
+  <name>delay_1</name>
+  <comment></comment>
+  <globalOrc></globalOrc>
+  <globalSco></globalSco>
+  <instrumentText>idlt    = p4; delay time (in sec.)
+idamp   = p5; damping factor (0 to 1,1 gives no damping and 0 gives total attenuation/no delay))
+ispread = p6; rotation angle (-1 to 1,0 gives no cross feedback, 1/-1 gives crossed delay w. L/R phase inversion)
+ifco    = p7; freq.cutoff attenuation (in Hz)
+
+i2pi = 6.283185307179
+
+adel1 delayr idlt
+adel2 delayr idlt
+
+acos = cos(ispread*i2pi)
+asin = sin(ispread*i2pi)
+
+across1 =  acos*adel1 + asin*adel2
+across2 = -asin*adel1 + acos*adel2
+
+afdbk1 tone across1+garvbsig1,ifco
+afdbk2 tone across2+garvbsig2,ifco
+
+delayw idamp*afdbk1
+delayw idamp*afdbk2
+
+blueMixerOut adel1,adel2
+
+garvbsig1 = 0
+garvbsig2 = 0</instrumentText>
+  <opcodeList/>
+</instrument>

@@ -1,0 +1,66 @@
+<instrument type='blue.orchestra.GenericInstrument'>
+  <name>reverb_2</name>
+  <comment></comment>
+  <globalOrc></globalOrc>
+  <globalSco></globalSco>
+  <instrumentText>idur     =      p3
+iamp     =      p4
+ideltime =      p5
+
+aout91 init     0
+aout92 init     0
+adel01 init     0
+adel11 init     0
+adel51 init     0
+adel52 init     0
+adel91 init     0
+adel92 init     0
+adel93 init     0
+
+kdclick linseg  0, .002, iamp, idur-.004, iamp, .002, 0
+
+; Initialize
+aflt01 butterlp garvbsig1, 4000             ; Pre-Filter
+aflt02 butterbp .5*aout91, 1000, 500    ; Feed-Back Filter
+
+aflt03 butterlp garvbsig2, 4000             ; Pre-Filter
+aflt04 butterbp .5*aout92, 1000, 500    ; Feed-Back Filter
+
+asum01  =       ((aflt01+.5*aflt02)+(aflt03+.5*aflt04))*.75        ; Initial Mix
+
+; All-Pass 1
+asub01  =       adel01-.3*asum01        ; Feedforward
+adel01  delay   asum01+.3*asub01,ideltime*.008   ; Feedback
+
+; All-Pass 2
+asub11  =       adel11-.3*asub01        ; Feedforward
+adel11  delay   asub01+.3*asub11,ideltime*.012   ; Feedback
+
+adel21  delay   asub11, ideltime*.004            ; Delay 1
+adel41  delay   adel21, ideltime*.017            ; Delay 2
+
+; Single Nested All-Pass
+asum51  =       adel52-.25*adel51       ; Inner Feedforward
+aout51  =       asum51-.5*adel41        ; Outer Feedforward
+adel51  delay   adel41+.5*aout51,  ideltime*.025 ; Outer Feedback
+adel52  delay   adel51+.25*asum51, ideltime*.062 ; Inner Feedback
+
+adel61  delay   aout51, ideltime*.031            ; Delay 3
+adel81  delay   adel61, ideltime*.003            ; Delay 4
+
+; Double Nested All-Pass
+asum91  =       adel92-.25*adel91       ; First  Inner Feedforward
+asum92  =       adel93-.25*asum91       ; Second Inner Feedforward
+aout91  =       asum92-.5*adel81        ; Outer Feedforward
+adel91  delay   adel81+.5*aout91, ideltime*.120  ; Outer Feedback
+adel92  delay   adel91+.25*asum91, ideltime*.076 ; First  Inner Feedback
+adel93  delay   asum91+.25*asum92, ideltime*.030 ; Second Inner Feedback
+
+aout    =       .8*aout91+.8*adel61+1.5*adel21 ; Combine outputs
+
+        blueMixerOut    aout*kdclick, -aout*kdclick    ; Final Output
+
+garvbsig1 = 0
+garvbsig2 = 0</instrumentText>
+  <opcodeList/>
+</instrument>

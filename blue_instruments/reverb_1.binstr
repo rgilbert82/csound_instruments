@@ -1,5 +1,5 @@
 <instrument type='blue.orchestra.GenericInstrument'>
-  <name>basic_reverb_stereo</name>
+  <name>reverb_1</name>
   <comment></comment>
   <globalOrc></globalOrc>
   <globalSco></globalSco>
